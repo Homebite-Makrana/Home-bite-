@@ -357,3 +357,48 @@ td,th{
   flex-wrap:wrap;
   margin:22px 0 10
 node --check public/app.js
+
+body{
+  background:
+    radial-gradient(circle at 8% 8%,rgba(255,154,61,.12),transparent 24%),
+    radial-gradient(circle at 92% 18%,rgba(7,93,49,.10),transparent 27%),
+    linear-gradient(135deg,#fffaf2 0%,#f3f8f1 48%,#eef7f0 100%);
+  background-attachment:fixed;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  width:240px;
+  height:240px;
+  border-radius:50%;
+  background:#075d3108;
+  top:110px;
+  right:-110px;
+  pointer-events:none;
+  z-index:-1;
+}
+
+body:after{
+  content:"";
+  position:fixed;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  background:#ff6b0008;
+  bottom:40px;
+  left:-90px;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.shop-card,
+.card{
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(8px);
+}
+
+.search-wrap{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);
+}
