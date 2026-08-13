@@ -4,3 +4,5 @@ node_modules/
 *.db.backup
 
 public/*.backup.*
+
+public/*.v2-backup.*
