@@ -2,7 +2,69 @@ const A=document.getElementById("app");let T=localStorage.getItem("hb_token"),U=
 async function api(u,o={}){o.headers={"Content-Type":"application/json",...(o.headers||{})};if(T)o.headers.Authorization="Bearer "+T;let r=await fetch("https://home-bite.onrender.com"+u,o),d=await r.json();if(!r.ok)throw Error(d.error||"Error");return d}
 function save(d){T=d.token;U=d.user;localStorage.setItem("hb_token",T);localStorage.setItem("hb_user",JSON.stringify(U))}
 function layout(c){A.innerHTML=`<header class="top"><div class="brand"><div class="logo">🍴</div><div><b>HOME BITE</b><small>Makrana City</small></div></div><div>${U?`Hi, ${U.name} <button class="btn dark" onclick="logout()">Logout</button>`:`<button class="btn" onclick="login()">Login</button>`}</div></header><main class="wrap">${c}</main>`}
-async function home(type=""){let s=await api("/api/shops"+(type?"?type="+type:""));layout(`<div>📍 <b>Makrana City</b> · Home delivery</div><input class="search" placeholder="Search restaurant or kitchen" oninput="find(this.value)"><div class="hero"><h1>Ghar ka swaad, ab aapke ghar.</h1><p>Restaurant food + homemade food</p></div><div class="tabs"><button class="${!type?'on':''}" onclick="home()">All</button><button class="${type==='restaurant'?'on':''}" onclick="home('restaurant')">🏪 Restaurants</button><button class="${type==='home'?'on':''}" onclick="home('home')">🏠 Home Food</button></div><div id="shops" class="grid">${s.map(x=>`<div class="card"><div style="font-size:40px">${x.type==='home'?'🏠':'🍛'}</div><h3>${x.name}</h3><span class="pill">⭐ ${x.rating}</span><p class="muted">${x.address}</p><button class="btn" onclick="menu(${x.id})">View Menu</button></div>`).join("")}</div><div class="topspace">${U?.role==='customer'?`<button class="btn" onclick="orders()">My Orders</button>`:""} ${U?.role==='admin'?`<button class="btn" onclick="admin()">Admin Panel</button>`:""} ${U?.role==='restaurant'?`<button class="btn" onclick="partner()">Restaurant Panel</button>`:""} ${U?.role==='delivery'?`<button class="btn" onclick="deliver()">Delivery Panel</button>`:""}</div>`)}
+async function home(type=""){
+  let s=await api("/api/shops"+(type?"?type="+type:""));
+  layout(`
+    <section class="home-head">
+      <div class="location">📍 <span>Delivering in</span><b> Makrana City</b></div>
+      <div class="welcome">
+        <div>
+          <small>WELCOME TO</small>
+          <h1>HOME <em>BITE</em></h1>
+          <p>Ghar ka swaad, ab aapke ghar.</p>
+        </div>
+        <div class="brand-mark">HB</div>
+      </div>
+    </section>
+
+    <div class="search-wrap">
+      <span>⌕</span>
+      <input class="search" placeholder="What are you craving today?" oninput="find(this.value)">
+    </div>
+
+    <div class="section-title">
+      <div><small>EXPLORE</small><h2>What would you like?</h2></div>
+    </div>
+
+    <div class="category-row">
+      <button class="category ${!type?'active':''}" onclick="home()">
+        <strong>ALL</strong><span>Everything</span>
+      </button>
+      <button class="category ${type==='restaurant'?'active':''}" onclick="home('restaurant')">
+        <strong>RESTAURANTS</strong><span>Fresh & tasty</span>
+      </button>
+      <button class="category ${type==='home'?'active':''}" onclick="home('home')">
+        <strong>HOME KITCHENS</strong><span>Ghar ka swaad</span>
+      </button>
+    </div>
+
+    <div class="section-title shop-heading">
+      <div><small>NEAR YOU</small><h2>${type==='restaurant'?'Restaurants':type==='home'?'Home Kitchens':'Popular places'}</h2></div>
+    </div>
+
+    <div id="shops" class="grid shop-grid">
+      ${s.map(x=>`
+        <article class="shop-card">
+          <div class="shop-visual ${x.type==='home'?'home-food':'restaurant-food'}">
+            <span>${x.type==='home'?'HOME KITCHEN':'RESTAURANT'}</span>
+          </div>
+          <div class="shop-info">
+            <div class="shop-title"><h3>${x.name}</h3><span class="pill">★ ${x.rating}</span></div>
+            <p class="muted">${x.address}</p>
+            <div class="shop-bottom"><span>● Available</span><button class="btn" onclick="menu(${x.id})">View Menu →</button></div>
+          </div>
+        </article>
+      `).join("")}
+    </div>
+
+    <div class="quick-actions">
+      ${U?.role==='customer'?`<button onclick="orders()">📦 My Orders</button>`:""}
+      ${U?.role==='admin'?`<button onclick="admin()">⚙ Admin Panel</button>`:""}
+      ${U?.role==='restaurant'?`<button onclick="partner()">Restaurant Panel</button>`:""}
+      ${U?.role==='delivery'?`<button onclick="deliver()">Delivery Panel</button>`:""}
+    </div>
+  `)
+}
 function find(q){[...document.querySelectorAll("#shops .card")].forEach(x=>x.style.display=x.innerText.toLowerCase().includes(q.toLowerCase())?"block":"none")}
 async function menu(id){let s=(await api("/api/shops")).find(x=>x.id==id),m=await api("/api/shops/"+id+"/menu");layout(`<button onclick="home()">← Back</button><h2>${s.name}</h2><div class="card">${m.map(x=>`<div class="food"><div><b>${x.name}</b><div class="muted">₹${x.price} · ${x.category}</div></div><button class="btn" onclick="add(${id},${x.id},'${x.name.replace(/'/g,"\\'")}',${x.price})">Add</button></div>`).join("")}</div><div class="topspace"><button class="btn" onclick="checkout()">Cart (${cart.length})</button></div>`)}
 function add(shopId,menuId,name,price){if(cart.length&&cart[0].shopId!==shopId)return alert("Please order from one restaurant at a time.");cart.push({shopId,menuId,name,price,qty:1});alert("Added: "+name)}
