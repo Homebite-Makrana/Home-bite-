@@ -1,0 +1,100 @@
+import express from "express";
+import cors from "cors";
+import Database from "better-sqlite3";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import path from "path";
+import {fileURLToPath} from "url";
+
+const __filename=fileURLToPath(import.meta.url), __dirname=path.dirname(__filename);
+const app=express(), db=new Database("homebite.db");
+const SECRET=process.env.JWT_SECRET||"CHANGE_ME_IN_PRODUCTION";
+app.use(cors()); app.use(express.json()); app.use(express.static(path.join(__dirname,"public")));
+
+db.exec(`
+CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,phone TEXT UNIQUE NOT NULL,password TEXT NOT NULL,role TEXT NOT NULL DEFAULT 'customer');
+CREATE TABLE IF NOT EXISTS shops(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,type TEXT NOT NULL,address TEXT,phone TEXT,rating REAL DEFAULT 5,active INTEGER DEFAULT 1,owner_id INTEGER);
+CREATE TABLE IF NOT EXISTS menu(id INTEGER PRIMARY KEY AUTOINCREMENT,shop_id INTEGER,name TEXT NOT NULL,price REAL NOT NULL,category TEXT,available INTEGER DEFAULT 1);
+CREATE TABLE IF NOT EXISTS orders(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER NOT NULL,shop_id INTEGER NOT NULL,total REAL NOT NULL,address TEXT NOT NULL,status TEXT DEFAULT 'PLACED',payment_status TEXT DEFAULT 'PENDING',delivery_id INTEGER,created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS order_items(id INTEGER PRIMARY KEY AUTOINCREMENT,order_id INTEGER,menu_id INTEGER,name TEXT,qty INTEGER,price REAL);
+`);
+
+function addUser(name,phone,password,role){
+  let u=db.prepare("SELECT id FROM users WHERE phone=?").get(phone);
+  if(!u) db.prepare("INSERT INTO users(name,phone,password,role) VALUES(?,?,?,?)").run(name,phone,bcrypt.hashSync(password,10),role);
+  return db.prepare("SELECT * FROM users WHERE phone=?").get(phone);
+}
+function addShop(name,type,address,phone,owner_id){
+  let s=db.prepare("SELECT id FROM shops WHERE name=?").get(name);
+  if(!s) return db.prepare("INSERT INTO shops(name,type,address,phone,owner_id) VALUES(?,?,?,?,?)").run(name,type,address,phone,owner_id).lastInsertRowid;
+  return s.id;
+}
+const admin=addUser("Home Bite Admin","9999999999","admin123","admin");
+const restOwner=addUser("Marble Cafe Owner","9000000001","restaurant123","restaurant");
+const delivery=addUser("Home Bite Delivery","9000000003","delivery123","delivery");
+const shop=addShop("Marble Cafe","restaurant","Makrana City","9000000001",restOwner.id);
+const homeOwner=addUser("Heena","9000000002","home123","restaurant");
+const kitchen=addShop("Heena's Kitchen","home","Makrana City","9000000002",homeOwner.id);
+if(db.prepare("SELECT COUNT(*) n FROM menu").get().n===0){
+ const m=db.prepare("INSERT INTO menu(shop_id,name,price,category) VALUES(?,?,?,?)");
+ m.run(shop,"Chicken Biryani",199,"Biryani"); m.run(shop,"Paneer Butter Masala",169,"North Indian"); m.run(shop,"Veg Thali",149,"Thali");
+ m.run(kitchen,"Ghar Ki Dal",99,"Home Food"); m.run(kitchen,"Roti Sabzi",80,"Home Food");
+}
+function token(u){return jwt.sign({id:u.id,name:u.name,role:u.role},SECRET,{expiresIn:"7d"})}
+function auth(req,res,next){try{req.user=jwt.verify((req.headers.authorization||"").replace("Bearer ",""),SECRET);next()}catch(e){res.status(401).json({error:"Login required"})}}
+function role(...roles){return (req,res,next)=>roles.includes(req.user.role)?next():res.status(403).json({error:"Not allowed"})}
+
+app.post("/api/register",(req,res)=>{
+ const {name,phone,password}=req.body||{}; if(!name||!phone||!password)return res.status(400).json({error:"Required fields missing"});
+ try{const r=db.prepare("INSERT INTO users(name,phone,password) VALUES(?,?,?)").run(name,phone,bcrypt.hashSync(password,10));const u={id:r.lastInsertRowid,name,role:"customer"};res.json({token:token(u),user:u})}catch(e){res.status(400).json({error:"Phone already registered"})}
+});
+app.post("/api/login",(req,res)=>{
+ const u=db.prepare("SELECT * FROM users WHERE phone=?").get(req.body.phone);
+ if(!u||!bcrypt.compareSync(req.body.password,u.password))return res.status(401).json({error:"Invalid login"});
+ res.json({token:token(u),user:{id:u.id,name:u.name,role:u.role,shop_id:db.prepare("SELECT id FROM shops WHERE owner_id=?").get(u.id)?.id||null}})
+});
+app.get("/api/shops",(req,res)=>{const t=req.query.type;res.json(db.prepare(t?"SELECT * FROM shops WHERE active=1 AND type=?":"SELECT * FROM shops WHERE active=1").all(...(t?[t]:[])))});
+app.get("/api/shops/:id/menu",(req,res)=>res.json(db.prepare("SELECT * FROM menu WHERE shop_id=? AND available=1").all(req.params.id)));
+
+app.post("/api/orders",auth,role("customer"),(req,res)=>{
+ const {shopId,items,address}=req.body||{}; if(!shopId||!items?.length||!address)return res.status(400).json({error:"Shop/items/address required"});
+ let total=0, checked=[], get=db.prepare("SELECT * FROM menu WHERE id=? AND shop_id=?");
+ try{for(const x of items){const m=get.get(x.menuId,shopId);if(!m)throw Error("Invalid item");total+=m.price*x.qty;checked.push({...m,qty:x.qty})}}
+ catch(e){return res.status(400).json({error:e.message})}
+ const r=db.prepare("INSERT INTO orders(user_id,shop_id,total,address) VALUES(?,?,?,?)").run(req.user.id,shopId,total,address);
+ const ins=db.prepare("INSERT INTO order_items(order_id,menu_id,name,qty,price) VALUES(?,?,?,?,?)");checked.forEach(x=>ins.run(r.lastInsertRowid,x.id,x.name,x.qty,x.price));
+ res.json({orderId:r.lastInsertRowid,total,status:"PLACED",payment_status:"PENDING"});
+});
+app.get("/api/orders",auth,role("customer"),(req,res)=>res.json(db.prepare("SELECT o.*,s.name shop_name FROM orders o JOIN shops s ON s.id=o.shop_id WHERE o.user_id=? ORDER BY o.id DESC").all(req.user.id)));
+
+app.get("/api/admin/stats",auth,role("admin"),(req,res)=>res.json({
+ orders:db.prepare("SELECT COUNT(*) n FROM orders").get().n,
+ revenue:db.prepare("SELECT COALESCE(SUM(total),0) n FROM orders").get().n,
+ restaurants:db.prepare("SELECT COUNT(*) n FROM shops WHERE type='restaurant'").get().n,
+ kitchens:db.prepare("SELECT COUNT(*) n FROM shops WHERE type='home'").get().n,
+ customers:db.prepare("SELECT COUNT(*) n FROM users WHERE role='customer'").get().n,
+ delivery:db.prepare("SELECT COUNT(*) n FROM users WHERE role='delivery'").get().n
+}));
+app.get("/api/admin/orders",auth,role("admin"),(req,res)=>res.json(db.prepare("SELECT o.*,s.name shop_name,u.name customer FROM orders o JOIN shops s ON s.id=o.shop_id JOIN users u ON u.id=o.user_id ORDER BY o.id DESC").all()));
+app.patch("/api/admin/orders/:id",auth,role("admin"),(req,res)=>{db.prepare("UPDATE orders SET status=? WHERE id=?").run(req.body.status,req.params.id);res.json({ok:true})});
+app.post("/api/admin/shops",auth,role("admin"),(req,res)=>{const {name,type,address,phone}=req.body||{};if(!name||!type)return res.status(400).json({error:"Name/type required"});const r=db.prepare("INSERT INTO shops(name,type,address,phone) VALUES(?,?,?,?)").run(name,type,address||"Makrana City",phone||"");res.json({id:r.lastInsertRowid})});
+
+app.get("/api/partner/shop",auth,role("restaurant"),(req,res)=>{
+ const s=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id); if(!s)return res.status(404).json({error:"Shop not found"});
+ res.json({...s,menu:db.prepare("SELECT * FROM menu WHERE shop_id=?").all(s.id),orders:db.prepare("SELECT o.*,u.name customer FROM orders o JOIN users u ON u.id=o.user_id WHERE o.shop_id=? ORDER BY o.id DESC").all(s.id)})
+});
+app.post("/api/partner/menu",auth,role("restaurant"),(req,res)=>{
+ const s=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);if(!s)return res.status(404).json({error:"Shop not found"});
+ const {name,price,category}=req.body||{};if(!name||!price)return res.status(400).json({error:"Name/price required"});
+ const r=db.prepare("INSERT INTO menu(shop_id,name,price,category) VALUES(?,?,?,?)").run(s.id,name,price,category||"General");res.json({id:r.lastInsertRowid});
+});
+app.patch("/api/partner/orders/:id",auth,role("restaurant"),(req,res)=>{
+ const s=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);
+ db.prepare("UPDATE orders SET status=? WHERE id=? AND shop_id=?").run(req.body.status,req.params.id,s.id);res.json({ok:true})
+});
+
+app.get("/api/delivery/orders",auth,role("delivery"),(req,res)=>res.json(db.prepare(`SELECT o.*,s.name shop_name,s.address shop_address,u.name customer FROM orders o JOIN shops s ON s.id=o.shop_id JOIN users u ON u.id=o.user_id WHERE o.status IN ('READY','ON_THE_WAY') OR o.delivery_id=? ORDER BY o.id DESC`).all(req.user.id)));
+app.patch("/api/delivery/orders/:id",auth,role("delivery"),(req,res)=>{db.prepare("UPDATE orders SET status=?,delivery_id=? WHERE id=?").run(req.body.status,req.user.id,req.params.id);res.json({ok:true})});
+
+app.get("*",(req,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
+app.listen(process.env.PORT||3000,()=>console.log("Home Bite running"));
