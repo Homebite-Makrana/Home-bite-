@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     namespace = "com.homebite.makrana"
     compileSdk = rootProject.ext.compileSdkVersion
+    buildToolsVersion "35.0.0"
     defaultConfig {
         applicationId "com.homebite.makrana"
         minSdkVersion rootProject.ext.minSdkVersion

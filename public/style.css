@@ -412,3 +412,106 @@ td,th{
   position:fixed;
   inset:0;
   background:#0009;
+
+/* HOME BITE — LOCKED BRAND THEME */
+:root{
+  --hb-red:#8b0000;
+  --hb-red-dark:#260000;
+  --hb-gold:#f4c542;
+  --hb-gold-dark:#9b6500;
+  --hb-black:#090909;
+  --hb-white:#fff;
+}
+
+body{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(150,0,0,.35),transparent 45%),
+    linear-gradient(145deg,#120000,#650000 48%,#080000);
+  color:var(--hb-white);
+}
+
+.top{
+  background:linear-gradient(135deg,#170000,#650000 55%,#080000);
+  border-bottom:1px solid rgba(244,197,66,.35);
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+}
+
+.brand .logo{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  overflow:hidden;
+  flex:none;
+  box-shadow:0 0 12px rgba(244,197,66,.35);
+}
+
+.brand .logo img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.brand b{
+  color:var(--hb-gold);
+  letter-spacing:1px;
+}
+
+.btn{
+  background:linear-gradient(135deg,#ffd95a,#b87900);
+  color:#160b00;
+  border:1px solid #ffe88a;
+  font-weight:800;
+  box-shadow:0 3px 10px rgba(244,197,66,.2);
+}
+
+.btn.dark{
+  background:#160000;
+  color:#fff;
+  border-color:rgba(244,197,66,.45);
+}
+
+.card,.shop-card{
+  border-color:rgba(244,197,66,.2);
+  box-shadow:0 8px 25px rgba(0,0,0,.3);
+}
+
+.pill{
+  background:linear-gradient(135deg,#ffd95a,#a86d00);
+  color:#180b00;
+}
+
+.stat{
+  color:var(--hb-gold);
+}
+
+h1 em,h2 em{
+  color:var(--hb-gold);
+}
+
+a{
+  color:var(--hb-gold);
+}
+
+
+.order-track{
+  display:flex;
+  gap:6px;
+  margin-top:14px;
+  overflow-x:auto;
+}
+.order-track span{
+  flex:1;
+  min-width:70px;
+  padding:7px 5px;
+  border-radius:8px;
+  background:#eee;
+  color:#777;
+  font-size:11px;
+  text-align:center;
+}
+.order-track span.active{
+  background:#075d31;
+  color:#fff;
+  font-weight:700;
+}

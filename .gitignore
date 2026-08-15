@@ -6,3 +6,18 @@ node_modules/
 public/*.backup.*
 
 public/*.v2-backup.*
+
+# Local backups / temporary files
+backup-fast/
+backups/
+icon-backup-*/
+icon-preview/
+*.backup
+*.backup.*
+*.before-*
+server.log
+.env*
+!.env.example
+build-tools-*.zip
+install_icon.py
+make_icon.py
