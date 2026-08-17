@@ -56,6 +56,39 @@ function token(u){return jwt.sign({id:u.id,name:u.name,role:u.role},SECRET,{expi
 function auth(req,res,next){try{req.user=jwt.verify((req.headers.authorization||"").replace("Bearer ",""),SECRET);next()}catch(e){res.status(401).json({error:"Login required"})}}
 function role(...roles){return (req,res,next)=>roles.includes(req.user.role)?next():res.status(403).json({error:"Not allowed"})}
 
+/* Change password for the currently logged-in account */
+app.patch("/api/account/password",auth,async(req,res)=>{
+  try{
+    const {current_password,new_password,confirm_password}=req.body||{};
+
+    if(!current_password||!new_password||!confirm_password)
+      return res.status(400).json({error:"All password fields are required"});
+
+    if(new_password.length<6)
+      return res.status(400).json({error:"New password must be at least 6 characters"});
+
+    if(new_password!==confirm_password)
+      return res.status(400).json({error:"New passwords do not match"});
+
+    const user=db.prepare("SELECT * FROM users WHERE id=?").get(req.user.id);
+
+    if(!user)
+      return res.status(404).json({error:"Account not found"});
+
+    if(!bcrypt.compareSync(current_password,user.password))
+      return res.status(400).json({error:"Current password is incorrect"});
+
+    db.prepare("UPDATE users SET password=? WHERE id=?")
+      .run(bcrypt.hashSync(new_password,10),req.user.id);
+
+    res.json({ok:true,message:"Password changed successfully"});
+  }catch(e){
+    console.error("PASSWORD CHANGE ERROR:",e);
+    res.status(500).json({error:"Unable to change password"});
+  }
+});
+
+
 app.post("/api/register",(req,res)=>{
  const {name,phone,password}=req.body||{}; if(!name||!phone||!password)return res.status(400).json({error:"Required fields missing"});
  try{const r=db.prepare("INSERT INTO users(name,phone,password) VALUES(?,?,?)").run(name,phone,bcrypt.hashSync(password,10));const u={id:r.lastInsertRowid,name,role:"customer"};res.json({token:token(u),user:u})}catch(e){res.status(400).json({error:"Phone already registered"})}

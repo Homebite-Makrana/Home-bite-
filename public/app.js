@@ -1,8 +1,35 @@
+
+
+async function changePassword(){
+  const current_password=prompt("Enter current password:");
+  if(current_password===null)return;
+
+  const new_password=prompt("Enter new password (minimum 6 characters):");
+  if(new_password===null)return;
+
+  const confirm_password=prompt("Confirm new password:");
+  if(confirm_password===null)return;
+
+  try{
+    const d=await api("/api/account/password",{
+      method:"PATCH",
+      body:JSON.stringify({
+        current_password,
+        new_password,
+        confirm_password
+      })
+    });
+    alert(d.message||"Password changed successfully");
+  }catch(e){
+    alert(e.message||"Unable to change password");
+  }
+}
+
 const A=document.getElementById("app");let T=localStorage.getItem("hb_token"),U=JSON.parse(localStorage.getItem("hb_user")||"null"),cart=[];
 const API_BASE="https://home-bite-t0mi.onrender.com";
 async function api(u,o={}){o.headers={"Content-Type":"application/json",...(o.headers||{})};if(T)o.headers.Authorization="Bearer "+T;let r=await fetch(API_BASE+u,o),d=await r.json();if(!r.ok)throw Error(d.error||"Error");return d}
 function save(d){T=d.token;U=d.user;localStorage.setItem("hb_token",T);localStorage.setItem("hb_user",JSON.stringify(U))}
-function layout(c){A.innerHTML=`<header class="top"><div class="brand"><div class="logo"><img src="/logo.svg" alt="HOME BITE"></div><div><b>HOME BITE</b><small>Makrana City</small></div></div><div>${U?`<button class="btn dark" onclick="notifications()">🔔</button> Hi, ${U.name} <button class="btn dark" onclick="logout()">Logout</button>`:`<button class="btn" onclick="login()">Login</button>`}</div></header><main class="wrap">${c}</main>`}
+function layout(c){A.innerHTML=`<header class="top"><div class="brand"><div class="logo"><img src="/logo.svg" alt="HOME BITE"></div><div><b>HOME BITE</b><small>Makrana City</small></div></div><div>${U?`<button class="btn dark" onclick="notifications()">🔔</button> Hi, ${U.name} <button class="btn dark" onclick="changePassword()">🔐 Password</button> <button class="btn dark" onclick="logout()">Logout</button>`:`<button class="btn" onclick="login()">Login</button>`}</div></header><main class="wrap">${c}</main>`}
 async function notifications(){
   try{
     let n=await api("/api/notifications");
@@ -25,68 +52,131 @@ async function readNotification(id){
 
 async function home(type=""){
   let s=await api("/api/shops"+(type?"?type="+type:""));
+
   layout(`
-    <section class="home-head">
-      <div class="location">📍 <span>Delivering in</span><b> Makrana City</b></div>
-      <div class="welcome">
+    <section class="hb-home">
+
+      <div class="hb-location">
+        <span class="hb-pin">●</span>
         <div>
-          <small>WELCOME TO</small>
-          <h1>HOME <em>BITE</em></h1>
-          <p>Ghar ka swaad, ab aapke ghar.</p>
+          <small>DELIVERING IN</small>
+          <b>Makrana City</b>
         </div>
-        <div class="brand-mark">HB</div>
+        <span class="hb-status">● LIVE</span>
       </div>
+
+      <section class="hb-hero">
+        <div class="hb-hero-content">
+          <span class="hb-kicker">WELCOME TO</span>
+          <h1>HOME <em>BITE</em></h1>
+          <p>Ghar ka swaad,<br>ab aapke ghar.</p>
+
+          <button class="hb-hero-btn" onclick="home('restaurant')">
+            ORDER NOW <span>→</span>
+          </button>
+        </div>
+
+        <div class="hb-hero-logo">
+          <div class="hb-ring">
+            <img src="/logo.svg" alt="HOME BITE">
+          </div>
+          <span>HB</span>
+        </div>
+
+        <div class="hb-glow"></div>
+      </section>
+
+      <div class="hb-search">
+        <span>⌕</span>
+        <input
+          id="hbSearch"
+          class="search"
+          placeholder="What are you craving today?"
+          oninput="find(this.value)"
+        >
+      </div>
+
+      <div class="hb-heading">
+        <div>
+          <small>EXPLORE</small>
+          <h2>What would you like?</h2>
+        </div>
+      </div>
+
+      <div class="hb-categories">
+        <button class="hb-category ${!type?'selected':''}" onclick="home()">
+          <div class="hb-cat-icon">ALL</div>
+          <b>Everything</b>
+          <small>Explore all</small>
+        </button>
+
+        <button class="hb-category ${type==='restaurant'?'selected':''}" onclick="home('restaurant')">
+          <div class="hb-cat-icon">🍽</div>
+          <b>Restaurants</b>
+          <small>Fresh & tasty</small>
+        </button>
+
+        <button class="hb-category ${type==='home'?'selected':''}" onclick="home('home')">
+          <div class="hb-cat-icon">⌂</div>
+          <b>Home Kitchens</b>
+          <small>Ghar ka swaad</small>
+        </button>
+      </div>
+
+      <div class="hb-heading hb-shop-heading">
+        <div>
+          <small>NEAR YOU</small>
+          <h2>${type==='restaurant'?'Restaurants':type==='home'?'Home Kitchens':'Popular places'}</h2>
+        </div>
+        <span class="hb-count">${s.length} places</span>
+      </div>
+
+      <div id="shops" class="hb-shops">
+        ${s.length ? s.map(x=>`
+          <article class="hb-shop-card">
+            <div class="hb-shop-image ${x.type==='home'?'home-food':'restaurant-food'}">
+              <span>${x.type==='home'?'HOME KITCHEN':'RESTAURANT'}</span>
+              <b>★ ${x.rating}</b>
+            </div>
+
+            <div class="hb-shop-info">
+              <div>
+                <h3>${x.name}</h3>
+                <p>${x.address||'Makrana City'}</p>
+              </div>
+
+              <div class="hb-shop-bottom">
+                <span class="hb-open">● AVAILABLE</span>
+                <button onclick="menu(${x.id})">VIEW MENU <span>→</span></button>
+              </div>
+            </div>
+          </article>
+        `).join("") : `
+          <div class="hb-empty">
+            <div>HB</div>
+            <h3>Coming Soon</h3>
+            <p>New food partners are joining HOME BITE.</p>
+          </div>
+        `}
+      </div>
+
+      <div class="hb-quick">
+        ${U?.role==='customer'?`<button onclick="orders()"><span>▣</span><b>My Orders</b></button>`:""}
+        ${U?.role==='admin'?`<button onclick="admin()"><span>⚙</span><b>Admin Panel</b></button>`:""}
+        ${U?.role==='restaurant'?`<button onclick="partner()"><span>▣</span><b>Restaurant Panel</b></button>`:""}
+        ${U?.role==='delivery'?`<button onclick="deliver()"><span>⌁</span><b>Delivery Panel</b></button>`:""}
+      </div>
+
     </section>
-
-    <div class="search-wrap">
-      <span>⌕</span>
-      <input class="search" placeholder="What are you craving today?" oninput="find(this.value)">
-    </div>
-
-    <div class="section-title">
-      <div><small>EXPLORE</small><h2>What would you like?</h2></div>
-    </div>
-
-    <div class="category-row">
-      <button class="category ${!type?'active':''}" onclick="home()">
-        <strong>ALL</strong><span>Everything</span>
-      </button>
-      <button class="category ${type==='restaurant'?'active':''}" onclick="home('restaurant')">
-        <strong>RESTAURANTS</strong><span>Fresh & tasty</span>
-      </button>
-      <button class="category ${type==='home'?'active':''}" onclick="home('home')">
-        <strong>HOME KITCHENS</strong><span>Ghar ka swaad</span>
-      </button>
-    </div>
-
-    <div class="section-title shop-heading">
-      <div><small>NEAR YOU</small><h2>${type==='restaurant'?'Restaurants':type==='home'?'Home Kitchens':'Popular places'}</h2></div>
-    </div>
-
-    <div id="shops" class="grid shop-grid">
-      ${s.map(x=>`
-        <article class="shop-card">
-          <div class="shop-visual ${x.type==='home'?'home-food':'restaurant-food'}">
-            <span>${x.type==='home'?'HOME KITCHEN':'RESTAURANT'}</span>
-          </div>
-          <div class="shop-info">
-            <div class="shop-title"><h3>${x.name}</h3><span class="pill">★ ${x.rating}</span></div>
-            <p class="muted">${x.address}</p>
-            <div class="shop-bottom"><span>● Available</span><button class="btn" onclick="menu(${x.id})">View Menu →</button></div>
-          </div>
-        </article>
-      `).join("")}
-    </div>
-
-    <div class="quick-actions">
-      ${U?.role==='customer'?`<button onclick="orders()">📦 My Orders</button>`:""}
-      ${U?.role==='admin'?`<button onclick="admin()">⚙ Admin Panel</button>`:""}
-      ${U?.role==='restaurant'?`<button onclick="partner()">Restaurant Panel</button>`:""}
-      ${U?.role==='delivery'?`<button onclick="deliver()">Delivery Panel</button>`:""}
-    </div>
   `)
 }
-function find(q){[...document.querySelectorAll("#shops .card")].forEach(x=>x.style.display=x.innerText.toLowerCase().includes(q.toLowerCase())?"block":"none")}
+
+function find(q){
+  const term=q.toLowerCase().trim();
+  document.querySelectorAll("#shops .hb-shop-card").forEach(x=>{
+    x.style.display=x.innerText.toLowerCase().includes(term)?"":"none";
+  });
+}
 async function menu(id){let s=(await api("/api/shops")).find(x=>x.id==id),m=await api("/api/shops/"+id+"/menu");layout(`<button onclick="home()">← Back</button><h2>${s.name}</h2><div class="card">${m.map(x=>`<div class="food"><div><b>${x.name}</b><div class="muted">₹${x.price} · ${x.category}</div></div><button class="btn" onclick="add(${id},${x.id},'${x.name.replace(/'/g,"\\'")}',${x.price})">Add</button></div>`).join("")}</div><div class="topspace"><button class="btn" onclick="checkout()">Cart (${cart.length})</button></div>`)}
 async function add(shopId,menuId,name,price){if(cart.length&&cart[0].shopId!==shopId)return alert("Please order from one restaurant at a time.");cart.push({shopId,menuId,name,price,qty:1});await menu(shopId)}
 async function checkout(){

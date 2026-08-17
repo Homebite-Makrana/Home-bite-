@@ -1,3 +1,30 @@
+
+
+async function changeOwnerPassword(){
+  const current_password=prompt("Enter current password:");
+  if(current_password===null)return;
+
+  const new_password=prompt("Enter new password (minimum 6 characters):");
+  if(new_password===null)return;
+
+  const confirm_password=prompt("Confirm new password:");
+  if(confirm_password===null)return;
+
+  try{
+    const d=await api("/api/account/password",{
+      method:"PATCH",
+      body:JSON.stringify({
+        current_password,
+        new_password,
+        confirm_password
+      })
+    });
+    alert(d.message||"Password changed successfully");
+  }catch(e){
+    alert(e.message||"Unable to change password");
+  }
+}
+
 let token = localStorage.getItem("hb_token");
 
 if (!token) {
@@ -26,6 +53,17 @@ async function api(url, options = {}) {
 
   return data;
 }
+
+function addPasswordButton(){
+  if(document.getElementById("changePasswordBtn"))return;
+  const b=document.createElement("button");
+  b.id="changePasswordBtn";
+  b.className="primary";
+  b.textContent="🔐 Change Password";
+  b.onclick=changeOwnerPassword;
+  document.body.insertBefore(b,document.body.firstChild);
+}
+setTimeout(addPasswordButton,100);
 
 async function loadDashboard() {
   try {
