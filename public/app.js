@@ -54,150 +54,97 @@ async function home(type=""){
   const s=await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
 
   layout(`
-    <section class="hb2-page">
+    <section class="hb-final">
 
-      <div class="hb2-location">
-        <span>📍</span>
+      <div class="hb-final-location">
+        <span class="hb-pin">●</span>
         <div>
           <small>DELIVERING IN</small>
           <b>Makrana City</b>
         </div>
-        <span class="hb2-live">● LIVE</span>
+        <span class="hb-live">● LIVE</span>
       </div>
 
-      <section class="hb2-hero">
-        <div class="hb2-hero-glow"></div>
+      <div class="hb-final-search">
+        <span>⌕</span>
+        <input id="hb-final-search-input"
+          placeholder="Search restaurant or kitchen"
+          oninput="find(this.value)">
+        <span>×</span>
+      </div>
 
-        <div class="hb2-hero-copy">
-          <div class="hb2-kicker">WELCOME TO</div>
-          <h1><span>HOME</span> <em>BITE</em></h1>
-          <p>Taste That Feels Like Home</p>
-          <button class="hb2-order" onclick="document.getElementById('hb2-search').focus()">
-            ORDER NOW <span>→</span>
-          </button>
+      <section class="hb-final-hero">
+        <div>
+          <small>HOME BITE</small>
+          <h1>रेस्टोरेंट का स्वाद<br><em>अब आपके घर.</em></h1>
+          <p>Restaurant food + homemade food</p>
         </div>
-
-        <div class="hb2-logo-ring">
-          <img src="/logo.svg" alt="HOME BITE">
-        </div>
+        <div class="hb-hero-dish">🍽</div>
       </section>
 
-      <div class="hb2-search">
-        <span>⌕</span>
-        <input id="hb2-search"
-          placeholder="Search restaurants or food"
-          oninput="find(this.value)">
-        <span class="hb2-search-x">×</span>
+      <div class="hb-final-cats">
+        <button class="${!type?"active":""}" onclick="home()">
+          <span>▦</span><b>All</b>
+        </button>
+        <button class="${type==="restaurant"?"active":""}" onclick="home('restaurant')">
+          <span>🏪</span><b>Restaurants</b>
+        </button>
+        <button class="${type==="home"?"active":""}" onclick="home('home')">
+          <span>🏠</span><b>Home Food</b>
+        </button>
       </div>
 
-      <div class="hb2-title">
-        <div>
-          <small>EXPLORE</small>
-          <h2>What would you like?</h2>
-        </div>
-      </div>
-
-      <div class="hb2-categories">
-
-        <button class="hb2-category ${!type?"active":""}" onclick="home()">
-          <span class="hb2-cat-icon">🍽</span>
-          <b>ALL</b>
-          <small>Everything</small>
-        </button>
-
-        <button class="hb2-category ${type==="restaurant"?"active":""}" onclick="home('restaurant')">
-          <span class="hb2-cat-icon">🏪</span>
-          <b>RESTAURANTS</b>
-          <small>Fresh & tasty</small>
-        </button>
-
-        <button class="hb2-category ${type==="home"?"active":""}" onclick="home('home')">
-          <span class="hb2-cat-icon">🍲</span>
-          <b>HOME FOOD</b>
-          <small>Ghar ka swaad</small>
-        </button>
-
-        <button class="hb2-category"
-          onclick="alert('Fast delivery available through local delivery partners.')">
-          <span class="hb2-cat-icon">🛵</span>
-          <b>FAST DELIVERY</b>
-          <small>Quick & safe</small>
-        </button>
-
-      </div>
-
-      <div class="hb2-title hb2-shop-title">
+      <div class="hb-final-heading">
         <div>
           <small>NEAR YOU</small>
-          <h2>${type==="restaurant"?"Restaurants":type==="home"?"Home Kitchens":"Popular Places"}</h2>
+          <h2>${type==="restaurant"?"Restaurants":type==="home"?"Home Food":"Popular Restaurants"}</h2>
         </div>
+        <span>View all ›</span>
       </div>
 
-      <div id="shops" class="hb2-shops">
-
+      <div id="shops" class="hb-final-shops">
         ${s.length?s.map(x=>`
-          <article class="hb2-shop-card">
-
-            <div class="hb2-shop-image ${x.type==="home"?"home":"restaurant"}">
-              <div class="hb2-shop-badge">
-                ${x.type==="home"?"HOME FOOD":"RESTAURANT"}
-              </div>
-              <div class="hb2-food-symbol">
-                ${x.type==="home"?"🍲":"🍛"}
-              </div>
+          <article class="hb-final-card">
+            <div class="hb-food-image ${x.type==="home"?"home":"restaurant"}">
+              <span>${x.type==="home"?"HOME FOOD":"RESTAURANT"}</span>
+              <strong>${x.type==="home"?"🍲":"🍛"}</strong>
             </div>
-
-            <div class="hb2-shop-content">
-
-              <div class="hb2-shop-head">
+            <div class="hb-card-body">
+              <div class="hb-card-title">
                 <h3>${x.name}</h3>
-                <span class="hb2-rating">★ ${x.rating||5}</span>
+                <b>★ ${x.rating||5}</b>
               </div>
-
               <p>${x.address||"Makrana City"}</p>
-
-              <div class="hb2-shop-bottom">
+              <div class="hb-card-bottom">
                 <span>● Available</span>
                 <button onclick="menu(${x.id})">VIEW MENU →</button>
               </div>
-
             </div>
-
           </article>
         `).join(""):`
-          <div class="hb2-empty">
+          <div class="hb-final-empty">
             <div>🍽</div>
             <h3>No restaurants available yet</h3>
             <p>Restaurants and home kitchens will appear here.</p>
           </div>
         `}
-
       </div>
 
-      <div class="hb2-benefits">
-
-        <div>
-          <span>🍲</span>
-          <b>HOME FOOD</b>
-          <small>Made with care</small>
-        </div>
-
-        <div>
-          <span>🏪</span>
-          <b>RESTAURANTS</b>
-          <small>Near you</small>
-        </div>
-
-        <div>
-          <span>🛵</span>
-          <b>FAST DELIVERY</b>
-          <small>Quick & safe</small>
-        </div>
-
+      <div class="hb-final-benefits">
+        <div><span>🛵</span><b>Fast Delivery</b><small>Quick & safe</small></div>
+        <div><span>✦</span><b>Best Quality</b><small>Fresh food</small></div>
+        <div><span>%</span><b>Best Offers</b><small>Great value</small></div>
+        <div><span>◉</span><b>24/7 Support</b><small>We're here</small></div>
       </div>
 
-      <div class="hb2-actions">
-        ${U?.role==="customer"?`<button onclick="orders()">📦 My Orders</button>`:""}
+      <nav class="hb-final-nav">
+        <button class="selected" onclick="home()"><span>⌂</span><b>Home</b></button>
+        ${U?.role==="customer"?`<button onclick="orders()"><span>▤</span><b>Orders</b></button>`:""}
+        <button onclick="checkout()"><span>🛒</span><b>Cart</b></button>
+        <button onclick="login()"><span>♙</span><b>Account</b></button>
+      </nav>
+
+      <div class="hb-final-role-actions">
         ${U?.role==="admin"?`<button onclick="admin()">⚙ Admin Panel</button>`:""}
         ${U?.role==="restaurant"?`<button onclick="partner()">🏪 Restaurant Panel</button>`:""}
         ${U?.role==="delivery"?`<button onclick="deliver()">🛵 Delivery Panel</button>`:""}
@@ -206,12 +153,17 @@ async function home(type=""){
     </section>
   `);
 }
+
+
+
+
 function find(q){
-  const term=q.toLowerCase().trim();
-  document.querySelectorAll("#shops .hb-shop-card").forEach(x=>{
-    x.style.display=x.innerText.toLowerCase().includes(term)?"":"none";
+  const term = String(q || "").toLowerCase().trim();
+  document.querySelectorAll("#shops .hb-final-card").forEach(x=>{
+    x.style.display = x.innerText.toLowerCase().includes(term) ? "" : "none";
   });
 }
+
 async function menu(id){let s=(await api("/api/shops")).find(x=>x.id==id),m=await api("/api/shops/"+id+"/menu");layout(`<button onclick="home()">← Back</button><h2>${s.name}</h2><div class="card">${m.map(x=>`<div class="food"><div><b>${x.name}</b><div class="muted">₹${x.price} · ${x.category}</div></div><button class="btn" onclick="add(${id},${x.id},'${x.name.replace(/'/g,"\\'")}',${x.price})">Add</button></div>`).join("")}</div><div class="topspace"><button class="btn" onclick="checkout()">Cart (${cart.length})</button></div>`)}
 async function add(shopId,menuId,name,price){if(cart.length&&cart[0].shopId!==shopId)return alert("Please order from one restaurant at a time.");cart.push({shopId,menuId,name,price,qty:1});await menu(shopId)}
 async function checkout(){
