@@ -396,3 +396,247 @@
   font-size:12px!important;
   opacity:.85!important;
 }
+
+
+/* =========================================================
+   HOME BITE FINAL CUSTOMER UI — v1.1.0
+   LAST OVERRIDE: do not place older UI rules after this.
+   ========================================================= */
+
+html,body{
+  background:#f5f0e7!important;
+}
+
+.hb-final-page{
+  position:relative!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-height:100vh!important;
+  padding:0 0 125px!important;
+  overflow-x:hidden!important;
+  background:#f5f0e7!important;
+}
+
+/* Header */
+.hb-final-page .hb-final-location{
+  color:#6d6256!important;
+}
+
+/* Hero */
+.hb-final-hero{
+  background:
+    radial-gradient(circle at 85% 20%,#f4c54222,transparent 28%),
+    linear-gradient(135deg,#3d0000 0%,#650000 55%,#8b1010 100%)!important;
+  border:2px solid #f4c542!important;
+  color:#fff!important;
+}
+
+/* Search */
+.hb-final-search{
+  background:#fffdf8!important;
+  border:1px solid #d8c9aa!important;
+}
+
+/* ALL / RESTAURANTS / HOME FOOD */
+.hb-final-cats,
+.hb-final-categories{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:100%!important;
+  margin:18px 0!important;
+}
+
+.hb-final-category{
+  min-height:70px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  padding:10px 7px!important;
+  border:1.5px solid #f4c542!important;
+  border-radius:14px!important;
+  background:#1b0808!important;
+  color:#f4c542!important;
+  box-shadow:0 5px 15px #00000020!important;
+}
+
+.hb-final-category b,
+.hb-final-category small{
+  color:#f4c542!important;
+}
+
+.hb-final-category.active{
+  background:#650000!important;
+  border:2px solid #f4c542!important;
+  box-shadow:0 6px 18px #65000045!important;
+}
+
+.hb-final-category.active b,
+.hb-final-category.active small{
+  color:#fff!important;
+}
+
+/* Section headings */
+.hb-final-heading{
+  color:#650000!important;
+}
+
+.hb-final-heading small{
+  color:#b38b25!important;
+}
+
+.hb-final-heading h2,
+.hb-final-heading h3{
+  color:#650000!important;
+}
+
+/* Shop area */
+.hb-final-shops{
+  width:100%!important;
+  margin-bottom:25px!important;
+}
+
+.hb-final-card,
+.hb-final-shop-card{
+  background:#160d0d!important;
+  color:#fff!important;
+  border:1.5px solid #f4c542!important;
+  border-radius:20px!important;
+  overflow:hidden!important;
+}
+
+.hb-final-card h3,
+.hb-final-card p,
+.hb-final-shop-card h3,
+.hb-final-shop-card p{
+  color:#fff!important;
+}
+
+/* Empty restaurant state */
+.hb-final-empty{
+  background:#160d0d!important;
+  color:#fff!important;
+  border:1.5px solid #f4c542!important;
+  border-radius:20px!important;
+  margin-bottom:25px!important;
+}
+
+.hb-final-empty h3,
+.hb-final-empty p{
+  color:#fff!important;
+}
+
+/* Benefits must remain above the bottom navigation */
+.hb-final-benefits{
+  position:relative!important;
+  z-index:2!important;
+  margin:20px 0 25px!important;
+}
+
+/* Bottom navigation — never overlap page content */
+.hb-final-nav{
+  position:fixed!important;
+  left:14px!important;
+  right:14px!important;
+  bottom:14px!important;
+  width:auto!important;
+  height:68px!important;
+  z-index:9990!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:4px!important;
+  padding:5px!important;
+  border:2px solid #f4c542!important;
+  border-radius:25px!important;
+  background:linear-gradient(135deg,#3d0000,#650000,#3d0000)!important;
+  box-shadow:0 10px 30px #00000055!important;
+}
+
+.hb-final-nav button{
+  min-width:0!important;
+  min-height:55px!important;
+  border:0!important;
+  border-radius:18px!important;
+  background:transparent!important;
+  color:#f4c542!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:1px!important;
+  font-weight:900!important;
+}
+
+.hb-final-nav button span{
+  color:#f4c542!important;
+  font-size:21px!important;
+  line-height:20px!important;
+}
+
+.hb-final-nav button b{
+  color:#f4c542!important;
+  font-size:11px!important;
+}
+
+.hb-final-nav button.active,
+.hb-final-nav button.selected{
+  background:#f4c542!important;
+  color:#3d0000!important;
+}
+
+.hb-final-nav button.active span,
+.hb-final-nav button.active b,
+.hb-final-nav button.selected span,
+.hb-final-nav button.selected b{
+  color:#3d0000!important;
+}
+
+/* Exact app icon in header */
+.top .brand .logo.hb-app-logo{
+  width:45px!important;
+  height:45px!important;
+  min-width:45px!important;
+  min-height:45px!important;
+  max-width:45px!important;
+  max-height:45px!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border-radius:11px!important;
+  background:#650000!important;
+}
+
+.top .brand .logo.hb-app-logo img{
+  display:block!important;
+  width:45px!important;
+  height:45px!important;
+  object-fit:cover!important;
+  border-radius:11px!important;
+}
+
+/* Mobile */
+@media(max-width:500px){
+  .hb-final-page{
+    padding-left:14px!important;
+    padding-right:14px!important;
+    padding-bottom:120px!important;
+  }
+
+  .hb-final-cats,
+  .hb-final-categories{
+    gap:7px!important;
+  }
+
+  .hb-final-category{
+    min-height:66px!important;
+    font-size:12px!important;
+  }
+
+  .hb-final-nav{
+    left:10px!important;
+    right:10px!important;
+    bottom:9px!important;
+  }
+}

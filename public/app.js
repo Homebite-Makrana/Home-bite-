@@ -51,18 +51,7 @@ async function readNotification(id){
 }
 
 async function home(type=""){
-  const app=document.getElementById("app");
-  if(app){
-    app.innerHTML=`<main class="hb-home-loading">
-      <div class="hb-home-loading-card">
-        <img src="/home-bite-app-icon.png" alt="HOME BITE">
-        <b>HOME BITE</b>
-        <span>Makrana City</span>
-      </div>
-    </main>`;
-  }
-
-  const s=await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
+const s=await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
 
   layout(`
     <section class="hb-final">
