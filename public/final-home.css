@@ -254,3 +254,61 @@
 @media(max-width:390px){
   .hb-final-category{font-size:11px!important;padding:10px 4px!important}
 }
+
+/* ===== EXACT ANDROID APP ICON ===== */
+.hb-final-logo-ring{
+  overflow:hidden!important;
+  background:#650000!important;
+  border:1px solid #f4c542!important;
+}
+
+.hb-final-logo-ring img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  border-radius:inherit!important;
+}
+
+/* Final customer screen */
+.hb-final-page{
+  background:
+    radial-gradient(circle at 50% 0%,#65000020,transparent 35%),
+    linear-gradient(180deg,#080808 0%,#120606 100%)!important;
+  color:#fff!important;
+}
+
+.hb-final-category{
+  background:#111!important;
+  color:#f4c542!important;
+  border:1px solid #f4c542!important;
+}
+
+.hb-final-category.active{
+  background:#f4c542!important;
+  color:#180000!important;
+}
+
+.hb-final-shop-card{
+  background:#111!important;
+  color:#fff!important;
+}
+
+.hb-final-heading h2{
+  color:#fff!important;
+}
+
+.hb-final-heading small{
+  color:#f4c542!important;
+}
+
+.hb-final-empty{
+  background:#111!important;
+  color:#fff!important;
+  border-color:#f4c542!important;
+}
+
+.hb-final-benefits>div{
+  background:#111!important;
+  color:#fff!important;
+  border-color:#f4c542!important;
+}

@@ -29,7 +29,7 @@ const A=document.getElementById("app");let T=localStorage.getItem("hb_token"),U=
 const API_BASE="https://home-bite-t0mi.onrender.com";
 async function api(u,o={}){o.headers={"Content-Type":"application/json",...(o.headers||{})};if(T)o.headers.Authorization="Bearer "+T;let r=await fetch(API_BASE+u,o),d=await r.json();if(!r.ok)throw Error(d.error||"Error");return d}
 function save(d){T=d.token;U=d.user;localStorage.setItem("hb_token",T);localStorage.setItem("hb_user",JSON.stringify(U))}
-function layout(c){A.innerHTML=`<header class="top"><div class="brand"><div class="logo"><img src="/logo.svg" alt="HOME BITE"></div><div><b>HOME BITE</b><small>Makrana City</small></div></div><div>${U?`<button class="btn dark" onclick="notifications()">🔔</button> Hi, ${U.name} <button class="btn dark" onclick="changePassword()">🔐 Password</button> <button class="btn dark" onclick="logout()">Logout</button>`:`<button class="btn" onclick="login()">Login</button>`}</div></header><main class="wrap">${c}</main>`}
+function layout(c){A.innerHTML=`<header class="top"><div class="brand"><div class="logo"><img src="/home-bite-app-icon.png" alt="HOME BITE"></div><div><b>HOME BITE</b><small>Makrana City</small></div></div><div>${U?`<button class="btn dark" onclick="notifications()">🔔</button> Hi, ${U.name} <button class="btn dark" onclick="changePassword()">🔐 Password</button> <button class="btn dark" onclick="logout()">Logout</button>`:`<button class="btn" onclick="login()">Login</button>`}</div></header><main class="wrap">${c}</main>`}
 async function notifications(){
   try{
     let n=await api("/api/notifications");
