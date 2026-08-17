@@ -640,3 +640,91 @@ html,body{
     bottom:9px!important;
   }
 }
+
+
+/* =========================================================
+   HOME BITE FINAL LOCK — CATEGORY BUTTONS
+   ========================================================= */
+
+.hb-final-page .hb-final-cats,
+.hb-final-page .hb-final-categories{
+  display:flex!important;
+  gap:12px!important;
+  width:100%!important;
+  margin:18px 0!important;
+}
+
+.hb-final-page .hb-final-category,
+.hb-final-page .hb-final-categories button,
+.hb-final-page .hb-final-cats button{
+  flex:1 1 0!important;
+  min-height:72px!important;
+  padding:10px 8px!important;
+  border:2px solid #f4c542!important;
+  border-radius:16px!important;
+  background:linear-gradient(145deg,#250000,#650000)!important;
+  color:#f4c542!important;
+  box-shadow:0 5px 16px #0008,inset 0 0 18px #f4c54212!important;
+  font-weight:800!important;
+  font-size:17px!important;
+  line-height:1.15!important;
+  text-align:center!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+.hb-final-page .hb-final-category *,
+.hb-final-page .hb-final-categories button *,
+.hb-final-page .hb-final-cats button *{
+  color:#f4c542!important;
+}
+
+.hb-final-page .hb-final-category.active,
+.hb-final-page .hb-final-categories button.active,
+.hb-final-page .hb-final-cats button.active{
+  background:linear-gradient(145deg,#f4c542,#d99b00)!important;
+  color:#250000!important;
+  border-color:#fff0a0!important;
+}
+
+.hb-final-page .hb-final-category.active *,
+.hb-final-page .hb-final-categories button.active *,
+.hb-final-page .hb-final-cats button.active *{
+  color:#250000!important;
+}
+
+/* Keep final navigation in its intended position. */
+.hb-final-page .hb-final-nav{
+  position:sticky!important;
+  bottom:8px!important;
+  z-index:1000!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:4px!important;
+  margin:16px -4px 0!important;
+  padding:5px!important;
+  border:2px solid #f4c542!important;
+  border-radius:28px!important;
+  background:linear-gradient(135deg,#250000,#650000)!important;
+}
+
+.hb-final-page .hb-final-nav button{
+  min-height:70px!important;
+  border:0!important;
+  border-radius:22px!important;
+  background:transparent!important;
+  color:#f4c542!important;
+  font-weight:800!important;
+}
+
+.hb-final-page .hb-final-nav button.active,
+.hb-final-page .hb-final-nav button.selected{
+  background:#f4c542!important;
+  color:#250000!important;
+}
+
+/* No fake loading overlay anywhere in the web app. */
+.hb-home-loading{
+  display:none!important;
+}
