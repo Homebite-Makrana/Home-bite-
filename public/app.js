@@ -51,126 +51,161 @@ async function readNotification(id){
 }
 
 async function home(type=""){
-  let s=await api("/api/shops"+(type?"?type="+type:""));
+  const s=await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
 
   layout(`
-    <section class="hb-home">
+    <section class="hb2-page">
 
-      <div class="hb-location">
-        <span class="hb-pin">●</span>
+      <div class="hb2-location">
+        <span>📍</span>
         <div>
           <small>DELIVERING IN</small>
           <b>Makrana City</b>
         </div>
-        <span class="hb-status">● LIVE</span>
+        <span class="hb2-live">● LIVE</span>
       </div>
 
-      <section class="hb-hero">
-        <div class="hb-hero-content">
-          <span class="hb-kicker">WELCOME TO</span>
-          <h1>HOME <em>BITE</em></h1>
-          <p>Ghar ka swaad,<br>ab aapke ghar.</p>
+      <section class="hb2-hero">
+        <div class="hb2-hero-glow"></div>
 
-          <button class="hb-hero-btn" onclick="home('restaurant')">
+        <div class="hb2-hero-copy">
+          <div class="hb2-kicker">WELCOME TO</div>
+          <h1><span>HOME</span> <em>BITE</em></h1>
+          <p>Taste That Feels Like Home</p>
+          <button class="hb2-order" onclick="document.getElementById('hb2-search').focus()">
             ORDER NOW <span>→</span>
           </button>
         </div>
 
-        <div class="hb-hero-logo">
-          <div class="hb-ring">
-            <img src="/logo.svg" alt="HOME BITE">
-          </div>
-          <span>HB</span>
+        <div class="hb2-logo-ring">
+          <img src="/logo.svg" alt="HOME BITE">
         </div>
-
-        <div class="hb-glow"></div>
       </section>
 
-      <div class="hb-search">
+      <div class="hb2-search">
         <span>⌕</span>
-        <input
-          id="hbSearch"
-          class="search"
-          placeholder="What are you craving today?"
-          oninput="find(this.value)"
-        >
+        <input id="hb2-search"
+          placeholder="Search restaurants or food"
+          oninput="find(this.value)">
+        <span class="hb2-search-x">×</span>
       </div>
 
-      <div class="hb-heading">
+      <div class="hb2-title">
         <div>
           <small>EXPLORE</small>
           <h2>What would you like?</h2>
         </div>
       </div>
 
-      <div class="hb-categories">
-        <button class="hb-category ${!type?'selected':''}" onclick="home()">
-          <div class="hb-cat-icon">ALL</div>
-          <b>Everything</b>
-          <small>Explore all</small>
+      <div class="hb2-categories">
+
+        <button class="hb2-category ${!type?"active":""}" onclick="home()">
+          <span class="hb2-cat-icon">🍽</span>
+          <b>ALL</b>
+          <small>Everything</small>
         </button>
 
-        <button class="hb-category ${type==='restaurant'?'selected':''}" onclick="home('restaurant')">
-          <div class="hb-cat-icon">🍽</div>
-          <b>Restaurants</b>
+        <button class="hb2-category ${type==="restaurant"?"active":""}" onclick="home('restaurant')">
+          <span class="hb2-cat-icon">🏪</span>
+          <b>RESTAURANTS</b>
           <small>Fresh & tasty</small>
         </button>
 
-        <button class="hb-category ${type==='home'?'selected':''}" onclick="home('home')">
-          <div class="hb-cat-icon">⌂</div>
-          <b>Home Kitchens</b>
+        <button class="hb2-category ${type==="home"?"active":""}" onclick="home('home')">
+          <span class="hb2-cat-icon">🍲</span>
+          <b>HOME FOOD</b>
           <small>Ghar ka swaad</small>
         </button>
+
+        <button class="hb2-category"
+          onclick="alert('Fast delivery available through local delivery partners.')">
+          <span class="hb2-cat-icon">🛵</span>
+          <b>FAST DELIVERY</b>
+          <small>Quick & safe</small>
+        </button>
+
       </div>
 
-      <div class="hb-heading hb-shop-heading">
+      <div class="hb2-title hb2-shop-title">
         <div>
           <small>NEAR YOU</small>
-          <h2>${type==='restaurant'?'Restaurants':type==='home'?'Home Kitchens':'Popular places'}</h2>
+          <h2>${type==="restaurant"?"Restaurants":type==="home"?"Home Kitchens":"Popular Places"}</h2>
         </div>
-        <span class="hb-count">${s.length} places</span>
       </div>
 
-      <div id="shops" class="hb-shops">
-        ${s.length ? s.map(x=>`
-          <article class="hb-shop-card">
-            <div class="hb-shop-image ${x.type==='home'?'home-food':'restaurant-food'}">
-              <span>${x.type==='home'?'HOME KITCHEN':'RESTAURANT'}</span>
-              <b>★ ${x.rating}</b>
+      <div id="shops" class="hb2-shops">
+
+        ${s.length?s.map(x=>`
+          <article class="hb2-shop-card">
+
+            <div class="hb2-shop-image ${x.type==="home"?"home":"restaurant"}">
+              <div class="hb2-shop-badge">
+                ${x.type==="home"?"HOME FOOD":"RESTAURANT"}
+              </div>
+              <div class="hb2-food-symbol">
+                ${x.type==="home"?"🍲":"🍛"}
+              </div>
             </div>
 
-            <div class="hb-shop-info">
-              <div>
+            <div class="hb2-shop-content">
+
+              <div class="hb2-shop-head">
                 <h3>${x.name}</h3>
-                <p>${x.address||'Makrana City'}</p>
+                <span class="hb2-rating">★ ${x.rating||5}</span>
               </div>
 
-              <div class="hb-shop-bottom">
-                <span class="hb-open">● AVAILABLE</span>
-                <button onclick="menu(${x.id})">VIEW MENU <span>→</span></button>
+              <p>${x.address||"Makrana City"}</p>
+
+              <div class="hb2-shop-bottom">
+                <span>● Available</span>
+                <button onclick="menu(${x.id})">VIEW MENU →</button>
               </div>
+
             </div>
+
           </article>
-        `).join("") : `
-          <div class="hb-empty">
-            <div>HB</div>
-            <h3>Coming Soon</h3>
-            <p>New food partners are joining HOME BITE.</p>
+        `).join(""):`
+          <div class="hb2-empty">
+            <div>🍽</div>
+            <h3>No restaurants available yet</h3>
+            <p>Restaurants and home kitchens will appear here.</p>
           </div>
         `}
+
       </div>
 
-      <div class="hb-quick">
-        ${U?.role==='customer'?`<button onclick="orders()"><span>▣</span><b>My Orders</b></button>`:""}
-        ${U?.role==='admin'?`<button onclick="admin()"><span>⚙</span><b>Admin Panel</b></button>`:""}
-        ${U?.role==='restaurant'?`<button onclick="partner()"><span>▣</span><b>Restaurant Panel</b></button>`:""}
-        ${U?.role==='delivery'?`<button onclick="deliver()"><span>⌁</span><b>Delivery Panel</b></button>`:""}
+      <div class="hb2-benefits">
+
+        <div>
+          <span>🍲</span>
+          <b>HOME FOOD</b>
+          <small>Made with care</small>
+        </div>
+
+        <div>
+          <span>🏪</span>
+          <b>RESTAURANTS</b>
+          <small>Near you</small>
+        </div>
+
+        <div>
+          <span>🛵</span>
+          <b>FAST DELIVERY</b>
+          <small>Quick & safe</small>
+        </div>
+
+      </div>
+
+      <div class="hb2-actions">
+        ${U?.role==="customer"?`<button onclick="orders()">📦 My Orders</button>`:""}
+        ${U?.role==="admin"?`<button onclick="admin()">⚙ Admin Panel</button>`:""}
+        ${U?.role==="restaurant"?`<button onclick="partner()">🏪 Restaurant Panel</button>`:""}
+        ${U?.role==="delivery"?`<button onclick="deliver()">🛵 Delivery Panel</button>`:""}
       </div>
 
     </section>
-  `)
+  `);
 }
-
 function find(q){
   const term=q.toLowerCase().trim();
   document.querySelectorAll("#shops .hb-shop-card").forEach(x=>{
