@@ -7,7 +7,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function createDatabase(filename = "foodbite.db") {
-  const DB_FILE = path.join(__dirname, filename);
+  const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : __dirname;
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  const DB_FILE = path.join(DATA_DIR, filename);
 
   const SQL = await initSqlJs({
     locateFile: file =>
