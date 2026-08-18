@@ -31,7 +31,7 @@ if (!token) {
   document.body.innerHTML = `
     <div style="padding:30px;font-family:Arial;text-align:center">
       <h2>Owner Login Required</h2>
-      <p>Please login from the Food Bite app first.</p>
+      <p>Please login from the HOME BITE app first.</p>
     </div>`;
 }
 

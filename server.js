@@ -596,4 +596,4 @@ app.patch("/api/delivery/orders/:id",auth,role("delivery"),(req,res)=>{
 registerOwnerApi(app,db,auth,role,bcrypt);
 app.get("/owner",(req,res)=>res.sendFile(path.join(__dirname,"public","owner.html")));
 app.get("/{*splat}",(req,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
-app.listen(process.env.PORT||3000,"0.0.0.0",()=>console.log("Food Bite running"));
+app.listen(process.env.PORT||3000,"0.0.0.0",()=>console.log("HOME BITE running"));

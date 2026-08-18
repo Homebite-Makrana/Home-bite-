@@ -323,7 +323,7 @@ async function admin(){
     <button class="btn" onclick="addArea()">+ Area</button>
   </div>
 
-  <h3>Food Bite Cities</h3>
+  <h3>HOME BITE Cities</h3>
   <div class="card">
     ${f.length ? f.map(x=>`
       <div class="food">
@@ -389,7 +389,7 @@ async function admin(){
 }
 
 async function addFranchise(){
-  layout(`<h2>Add Food Bite City</h2>
+  layout(`<h2>Add HOME BITE City</h2>
   <div class="card">
     <input id="fn" class="input" placeholder="City / Franchise name">
     <input id="fc" class="input" placeholder="Unique code e.g. MAKRANA">
@@ -421,7 +421,7 @@ async function saveFranchise(){
       body:JSON.stringify(data)
     });
 
-    alert("Food Bite City created successfully");
+    alert("HOME BITE City created successfully");
     admin();
   }catch(e){
     alert(e.message);
@@ -435,7 +435,7 @@ async function addArea(){
     layout(`<h2>Add Area</h2>
     <div class="card">
       <select id="afi" class="input">
-        <option value="">Select Food Bite City</option>
+        <option value="">Select HOME BITE City</option>
         ${f.map(x=>`<option value="${x.id}">${x.name} - ${x.city||""}</option>`).join("")}
       </select>
 
@@ -834,4 +834,4 @@ async function collectCOD(id){
 }
 
 async function dst(id,status){await api("/api/delivery/orders/"+id,{method:"PATCH",body:JSON.stringify({status})});deliver()}
-home().catch(e=>document.getElementById("app").innerHTML="<div style='padding:30px'><h2>Food Bite Error</h2><pre>"+e.message+"</pre></div>");
+home().catch(e=>document.getElementById("app").innerHTML="<div style='padding:30px'><h2>HOME BITE Error</h2><pre>"+e.message+"</pre></div>");
