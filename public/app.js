@@ -56,35 +56,29 @@ async function home(type=""){
     type==="home" ? "Home Food" :
     "Popular Restaurants";
 
-  const shopLoading = `
-    <div class="hb-final-empty" style="padding:28px;text-align:center;">
-      <div style="font-size:30px;color:#FFD700;">🍽️</div>
-      <b style="color:#FFD700!important;">Loading restaurants...</b>
-    </div>
-  `;
-
   layout(`
-    <section class="hb-final-page">
+    <section class="hb-final-page hb-reference-home">
 
       <div class="hb-final-location">
         <span class="hb-pin">●</span>
-        <div>
-          <small>DELIVERING IN</small>
-          <b>Makrana City</b>
-        </div>
+        <div><small>DELIVERING IN</small> <b>Makrana City</b></div>
         <span class="hb-live">● LIVE</span>
       </div>
 
-      <div class="hb-final-search">
-        <span>⌕</span>
+      <div class="hb-final-search hb-reference-search">
+        <span class="hb-search-icon">⌕</span>
         <input id="hb-final-search-input"
+          type="search"
+          autocomplete="off"
           placeholder="Search restaurant or kitchen"
           oninput="find(this.value)">
-        <span>×</span>
+        <button type="button" class="hb-search-clear"
+          onclick="document.getElementById('hb-final-search-input').value='';find('')">×</button>
+        <span class="hb-search-go">⌕</span>
       </div>
 
-      <section class="hb-final-hero">
-        <div>
+      <section class="hb-final-hero hb-reference-hero">
+        <div class="hb-hero-copy">
           <small>HOME BITE</small>
           <h1>रेस्टोरेंट का स्वाद<br><em>अब आपके घर.</em></h1>
           <p>Restaurant food + homemade food</p>
@@ -92,7 +86,7 @@ async function home(type=""){
         <div class="hb-hero-dish">🍽</div>
       </section>
 
-      <div class="hb-final-cats">
+      <div class="hb-final-cats hb-reference-cats">
         <button class="${!type?"active":""}" onclick="home()">
           <span>▦</span><b>All</b>
         </button>
@@ -104,7 +98,7 @@ async function home(type=""){
         </button>
       </div>
 
-      <div class="hb-final-heading">
+      <div class="hb-final-heading hb-reference-heading">
         <div>
           <small>NEAR YOU</small>
           <h2>${title}</h2>
@@ -113,7 +107,10 @@ async function home(type=""){
       </div>
 
       <div id="shops" class="hb-final-shops">
-        ${shopLoading}
+        <div class="hb-final-empty hb-reference-empty">
+          <div>🍽</div>
+          <h3>Loading restaurants...</h3>
+        </div>
       </div>
 
       <div class="hb-final-benefits">
@@ -123,7 +120,7 @@ async function home(type=""){
         <div><span>◉</span><b>24/7 Support</b><small>We're here</small></div>
       </div>
 
-      <nav class="hb-final-nav">
+      <nav class="hb-final-nav hb-reference-nav">
         <button class="selected" onclick="home()"><span>⌂</span><b>Home</b></button>
         ${U?.role==="customer"?`<button onclick="orders()"><span>▤</span><b>Orders</b></button>`:""}
         <button onclick="checkout()"><span>🛒</span><b>Cart</b></button>
@@ -145,25 +142,30 @@ async function home(type=""){
     if(!shops) return;
 
     shops.innerHTML = s.length ? s.map(x=>`
-      <article class="hb-final-card">
+      <article class="hb-final-card hb-reference-card">
         <div class="hb-food-image ${x.type==="home"?"home":"restaurant"}">
           <span>${x.type==="home"?"HOME FOOD":"RESTAURANT"}</span>
           <strong>${x.type==="home"?"🍲":"🍛"}</strong>
         </div>
+
         <div class="hb-card-body">
           <div class="hb-card-title">
-            <h3>${x.name}</h3>
-            <b>★ ${x.rating||5}</b>
+            <div>
+              <h3>${x.name}</h3>
+              <b class="hb-rating">★ ${x.rating||5}</b>
+            </div>
           </div>
-          <p>${x.address||"Makrana City"}</p>
+
+          <p class="hb-address">⌖ ${x.address||"Makrana City"}</p>
+
           <div class="hb-card-bottom">
-            <span>● Available</span>
-            <button onclick="menu(${x.id})">VIEW MENU →</button>
+            <span class="hb-open">● Open</span>
+            <button onclick="menu(${x.id})">VIEW MENU <span>→</span></button>
           </div>
         </div>
       </article>
     `).join("") : `
-      <div class="hb-final-empty">
+      <div class="hb-final-empty hb-reference-empty">
         <div>🍽</div>
         <h3>No restaurants available yet</h3>
         <p>Restaurants and home kitchens will appear here.</p>
@@ -174,7 +176,7 @@ async function home(type=""){
     if(!shops) return;
 
     shops.innerHTML = `
-      <div class="hb-final-empty" style="padding:28px;text-align:center;">
+      <div class="hb-final-empty hb-reference-empty">
         <div style="font-size:40px;">⚠️</div>
         <h3>Restaurants couldn't load</h3>
         <p>HOME BITE is ready. Please try again.</p>
