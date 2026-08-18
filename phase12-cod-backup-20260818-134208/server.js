@@ -389,41 +389,6 @@ app.patch("/api/notifications/:id/read",auth,(req,res)=>{
 });
 
 app.get("/api/delivery/orders",auth,role("delivery"),(req,res)=>res.json(db.prepare(`SELECT o.*,s.name shop_name,s.address shop_address,u.name customer FROM orders o JOIN shops s ON s.id=o.shop_id JOIN users u ON u.id=o.user_id WHERE (o.status='READY' AND (o.delivery_id IS NULL OR o.delivery_id=?)) OR o.delivery_id=? ORDER BY o.id DESC`).all(req.user.id,req.user.id)));
-app.patch("/api/delivery/orders/:id/cod-collected",auth,role("delivery"),(req,res)=>{
-  const o=db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);
-
-  if(!o)
-    return res.status(404).json({error:"Order not found"});
-
-  if(o.delivery_id!==req.user.id)
-    return res.status(403).json({error:"Order not assigned to this delivery agent"});
-
-  if(o.payment_method!=="COD")
-    return res.status(400).json({error:"This order is not COD"});
-
-  if(o.status!=="DELIVERED")
-    return res.status(400).json({error:"Order must be DELIVERED before cash collection"});
-
-  if(o.payment_status==="PAID")
-    return res.json({ok:true,orderId:o.id,payment_status:"PAID",already_paid:true});
-
-  db.prepare(`
-    UPDATE orders
-    SET payment_status='PAID'
-    WHERE id=? AND delivery_id=? AND payment_method='COD' AND status='DELIVERED'
-  `).run(o.id,req.user.id);
-
-  db.prepare(
-    "INSERT INTO notifications(user_id,order_id,message) VALUES(?,?,?)"
-  ).run(o.user_id,o.id,"Cash payment received successfully");
-
-  res.json({
-    ok:true,
-    orderId:o.id,
-    payment_status:"PAID"
-  });
-});
-
 app.patch("/api/delivery/orders/:id",auth,role("delivery"),(req,res)=>{const o=db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);if(!o)return res.status(404).json({error:"Order not found"});if(o.delivery_id&&o.delivery_id!==req.user.id)return res.status(403).json({error:"Delivery already assigned"});db.prepare("UPDATE orders SET status=?,delivery_id=? WHERE id=?").run(req.body.status,req.user.id,req.params.id);notifyOrderStatus(req.params.id,req.body.status);res.json({ok:true})});
 
 registerOwnerApi(app,db,auth,role,bcrypt);

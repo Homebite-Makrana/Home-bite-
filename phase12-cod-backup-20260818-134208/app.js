@@ -601,28 +601,9 @@ async function deliver(){
     Payment: ${x.payment_status||"PENDING"}</p>
     <span class="pill">${x.status}</span><br>
     ${x.status!=="DELIVERED"?`<button class="btn topspace" onclick="dst(${x.id},'ON_THE_WAY')">Picked Up</button>
-    <button class="btn topspace" onclick="dst(${x.id},'DELIVERED')">Delivered</button>`:
-    `<b>✅ Delivered</b>
-     ${x.payment_method==="COD" && x.payment_status!=="PAID"
-       ? `<button class="btn topspace" onclick="collectCOD(${x.id})">💵 Cash Collected</button>`
-       : x.payment_method==="COD" && x.payment_status==="PAID"
-       ? `<div class="pill topspace">💵 Cash Paid</div>`
-       : ""}`}
+    <button class="btn topspace" onclick="dst(${x.id},'DELIVERED')">Delivered</button>`:"<b>✅ Delivered</b>"}
   </div>`).join(""):"<p>No assigned deliveries.</p>"}
   <button class="btn topspace" onclick="home()">Home</button>`)
 }
-async function collectCOD(id){
-  if(!confirm("Confirm that cash payment has been received from the customer?")) return;
-  try{
-    await api("/api/delivery/orders/"+id+"/cod-collected",{
-      method:"PATCH"
-    });
-    alert("Cash payment marked as PAID.");
-    deliver();
-  }catch(e){
-    alert(e.message);
-  }
-}
-
 async function dst(id,status){await api("/api/delivery/orders/"+id,{method:"PATCH",body:JSON.stringify({status})});deliver()}
 home().catch(e=>document.getElementById("app").innerHTML="<div style='padding:30px'><h2>Food Bite Error</h2><pre>"+e.message+"</pre></div>");
