@@ -295,7 +295,7 @@ async function settings(){
     <div class="section-card">
       <span class="tag">ACCOUNT SECURITY</span>
       <h2>⚙️ Owner Settings</h2>
-      <p>Manage your HOME BITE owner account.</p>
+      <p>Manage your Food Bite owner account.</p>
 
       <h3>🔐 Change Password</h3>
 
