@@ -79,7 +79,7 @@ async function home(type=""){
   }
 
   layout(`
-    <section class="hb-final">
+    <section class="hb-final-page">
 
       <div class="hb-final-location">
         <span class="hb-pin">●</span>
