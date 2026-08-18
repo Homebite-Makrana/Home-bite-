@@ -659,3 +659,383 @@ html,body{
 .hb-home-loading{
   display:none!important;
 }
+
+/* HOME BITE FINAL APPROVED UI */
+html,body,#app{background:#0D0D0D!important;color:#fff!important}
+.hb-final-page{background:#0D0D0D!important;color:#fff!important;min-height:100vh;padding-bottom:110px!important}
+
+.hb-final-page input,
+.hb-final-page input[type="text"],
+.hb-final-page input[type="search"],
+.hb-final-search,
+.hb-final-search-input{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  background:#0D0D0D!important;
+  background-color:#0D0D0D!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  border:2px solid #FFD700!important;
+  border-radius:18px!important;
+  box-shadow:none!important;
+  outline:none!important;
+}
+
+.hb-final-page input::placeholder{
+  color:#aaa!important;
+  -webkit-text-fill-color:#aaa!important;
+  opacity:1!important;
+}
+
+.hb-final-page button{
+  font-family:inherit!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+}
+
+.hb-final-cats button,
+.hb-final-categories button,
+.hb-final-category{
+  background:linear-gradient(145deg,#650000,#3D0000)!important;
+  color:#FFD700!important;
+  border:2px solid #FFD700!important;
+  border-radius:18px!important;
+  box-shadow:0 5px 18px #0008!important;
+}
+
+.hb-final-cats button *,
+.hb-final-categories button *,
+.hb-final-category *{
+  background:transparent!important;
+  color:#FFD700!important;
+}
+
+.hb-final-cats button.active,
+.hb-final-cats button.selected,
+.hb-final-categories button.active,
+.hb-final-categories button.selected,
+.hb-final-category.active{
+  background:#FFD700!important;
+  color:#0D0D0D!important;
+}
+
+.hb-final-cats button.active *,
+.hb-final-cats button.selected *,
+.hb-final-categories button.active *,
+.hb-final-categories button.selected *,
+.hb-final-category.active *{
+  color:#0D0D0D!important;
+}
+
+.hb-final-page .hb-final-hero{
+  background:linear-gradient(135deg,#3D0000,#650000 60%,#880000)!important;
+  border:2px solid #FFD700!important;
+  border-radius:24px!important;
+  box-shadow:0 12px 35px #65000055!important;
+}
+
+.hb-final-page .hb-final-card{
+  background:#0D0D0D!important;
+  color:#fff!important;
+  border:2px solid #FFD700!important;
+  border-radius:20px!important;
+  box-shadow:0 8px 24px #0009!important;
+}
+
+.hb-final-page .hb-final-card *{
+  color:#fff!important;
+}
+
+.hb-final-page .hb-final-card h3,
+.hb-final-page .hb-final-card strong,
+.hb-final-page .hb-final-card b{
+  color:#FFD700!important;
+}
+
+.hb-final-page .hb-final-card button{
+  background:#650000!important;
+  color:#FFD700!important;
+  border:1.5px solid #FFD700!important;
+  border-radius:12px!important;
+  font-weight:800!important;
+}
+
+.hb-final-page .hb-final-empty{
+  background:#0D0D0D!important;
+  color:#fff!important;
+  border:2px solid #FFD700!important;
+  border-radius:20px!important;
+}
+
+.hb-final-page .hb-final-empty *{
+  color:#fff!important;
+}
+
+.hb-final-page .hb-final-nav{
+  background:linear-gradient(90deg,#650000,#3D0000)!important;
+  border:2px solid #FFD700!important;
+  border-radius:30px!important;
+}
+
+.hb-final-page .hb-final-nav button{
+  background:transparent!important;
+  color:#FFD700!important;
+  border:0!important;
+}
+
+.hb-final-page .hb-final-nav button *{
+  color:#FFD700!important;
+}
+
+.hb-final-page .hb-final-nav button.active,
+.hb-final-page .hb-final-nav button.selected{
+  background:#FFD700!important;
+  color:#0D0D0D!important;
+  border-radius:24px!important;
+}
+
+.hb-final-page .hb-final-nav button.active *,
+.hb-final-page .hb-final-nav button.selected *{
+  color:#0D0D0D!important;
+}
+
+
+/* =========================================================
+   HOME BITE — FINAL SECOND-IMAGE DESIGN POLISH
+   DO NOT CHANGE SDK / API / AUTH / DATABASE
+   ========================================================= */
+
+/* APP ROOT */
+html,body,#app{
+  background:#000!important;
+  color:#fff!important;
+}
+
+/* FINAL HOME */
+.hb-final-page{
+  background:#000!important;
+  color:#fff!important;
+  min-height:100vh!important;
+  padding-bottom:105px!important;
+}
+
+/* HEADER */
+.hb-final-page header,
+.hb-final-page .hb-final-header{
+  background:#000!important;
+  border-bottom:1px solid #FFD700!important;
+}
+
+/* SEARCH — NO WHITE INPUT */
+.hb-final-page .hb-final-search,
+.hb-final-page .hb-final-search-input,
+.hb-final-page input,
+.hb-final-page input[type="text"],
+.hb-final-page input[type="search"]{
+  background:#000!important;
+  background-color:#000!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  border:1.5px solid #FFD700!important;
+  border-radius:24px!important;
+  box-shadow:none!important;
+  outline:none!important;
+}
+
+.hb-final-page input::placeholder{
+  color:#aaa!important;
+  -webkit-text-fill-color:#aaa!important;
+}
+
+/* HERO */
+.hb-final-page .hb-final-hero{
+  background:linear-gradient(135deg,#650000,#3d0000 65%,#880000)!important;
+  border:1.5px solid #FFD700!important;
+  border-radius:22px!important;
+  box-shadow:0 10px 30px #65000055!important;
+}
+
+/* CATEGORY ROW */
+.hb-final-page .hb-final-cats,
+.hb-final-page .hb-final-categories{
+  gap:10px!important;
+}
+
+.hb-final-page .hb-final-cats button,
+.hb-final-page .hb-final-categories button,
+.hb-final-page .hb-final-category{
+  background:#650000!important;
+  color:#fff!important;
+  border:1.5px solid #FFD700!important;
+  border-radius:14px!important;
+  min-height:64px!important;
+}
+
+.hb-final-page .hb-final-cats button *,
+.hb-final-page .hb-final-categories button *,
+.hb-final-page .hb-final-category *{
+  background:transparent!important;
+  color:#fff!important;
+}
+
+/* ACTIVE CATEGORY = GOLD */
+.hb-final-page .hb-final-cats button.active,
+.hb-final-page .hb-final-cats button.selected,
+.hb-final-page .hb-final-categories button.active,
+.hb-final-page .hb-final-categories button.selected,
+.hb-final-page .hb-final-category.active{
+  background:#FFD700!important;
+  color:#000!important;
+}
+
+.hb-final-page .hb-final-cats button.active *,
+.hb-final-page .hb-final-cats button.selected *,
+.hb-final-page .hb-final-categories button.active *,
+.hb-final-page .hb-final-categories button.selected *,
+.hb-final-page .hb-final-category.active *{
+  color:#000!important;
+}
+
+/* RESTAURANT SECTION */
+.hb-final-page .hb-final-card{
+  background:#050505!important;
+  color:#fff!important;
+  border:1.5px solid #FFD700!important;
+  border-radius:20px!important;
+  box-shadow:0 6px 20px #000!important;
+  overflow:hidden!important;
+}
+
+.hb-final-page .hb-final-card *{
+  background:transparent!important;
+  color:#fff!important;
+}
+
+.hb-final-page .hb-final-card h3,
+.hb-final-page .hb-final-card h4,
+.hb-final-page .hb-final-card strong,
+.hb-final-page .hb-final-card b{
+  color:#fff!important;
+}
+
+.hb-final-page .hb-final-card button{
+  background:#650000!important;
+  color:#FFD700!important;
+  border:1px solid #FFD700!important;
+  border-radius:12px!important;
+  font-weight:800!important;
+}
+
+/* EMPTY STATE */
+.hb-final-page .hb-final-empty{
+  background:#050505!important;
+  color:#fff!important;
+  border:1.5px solid #FFD700!important;
+  border-radius:20px!important;
+}
+
+.hb-final-page .hb-final-empty *{
+  color:#fff!important;
+}
+
+/* BOTTOM NAV — SECOND IMAGE STYLE */
+.hb-final-page .hb-final-nav{
+  background:linear-gradient(90deg,#650000,#3d0000)!important;
+  border:2px solid #FFD700!important;
+  border-radius:30px!important;
+  box-shadow:0 8px 25px #000!important;
+}
+
+.hb-final-page .hb-final-nav button{
+  background:transparent!important;
+  color:#FFD700!important;
+  border:0!important;
+}
+
+.hb-final-page .hb-final-nav button *{
+  color:#FFD700!important;
+}
+
+.hb-final-page .hb-final-nav button.active,
+.hb-final-page .hb-final-nav button.selected{
+  background:#FFD700!important;
+  color:#000!important;
+  border-radius:24px!important;
+}
+
+.hb-final-page .hb-final-nav button.active *,
+.hb-final-page .hb-final-nav button.selected *{
+  color:#000!important;
+}
+
+/* =========================================================
+   FINAL SPLASH — BIG HB LOGO / DEEP RED
+   ========================================================= */
+
+#splash,
+.splash,
+.splash-screen,
+#splashScreen{
+  background:#650000!important;
+  color:#fff!important;
+}
+
+#splash img,
+.splash img,
+.splash-screen img,
+#splashScreen img{
+  width:min(58vw,280px)!important;
+  height:min(58vw,280px)!important;
+  max-width:280px!important;
+  max-height:280px!important;
+  object-fit:contain!important;
+  display:block!important;
+  margin:auto!important;
+}
+
+#splash h1,
+.splash h1,
+.splash-screen h1,
+#splashScreen h1{
+  color:#fff!important;
+  font-weight:900!important;
+}
+
+#splash h1 span,
+.splash h1 span,
+.splash-screen h1 span,
+#splashScreen h1 span{
+  color:#FFD700!important;
+}
+
+#splash p,
+.splash p,
+.splash-screen p,
+#splashScreen p{
+  color:#FFD700!important;
+}
+
+/* PREVENT WHITE FORM CONTROLS */
+.hb-final-page textarea,
+.hb-final-page select{
+  background:#000!important;
+  color:#fff!important;
+  border-color:#FFD700!important;
+}
+
+/* MOBILE SPACING */
+@media(max-width:600px){
+  .hb-final-page{
+    padding-left:16px!important;
+    padding-right:16px!important;
+  }
+
+  .hb-final-page .hb-final-hero{
+    margin-top:12px!important;
+  }
+
+  .hb-final-page .hb-final-cats,
+  .hb-final-page .hb-final-categories{
+    grid-template-columns:repeat(3,1fr)!important;
+  }
+}
