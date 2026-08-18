@@ -51,7 +51,32 @@ async function readNotification(id){
 }
 
 async function home(type=""){
-const s=await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
+  layout(`
+    <section style="min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;">
+      <div>
+        <div style="font-size:54px;">🍽️</div>
+        <h2 style="margin:12px 0 6px;">HOME BITE</h2>
+        <p style="margin:0;opacity:.75;">Loading restaurants...</p>
+      </div>
+    </section>
+  `);
+
+  let s=[];
+  try{
+    s=await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
+  }catch(e){
+    layout(`
+      <section style="min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;">
+        <div>
+          <div style="font-size:50px;">⚠️</div>
+          <h2>HOME BITE</h2>
+          <p>Unable to load restaurants.</p>
+          <button class="btn" onclick="home('${type||""}')">Try Again</button>
+        </div>
+      </section>
+    `);
+    return;
+  }
 
   layout(`
     <section class="hb-final">
