@@ -1774,3 +1774,382 @@ html,body,#app{
     width:88px!important;
   }
 }
+
+/* =========================================================
+   HOME BITE — FINAL REFERENCE MASTER v35
+   LAST OVERRIDE — DO NOT PATCH BELOW
+   ========================================================= */
+
+.hb-header-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+
+.hb-bell{
+  width:44px!important;
+  height:44px!important;
+  border:0!important;
+  background:transparent!important;
+  color:#FFD000!important;
+  font-size:28px!important;
+  padding:0!important;
+}
+
+.hb-hi{
+  color:#fff!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+}
+
+.hb-final-page{
+  background:#000!important;
+  color:#fff!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-height:100vh!important;
+  padding:0 18px 112px!important;
+  box-sizing:border-box!important;
+}
+
+.hb-final-location{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  margin:18px 0 18px!important;
+  color:#fff!important;
+}
+
+.hb-final-location small{
+  color:#fff!important;
+  font-size:15px!important;
+  letter-spacing:.3px!important;
+}
+
+.hb-final-location b{
+  color:#FFD000!important;
+  font-size:18px!important;
+}
+
+.hb-final-location .hb-live{
+  color:#ff3030!important;
+  font-weight:800!important;
+  font-size:16px!important;
+}
+
+.hb-final-search{
+  width:100%!important;
+  height:54px!important;
+  border:2px solid #FFD000!important;
+  border-radius:30px!important;
+  background:#050505!important;
+  display:flex!important;
+  align-items:center!important;
+  padding:0 15px!important;
+  box-sizing:border-box!important;
+  margin-bottom:16px!important;
+}
+
+.hb-final-search span{
+  color:#FFD000!important;
+  font-size:29px!important;
+  line-height:1!important;
+}
+
+.hb-final-search input{
+  flex:1!important;
+  min-width:0!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  color:#fff!important;
+  font-size:17px!important;
+  padding:0 10px!important;
+}
+
+.hb-final-search input::placeholder{
+  color:#999!important;
+}
+
+.hb-final-hero{
+  min-height:220px!important;
+  border:2px solid #FFD000!important;
+  border-radius:24px!important;
+  background:linear-gradient(135deg,#720000,#9b0000 55%,#650000)!important;
+  box-sizing:border-box!important;
+  padding:27px 24px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  overflow:hidden!important;
+}
+
+.hb-final-hero > div:first-child{
+  flex:1!important;
+  min-width:0!important;
+}
+
+.hb-final-hero small{
+  color:#FFD000!important;
+  font-size:15px!important;
+  font-weight:900!important;
+  letter-spacing:.4px!important;
+}
+
+.hb-final-hero h1{
+  margin:8px 0!important;
+  color:#fff!important;
+  font-size:31px!important;
+  line-height:1.08!important;
+  font-weight:900!important;
+}
+
+.hb-final-hero h1 em{
+  color:#FFD000!important;
+  font-style:normal!important;
+}
+
+.hb-final-hero p{
+  color:#fff!important;
+  font-size:15px!important;
+  margin:12px 0 0!important;
+}
+
+.hb-hero-dish{
+  flex:0 0 auto!important;
+  font-size:62px!important;
+  color:#FFD000!important;
+}
+
+.hb-final-cats{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:12px!important;
+  margin:16px 0 26px!important;
+}
+
+.hb-final-cats button{
+  min-height:76px!important;
+  border:1.5px solid #FFD000!important;
+  border-radius:17px!important;
+  background:#650000!important;
+  color:#fff!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  box-sizing:border-box!important;
+}
+
+.hb-final-cats button span{
+  color:#FFD000!important;
+  font-size:27px!important;
+  line-height:1!important;
+}
+
+.hb-final-cats button b{
+  color:#fff!important;
+  font-size:15px!important;
+}
+
+.hb-final-cats button.active,
+.hb-final-cats button.selected{
+  background:#FFD000!important;
+}
+
+.hb-final-cats button.active *,
+.hb-final-cats button.selected *{
+  color:#111!important;
+}
+
+.hb-final-heading{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:space-between!important;
+  margin-bottom:14px!important;
+}
+
+.hb-final-heading small{
+  display:block!important;
+  color:#FFD000!important;
+  font-size:12px!important;
+  letter-spacing:2px!important;
+  margin-bottom:5px!important;
+}
+
+.hb-final-heading h2{
+  margin:0!important;
+  color:#fff!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+}
+
+.hb-final-heading > span{
+  color:#FFD000!important;
+  font-size:14px!important;
+  white-space:nowrap!important;
+}
+
+.hb-final-shops{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:12px!important;
+}
+
+.hb-final-card{
+  display:grid!important;
+  grid-template-columns:112px minmax(0,1fr)!important;
+  min-height:170px!important;
+  border:2px solid #FFD000!important;
+  border-radius:22px!important;
+  background:#050505!important;
+  padding:12px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+.hb-food-image{
+  min-height:145px!important;
+  border:1px solid #8f7100!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,#6c2500,#210000)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:14px!important;
+}
+
+.hb-food-image span{
+  color:#FFD000!important;
+  font-size:10px!important;
+  font-weight:900!important;
+}
+
+.hb-food-image strong{
+  font-size:48px!important;
+}
+
+.hb-card-body{
+  min-width:0!important;
+  padding:8px 0 8px 14px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+.hb-card-title{
+  display:flex!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+}
+
+.hb-card-title h3{
+  margin:0!important;
+  color:#fff!important;
+  font-size:20px!important;
+  line-height:1.15!important;
+}
+
+.hb-card-title b{
+  color:#fff!important;
+  white-space:nowrap!important;
+}
+
+.hb-card-body p{
+  color:#bbb!important;
+  font-size:13px!important;
+  margin:10px 0!important;
+}
+
+.hb-card-bottom{
+  margin-top:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+}
+
+.hb-card-bottom span{
+  color:#43e35b!important;
+  font-weight:800!important;
+  font-size:14px!important;
+}
+
+.hb-card-bottom button{
+  border:1.5px solid #FFD000!important;
+  border-radius:13px!important;
+  background:#650000!important;
+  color:#FFD000!important;
+  padding:10px 12px!important;
+  font-weight:900!important;
+}
+
+.hb-final-nav{
+  position:fixed!important;
+  z-index:9999!important;
+  left:16px!important;
+  right:16px!important;
+  bottom:12px!important;
+  height:76px!important;
+  border:3px solid #FFD000!important;
+  border-radius:40px!important;
+  background:#650000!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  padding:4px!important;
+  box-sizing:border-box!important;
+}
+
+.hb-final-nav button{
+  border:0!important;
+  border-radius:34px!important;
+  background:transparent!important;
+  color:#FFD000!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:1px!important;
+}
+
+.hb-final-nav button span{
+  font-size:28px!important;
+  line-height:1!important;
+}
+
+.hb-final-nav button b{
+  font-size:13px!important;
+}
+
+.hb-final-nav button.active,
+.hb-final-nav button.selected{
+  background:#FFD000!important;
+  color:#111!important;
+}
+
+.hb-final-nav button.active *,
+.hb-final-nav button.selected *{
+  color:#111!important;
+}
+
+.hb-final-benefits,
+.hb-final-role-actions{
+  display:none!important;
+}
+
+@media(max-width:380px){
+  .hb-final-page{padding-left:14px!important;padding-right:14px!important}
+  .hb-final-hero{min-height:205px!important;padding:22px 18px!important}
+  .hb-final-hero h1{font-size:27px!important}
+  .hb-hero-dish{font-size:50px!important}
+  .hb-final-card{grid-template-columns:96px minmax(0,1fr)!important}
+  .hb-food-image{min-height:130px!important}
+  .hb-card-title h3{font-size:18px!important}
+}
+
+@media(min-width:600px){
+  .hb-final-page{max-width:560px!important;margin:0 auto!important}
+}
