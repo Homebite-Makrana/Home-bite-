@@ -16,6 +16,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.23.0",
     "razorpay": "^2.9.8",
     "sql.js": "^1.14.1"
   },

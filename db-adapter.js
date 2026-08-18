@@ -1,81 +1,65 @@
-import initSqlJs from "sql.js";
-import fs from "fs";
+import "dotenv/config";
+import { spawnSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const HELPER = path.join(__dirname, "pg-query.js");
 
-export async function createDatabase(filename = "foodbite.db") {
-  const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : __dirname;
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-  const DB_FILE = path.join(DATA_DIR, filename);
+function query(mode, sql, params = []) {
+  const r = spawnSync(
+    process.execPath,
+    [HELPER, JSON.stringify({mode, sql, params})],
+    {
+      encoding: "utf8",
+      env: process.env,
+      maxBuffer: 10 * 1024 * 1024
+    }
+  );
 
-  const SQL = await initSqlJs({
-    locateFile: file =>
-      path.join(__dirname, "node_modules", "sql.js", "dist", file)
-  });
+  if (r.error) throw r.error;
 
-  const nativeDb = fs.existsSync(DB_FILE)
-    ? new SQL.Database(fs.readFileSync(DB_FILE))
-    : new SQL.Database();
+  if (r.status !== 0) {
+    throw new Error(
+      (r.stderr || r.stdout || "PostgreSQL query failed").trim()
+    );
+  }
 
-  function save() {
-    fs.writeFileSync(DB_FILE, Buffer.from(nativeDb.export()));
+  return JSON.parse(r.stdout || '{"rows":[],"rowCount":0}');
+}
+
+export async function createDatabase() {
+  if (!(process.env.DATABASE_URL || "").startsWith("postgres")) {
+    throw new Error("DATABASE_URL is missing or invalid");
   }
 
   return {
+    // The production PostgreSQL schema was already created and migrated
+    // in Phase 4. The old server.js contains SQLite CREATE TABLE syntax,
+    // so do not execute that legacy startup schema against PostgreSQL.
     exec(sql) {
-      nativeDb.run(sql);
-      save();
+      return undefined;
     },
 
     prepare(sql) {
       return {
         get(...params) {
-          const stmt = nativeDb.prepare(sql);
-          try {
-            stmt.bind(params);
-            if (!stmt.step()) return undefined;
-            return stmt.getAsObject();
-          } finally {
-            stmt.free();
-          }
+          return query("get", sql, params).rows[0];
         },
 
         all(...params) {
-          const stmt = nativeDb.prepare(sql);
-          try {
-            stmt.bind(params);
-            const rows = [];
-            while (stmt.step()) rows.push(stmt.getAsObject());
-            return rows;
-          } finally {
-            stmt.free();
-          }
+          return query("all", sql, params).rows;
         },
 
         run(...params) {
-          const stmt = nativeDb.prepare(sql);
-          try {
-            stmt.bind(params);
-            stmt.step();
-          } finally {
-            stmt.free();
-          }
-
-          const result = nativeDb.exec(
-            "SELECT last_insert_rowid() AS id"
-          );
-
-          const lastInsertRowid =
-            result.length && result[0].values.length
-              ? Number(result[0].values[0][0])
-              : 0;
-
-          save();
-
-          return { lastInsertRowid };
+          const r = query("run", sql, params);
+          return {
+            lastInsertRowid: r.rows?.[0]?.id
+              ? Number(r.rows[0].id)
+              : 0,
+            rowCount: r.rowCount || 0
+          };
         }
       };
     }

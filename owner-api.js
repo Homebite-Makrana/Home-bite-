@@ -98,9 +98,7 @@ export function registerOwnerApi(app, db, auth, role, bcrypt) {
         bcrypt.hashSync(password,10),
         "delivery",
         franchise_id||null,
-        area_id||null,
-        Number(latitude)||null,
-        Number(longitude)||null
+        area_id||null
       );
 
       res.json({ok:true,id:r.lastInsertRowid});
