@@ -51,32 +51,17 @@ async function readNotification(id){
 }
 
 async function home(type=""){
-  layout(`
-    <section style="min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;">
-      <div>
-        <div style="font-size:54px;">🍽️</div>
-        <h2 style="margin:12px 0 6px;">HOME BITE</h2>
-        <p style="margin:0;opacity:.75;">Loading restaurants...</p>
-      </div>
-    </section>
-  `);
+  const title =
+    type==="restaurant" ? "Restaurants" :
+    type==="home" ? "Home Food" :
+    "Popular Restaurants";
 
-  let s=[];
-  try{
-    s=await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
-  }catch(e){
-    layout(`
-      <section style="min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;">
-        <div>
-          <div style="font-size:50px;">⚠️</div>
-          <h2>HOME BITE</h2>
-          <p>Unable to load restaurants.</p>
-          <button class="btn" onclick="home('${type||""}')">Try Again</button>
-        </div>
-      </section>
-    `);
-    return;
-  }
+  const shopLoading = `
+    <div class="hb-final-empty" style="padding:28px;text-align:center;">
+      <div style="font-size:30px;color:#FFD700;">🍽️</div>
+      <b style="color:#FFD700!important;">Loading restaurants...</b>
+    </div>
+  `;
 
   layout(`
     <section class="hb-final-page">
@@ -122,37 +107,13 @@ async function home(type=""){
       <div class="hb-final-heading">
         <div>
           <small>NEAR YOU</small>
-          <h2>${type==="restaurant"?"Restaurants":type==="home"?"Home Food":"Popular Restaurants"}</h2>
+          <h2>${title}</h2>
         </div>
         <span>View all ›</span>
       </div>
 
       <div id="shops" class="hb-final-shops">
-        ${s.length?s.map(x=>`
-          <article class="hb-final-card">
-            <div class="hb-food-image ${x.type==="home"?"home":"restaurant"}">
-              <span>${x.type==="home"?"HOME FOOD":"RESTAURANT"}</span>
-              <strong>${x.type==="home"?"🍲":"🍛"}</strong>
-            </div>
-            <div class="hb-card-body">
-              <div class="hb-card-title">
-                <h3>${x.name}</h3>
-                <b>★ ${x.rating||5}</b>
-              </div>
-              <p>${x.address||"Makrana City"}</p>
-              <div class="hb-card-bottom">
-                <span>● Available</span>
-                <button onclick="menu(${x.id})">VIEW MENU →</button>
-              </div>
-            </div>
-          </article>
-        `).join(""):`
-          <div class="hb-final-empty">
-            <div>🍽</div>
-            <h3>No restaurants available yet</h3>
-            <p>Restaurants and home kitchens will appear here.</p>
-          </div>
-        `}
+        ${shopLoading}
       </div>
 
       <div class="hb-final-benefits">
@@ -177,10 +138,51 @@ async function home(type=""){
 
     </section>
   `);
+
+  try{
+    const s = await api("/api/shops"+(type?"?type="+encodeURIComponent(type):""));
+    const shops = document.getElementById("shops");
+    if(!shops) return;
+
+    shops.innerHTML = s.length ? s.map(x=>`
+      <article class="hb-final-card">
+        <div class="hb-food-image ${x.type==="home"?"home":"restaurant"}">
+          <span>${x.type==="home"?"HOME FOOD":"RESTAURANT"}</span>
+          <strong>${x.type==="home"?"🍲":"🍛"}</strong>
+        </div>
+        <div class="hb-card-body">
+          <div class="hb-card-title">
+            <h3>${x.name}</h3>
+            <b>★ ${x.rating||5}</b>
+          </div>
+          <p>${x.address||"Makrana City"}</p>
+          <div class="hb-card-bottom">
+            <span>● Available</span>
+            <button onclick="menu(${x.id})">VIEW MENU →</button>
+          </div>
+        </div>
+      </article>
+    `).join("") : `
+      <div class="hb-final-empty">
+        <div>🍽</div>
+        <h3>No restaurants available yet</h3>
+        <p>Restaurants and home kitchens will appear here.</p>
+      </div>
+    `;
+  }catch(e){
+    const shops = document.getElementById("shops");
+    if(!shops) return;
+
+    shops.innerHTML = `
+      <div class="hb-final-empty" style="padding:28px;text-align:center;">
+        <div style="font-size:40px;">⚠️</div>
+        <h3>Restaurants couldn't load</h3>
+        <p>HOME BITE is ready. Please try again.</p>
+        <button class="btn" onclick="home('${type||""}')">Try Again</button>
+      </div>
+    `;
+  }
 }
-
-
-
 
 function find(q){
   const term = String(q || "").toLowerCase().trim();
