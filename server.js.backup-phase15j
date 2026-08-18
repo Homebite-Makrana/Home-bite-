@@ -354,64 +354,6 @@ app.post("/api/partner/menu",auth,role("restaurant"),(req,res)=>{
  const {name,price,category}=req.body||{};if(!name||!price)return res.status(400).json({error:"Name/price required"});
  const r=db.prepare("INSERT INTO menu(shop_id,name,price,category) VALUES(?,?,?,?)").run(s.id,name,price,category||"General");res.json({id:r.lastInsertRowid});
 });
-app.patch("/api/partner/menu/:id",auth,role("restaurant"),(req,res)=>{
-  const shop=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);
-  if(!shop)
-    return res.status(404).json({error:"Shop not found"});
-
-  const item=db.prepare(
-    "SELECT * FROM menu WHERE id=? AND shop_id=?"
-  ).get(req.params.id,shop.id);
-
-  if(!item)
-    return res.status(404).json({error:"Menu item not found"});
-
-  const {name,price,category,available}=req.body||{};
-
-  if(name!==undefined && !String(name).trim())
-    return res.status(400).json({error:"Menu name cannot be empty"});
-
-  if(price!==undefined &&
-     (!Number.isFinite(Number(price)) || Number(price)<=0))
-    return res.status(400).json({error:"Invalid menu price"});
-
-  if(available!==undefined && ![0,1,true,false].includes(available))
-    return res.status(400).json({error:"Invalid availability value"});
-
-  db.prepare(`
-    UPDATE menu
-    SET name=?,
-        price=?,
-        category=?,
-        available=?
-    WHERE id=? AND shop_id=?
-  `).run(
-    name===undefined ? item.name : String(name).trim(),
-    price===undefined ? item.price : Number(price),
-    category===undefined ? (item.category||"General") : String(category).trim(),
-    available===undefined ? item.available : (available===true || Number(available)===1 ? 1 : 0),
-    item.id,
-    shop.id
-  );
-
-  res.json({ok:true});
-});
-
-app.delete("/api/partner/menu/:id",auth,role("restaurant"),(req,res)=>{
-  const shop=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);
-  if(!shop)
-    return res.status(404).json({error:"Shop not found"});
-
-  const result=db.prepare(
-    "DELETE FROM menu WHERE id=? AND shop_id=?"
-  ).run(req.params.id,shop.id);
-
-  if(!result.changes)
-    return res.status(404).json({error:"Menu item not found"});
-
-  res.json({ok:true});
-});
-
 app.patch("/api/partner/orders/:id",auth,role("restaurant"),(req,res)=>{
  const s=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);
  db.prepare("UPDATE orders SET status=? WHERE id=? AND shop_id=?").run(req.body.status,req.params.id,s.id);notifyOrderStatus(req.params.id,req.body.status);res.json({ok:true})
