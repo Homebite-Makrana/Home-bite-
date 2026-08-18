@@ -253,6 +253,26 @@ cart=[];alert("Order #HB"+r.orderId+" placed");return orders();
 let p=await api("/api/payment/create",{method:"POST",body:JSON.stringify({shopId:cart[0].shopId,items:cart.map(x=>({menuId:x.menuId,qty:x.qty})),address:a,latitude,longitude})});
 
 let cfg=await api("/api/config/razorpay");
+
+if(typeof Razorpay!=="function"){
+  await new Promise((resolve,reject)=>{
+    const existing=document.querySelector('script[data-razorpay-sdk="1"]');
+    if(existing){
+      existing.addEventListener("load",resolve,{once:true});
+      existing.addEventListener("error",()=>reject(new Error("Razorpay SDK failed to load")),{once:true});
+      return;
+    }
+
+    const script=document.createElement("script");
+    script.src="https://checkout.razorpay.com/v1/checkout.js";
+    script.async=true;
+    script.dataset.razorpaySdk="1";
+    script.onload=resolve;
+    script.onerror=()=>reject(new Error("Razorpay SDK failed to load"));
+    document.head.appendChild(script);
+  });
+}
+
 let options={
 key:"",
 amount:p.amount,
