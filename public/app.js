@@ -27,7 +27,28 @@ async function changePassword(){
 
 const A=document.getElementById("app");let T=localStorage.getItem("hb_token"),U=JSON.parse(localStorage.getItem("hb_user")||"null"),cart=[];
 const API_BASE="https://home-bite-t0mi.onrender.com";
-async function api(u,o={}){o.headers={"Content-Type":"application/json",...(o.headers||{})};if(T)o.headers.Authorization="Bearer "+T;let r=await fetch(API_BASE+u,o),d=await r.json();if(!r.ok)throw Error(d.error||"Error");return d}
+async function api(u,o={}){
+  try{
+    o.headers={"Content-Type":"application/json",...(o.headers||{})};
+    if(T)o.headers.Authorization="Bearer "+T;
+
+    const r=await fetch(API_BASE+u,o);
+    const text=await r.text();
+
+    let d={};
+    try{
+      d=text?JSON.parse(text):{};
+    }catch(_){
+      d={error:text||"Empty server response"};
+    }
+
+    if(!r.ok)throw Error(d.error||("HTTP "+r.status));
+    return d;
+  }catch(e){
+    console.error("HOME BITE API ERROR:",e);
+    throw Error(e?.message||"Network error. Please check internet connection.");
+  }
+}
 function save(d){T=d.token;U=d.user;localStorage.setItem("hb_token",T);localStorage.setItem("hb_user",JSON.stringify(U))}
 function hbIcon(name){
   const a={
@@ -363,13 +384,15 @@ async function orders(){
   layout(`<h2>My Orders</h2>${r.length?r.map(x=>`<div class="card topspace">
     <div class="row"><b>#HB${x.id} ${x.shop_name}</b><span class="pill">${x.status}</span></div>
     <p>₹${x.total}<br>${x.address}<br><b>Payment: ${x.payment_status||"PENDING"}</b></p>
-    <div style="margin-top:12px;padding:10px;border-radius:10px;background:#f5f5f5">
+    <div class="hb-order-progress">
       <b>Order Progress</b><br>
-      ${x.status==="PLACED"?"🟢":"⚪"} Order Placed →
-      ${["PREPARING","READY","ON_THE_WAY","DELIVERED"].includes(x.status)?"🟢":"⚪"} Preparing →
-      ${["READY","ON_THE_WAY","DELIVERED"].includes(x.status)?"🟢":"⚪"} Ready →
-      ${["ON_THE_WAY","DELIVERED"].includes(x.status)?"🟢":"⚪"} On the Way →
-      ${x.status==="DELIVERED"?"🟢":"⚪"} Delivered
+      <div class="hb-progress-line">
+        <span>${x.status==="PLACED"?"🟢":"⚪"} Order Placed →</span>
+        <span>${["PREPARING","READY","ON_THE_WAY","DELIVERED"].includes(x.status)?"🟢":"⚪"} Preparing →</span>
+        <span>${["READY","ON_THE_WAY","DELIVERED"].includes(x.status)?"🟢":"⚪"} Ready →</span>
+        <span>${["ON_THE_WAY","DELIVERED"].includes(x.status)?"🟢":"⚪"} On the Way →</span>
+        <span>${x.status==="DELIVERED"?"🟢":"⚪"} Delivered</span>
+      </div>
     </div>
   </div>`).join(""):"<p>No orders yet.</p>"}<button class="btn topspace" onclick="home()">Home</button>`)
 }
