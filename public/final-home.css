@@ -970,3 +970,20 @@ body{
   background:#070B14!important;
   min-height:100vh!important;
 }
+
+/* HOME BITE V48 — FINAL FIRST SURFACE */
+html,
+body,
+#app {
+    margin: 0 !important;
+    background: #070B14 !important;
+    color: #FFFFFF !important;
+}
+
+body {
+    min-height: 100vh !important;
+}
+
+#app {
+    min-height: 100vh !important;
+}
