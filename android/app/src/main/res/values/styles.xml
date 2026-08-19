@@ -18,13 +18,10 @@
         <item name="android:statusBarColor">#070B14</item>
         <item name="android:forceDarkAllowed">false</item>
     </style>
-    <style name="AppTheme.NoActionBarLaunch" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/home_bite_v48_launch</item>
-        <item name="android:navigationBarColor">#070B14</item>
-        <item name="android:statusBarColor">#070B14</item>
-        <item name="android:forceDarkAllowed">false</item>
-        <item name="android:windowDisablePreview">false</item>
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#070B14</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/home_bite_v49_splash</item>
+        <item name="windowSplashScreenAnimationDuration">0</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
     </style>
 </resources>
