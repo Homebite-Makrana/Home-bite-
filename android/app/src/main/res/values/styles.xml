@@ -8,8 +8,7 @@
         <item name="android:navigationBarColor">#070B14</item>
         <item name="android:statusBarColor">#070B14</item>
         <item name="android:forceDarkAllowed">false</item>
-        <item name="windowSplashScreenBehavior">icon_preferred</item>
-</style>
+    </style>
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
