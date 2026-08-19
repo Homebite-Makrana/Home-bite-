@@ -947,3 +947,26 @@ body{min-height:100vh!important;}
   .brand small{font-size:15px!important;}
   .hb-header-actions .btn{padding:0 13px!important;font-size:15px!important;}
 }
+
+
+/* HOME BITE V46 — NO INTERMEDIATE BLANK SURFACE */
+html,body,#app{
+  background:#070B14!important;
+  color:#FFFFFF!important;
+  min-height:100%!important;
+}
+
+body{
+  margin:0!important;
+  background:#070B14!important;
+}
+
+#app{
+  background:#070B14!important;
+  min-height:100vh!important;
+}
+
+.hb-final-page{
+  background:#070B14!important;
+  min-height:100vh!important;
+}
