@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<scale xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/home_bite_splash_bitmap"
-    android:scaleWidth="130%"
-    android:scaleHeight="130%"
-    android:scaleGravity="center" />
