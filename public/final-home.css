@@ -651,3 +651,85 @@ html,body,#app{
 #hb-boot-splash{background:var(--hb-maroon)!important}
 .hb-boot-title b,.hb-boot-city,.hb-boot-loading{color:var(--hb-gold-bright)!important}
 /* HOME BITE FINAL WARM MAROON THEME END */
+
+/* HOME BITE v40 — REFERENCE BLUE / GOLD THEME */
+
+:root{
+  --hb-bg:#07080C;
+  --hb-panel:#0B1018;
+  --hb-blue:#06182A;
+  --hb-blue2:#0A2036;
+  --hb-gold:#FFC400;
+  --hb-gold2:#E6A900;
+  --hb-white:#F7F7F5;
+  --hb-muted:#B9BBC1;
+  --hb-green:#18C84B;
+}
+
+html,body{
+  background:var(--hb-bg)!important;
+  color:var(--hb-white)!important;
+}
+body{min-height:100vh!important;overflow-x:hidden!important}
+.top{background:#07080C!important;border-bottom:1px solid var(--hb-gold)!important}
+.wrap{background:#07080C!important}
+input,textarea,select{background:#07080C!important;color:#F7F7F5!important}
+
+.hb-hero,.hero,.hero-card{
+  background:
+    radial-gradient(circle at 78% 45%,rgba(17,48,78,.55),transparent 34%),
+    linear-gradient(135deg,#071321,#020912)!important;
+  border-color:var(--hb-gold)!important;
+}
+
+.hb-category,.category,.filter-btn{
+  background:#071321!important;color:#F7F7F5!important;
+  border-color:var(--hb-gold)!important;
+}
+.hb-category.active,.category.active,.filter-btn.active{
+  background:linear-gradient(135deg,#FFC400,#E8A900)!important;
+  color:#090A0D!important;border-color:#FFC400!important;
+}
+
+.card,.restaurant-card,.shop-card{
+  background:#070B11!important;color:#F7F7F5!important;
+  border-color:var(--hb-gold)!important;
+}
+.card small,.restaurant-card small,.shop-card small{color:#B9BBC1!important}
+.card .rating,.restaurant-card .rating,.shop-card .rating{color:#FFC400!important}
+
+.btn{
+  background:#071321!important;color:#FFC400!important;
+  border-color:#FFC400!important;
+}
+.btn.primary,.btn.gold,button.primary{
+  background:linear-gradient(135deg,#FFC400,#E8A900)!important;
+  color:#090A0D!important;border-color:#FFC400!important;
+}
+
+.bottom-nav,.bottom,nav.bottom{
+  background:#071321!important;border-color:#FFC400!important;
+}
+.bottom-nav .active,.bottom .active,nav.bottom .active{
+  background:linear-gradient(135deg,#FFC400,#E8A900)!important;
+  color:#090A0D!important;
+}
+
+h1,h2,h3,h4,b,strong{color:#F7F7F5}
+.gold,.text-gold{color:#FFC400!important}
+
+#app{background:#07080C!important;min-height:100vh!important}
+
+#hb-boot-splash{
+  background:#07080C!important;color:#F7F7F5!important;
+}
+#hb-boot-splash .hb-boot-inner{background:#07080C!important}
+#hb-boot-splash .hb-boot-inner img{
+  width:min(250px,62vw)!important;
+  height:min(250px,62vw)!important;
+  object-fit:contain!important;
+}
+#hb-boot-splash .hb-boot-title{color:#F7F7F5!important}
+#hb-boot-splash .hb-boot-title b{color:#FFC400!important}
+#hb-boot-splash .hb-boot-city,
+#hb-boot-splash .hb-boot-loading{color:#FFC400!important}
