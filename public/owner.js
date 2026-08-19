@@ -216,12 +216,48 @@ async function loadSection(section) {
             <b>${x.name}</b>
             <small>${x.phone}</small>
           </div>
-          <span>${x.role}</span>
+          <div>
+            <span>${x.role}</span>
+            ${["restaurant","delivery"].includes(x.role)
+              ? `<button class="primary topspace" onclick="resetManagedPassword(${x.id},'${String(x.name).replace(/'/g,"\\'")}','${x.role}')">🔐 Reset Password</button>`
+              : ""}
+          </div>
         </div>
       `).join("");
     }
   } catch (e) {
     box.innerHTML = `<div class="error">${e.message}</div>`;
+  }
+}
+
+async function resetManagedPassword(userId, name, role){
+  const newPassword = prompt(
+    "Set a new password for " + name + " (" + role + ").\nMinimum 6 characters:"
+  );
+  if(newPassword === null) return;
+
+  if(newPassword.length < 6){
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
+  const confirmPassword = prompt("Confirm the new password:");
+  if(confirmPassword === null) return;
+
+  if(newPassword !== confirmPassword){
+    alert("Passwords do not match.");
+    return;
+  }
+
+  try{
+    const result = await api("/api/owner/users/"+userId+"/password",{
+      method:"PATCH",
+      body:JSON.stringify({new_password:newPassword})
+    });
+    alert(result.message || "Account password reset successfully.");
+    showSection(role === "delivery" ? "delivery" : "shops");
+  }catch(e){
+    alert(e.message || "Unable to reset password.");
   }
 }
 

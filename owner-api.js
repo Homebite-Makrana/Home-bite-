@@ -243,6 +243,44 @@ export function registerOwnerApi(app, db, auth, role, bcrypt) {
   });
 
 
+  // Admin reset for restaurant/delivery account password
+  app.patch("/api/owner/users/:id/password", auth, role("admin"), (req,res) => {
+    try {
+      const userId = Number(req.params.id);
+      const {new_password} = req.body || {};
+
+      if (!Number.isInteger(userId) || userId <= 0)
+        return res.status(400).json({error:"Invalid user ID"});
+
+      if (!new_password || typeof new_password !== "string")
+        return res.status(400).json({error:"New password is required"});
+
+      if (new_password.length < 6)
+        return res.status(400).json({error:"New password must be at least 6 characters"});
+
+      const user = db.prepare(
+        "SELECT id,name,role FROM users WHERE id=?"
+      ).get(userId);
+
+      if (!user)
+        return res.status(404).json({error:"Account not found"});
+
+      if (!["restaurant","delivery"].includes(user.role))
+        return res.status(403).json({error:"Password reset is allowed only for restaurant or delivery accounts"});
+
+      db.prepare("UPDATE users SET password=? WHERE id=?")
+        .run(bcrypt.hashSync(new_password,10), user.id);
+
+      res.json({
+        ok:true,
+        message:"Account password reset successfully"
+      });
+    } catch(e) {
+      console.error("ACCOUNT PASSWORD RESET ERROR:", e.message);
+      res.status(500).json({error:"Unable to reset account password"});
+    }
+  });
+
   // Change owner phone
   app.patch("/api/owner/phone", auth, role("admin"), (req,res) => {
     const {current_password,new_phone} = req.body || {};
