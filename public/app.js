@@ -29,8 +29,35 @@ const A=document.getElementById("app");let T=localStorage.getItem("hb_token"),U=
 const API_BASE="https://home-bite-t0mi.onrender.com";
 async function api(u,o={}){o.headers={"Content-Type":"application/json",...(o.headers||{})};if(T)o.headers.Authorization="Bearer "+T;let r=await fetch(API_BASE+u,o),d=await r.json();if(!r.ok)throw Error(d.error||"Error");return d}
 function save(d){T=d.token;U=d.user;localStorage.setItem("hb_token",T);localStorage.setItem("hb_user",JSON.stringify(U))}
+function hbIcon(name){
+  const a={
+    grid:`<svg class="hb-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`,
+    restaurant:`<svg class="hb-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10h16M5 10v9M19 10v9M3 19h18M6 10l2-5h8l2 5M8 14h8"/></svg>`,
+    homefood:`<svg class="hb-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 10.5V20h13v-9.5M9 20v-5h6v5"/></svg>`,
+    hero:`<svg class="hb-svg hb-svg-hero" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 36h44M14 36c0-13 8-22 18-22s18 9 18 22M8 40h48M18 40v8h28v-8M23 50h18M29 14h6M32 9v5"/></svg>`,
+    bell:`<svg class="hb-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>`,
+    user:`<svg class="hb-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/></svg>`,
+    cart:`<svg class="hb-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 8H6M9 21h.01M18 21h.01"/></svg>`,
+    orders:`<svg class="hb-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg>`
+  };
+  return a[name]||"";
+}
+
 function layout(c){
-  A.innerHTML = c;
+  A.innerHTML=`<header class="top">
+    <div class="brand">
+      <div class="logo hb-app-logo">
+        <img class="hb-app-logo-img" src="/home-bite-app-icon.png" alt="HOME BITE">
+      </div>
+      <div><b>HOME BITE</b><small>Makrana City</small></div>
+    </div>
+    <div class="hb-header-actions">
+      ${U
+        ? `<button class="hb-bell" onclick="notifications()">${hbIcon("bell")}</button><span class="hb-hi">Hi, ${U.name}</span><button class="btn dark" onclick="changePassword()">🔐 Password</button><button class="btn dark" onclick="logout()">Logout</button>`
+        : `<button class="hb-bell" onclick="notifications()">${hbIcon("bell")}</button><button class="btn" onclick="login()">Login</button>`
+      }
+    </div>
+  </header><main class="wrap">${c}</main>`;
 }
 
 async function notifications(){
@@ -86,18 +113,18 @@ async function home(type=""){
           <h1>रेस्टोरेंट का स्वाद<br><em>अब आपके घर.</em></h1>
           <p>Restaurant food + homemade food</p>
         </div>
-        <div class="hb-hero-dish">🍽</div>
+        <div class="hb-hero-dish">${hbIcon("hero")}</div>
       </section>
 
       <div class="hb-final-cats hb-reference-cats">
         <button class="${!type?"active":""}" onclick="home()">
-          <span>▦</span><b>All</b>
+          ${hbIcon("grid")}<b>All</b>
         </button>
         <button class="${type==="restaurant"?"active":""}" onclick="home('restaurant')">
-          <span>🏪</span><b>Restaurants</b>
+          ${hbIcon("restaurant")}<b>Restaurants</b>
         </button>
         <button class="${type==="home"?"active":""}" onclick="home('home')">
-          <span>🏠</span><b>Home Food</b>
+          ${hbIcon("homefood")}<b>Home Food</b>
         </button>
       </div>
 
@@ -111,7 +138,7 @@ async function home(type=""){
 
       <div id="shops" class="hb-final-shops">
         <div class="hb-final-empty hb-reference-empty">
-          <div>🍽</div>
+          <div>${hbIcon("hero")}</div>
           <h3>Loading restaurants...</h3>
         </div>
       </div>
@@ -124,10 +151,10 @@ async function home(type=""){
       </div>
 
       <nav class="hb-final-nav hb-reference-nav">
-        <button class="selected" onclick="home()"><span>⌂</span><b>Home</b></button>
-        ${U?.role==="customer"?`<button onclick="orders()"><span>▤</span><b>Orders</b></button>`:""}
-        <button onclick="checkout()"><span>🛒</span><b>Cart</b></button>
-        <button onclick="login()"><span>♙</span><b>Account</b></button>
+        <button class="selected" onclick="home()">${hbIcon("homefood")}<b>Home</b></button>
+        ${U?.role==="customer"?`<button onclick="orders()">${hbIcon("orders")}<b>Orders</b></button>`:""}
+        <button onclick="checkout()">${hbIcon("cart")}<b>Cart</b></button>
+        <button onclick="login()">${hbIcon("user")}<b>Account</b></button>
       </nav>
 
       <div class="hb-final-role-actions">
@@ -169,7 +196,7 @@ async function home(type=""){
       </article>
     `).join("") : `
       <div class="hb-final-empty hb-reference-empty">
-        <div>🍽</div>
+        <div>${hbIcon("hero")}</div>
         <h3>No restaurants available yet</h3>
         <p>Restaurants and home kitchens will appear here.</p>
       </div>

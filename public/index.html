@@ -1,5 +1,3 @@
-<!doctype html>
-<html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -7,10 +5,39 @@
   <meta name="description" content="HOME BITE – Makrana food delivery">
   <title>HOME BITE – Makrana</title>
 
-<link rel="icon" type="image/svg+xml" href="/logo.svg"><link rel="manifest" href="/manifest.json"><link rel="preload" as="image" href="home-bite-app-icon.png"><link rel="stylesheet" href="final-home.css?v=37">
-</head>
-<body style="margin:0;background:#000;">
-<div id="app"></div>
-<script defer src="app.js?v=37"></script>
+<link rel="icon" type="image/svg+xml" href="/logo.svg"><link rel="manifest" href="/manifest.json"><link rel="preload" as="image" href="home-bite-app-icon.png"><link rel="stylesheet" href="final-home.css?v=38"></head>
+
+<body>
+<div id="app">
+  <div class="hb-boot">
+    <header class="top">
+      <div class="brand">
+        <div class="logo hb-app-logo"><img class="hb-app-logo-img" src="/home-bite-app-icon.png" alt="HOME BITE"></div>
+        <div><b>HOME BITE</b><small>Makrana City</small></div>
+      </div>
+      <div class="hb-header-actions">
+        <span class="hb-boot-bell">♧</span>
+        <button class="btn" type="button">Login</button>
+      </div>
+    </header>
+    <main class="hb-final-page">
+      <div class="hb-final-location"><span class="hb-pin">●</span><div><small>DELIVERING IN</small> <b>Makrana City</b></div><span class="hb-live">● LIVE</span></div>
+      <div class="hb-final-search"><span class="hb-search-icon">⌕</span><input type="search" placeholder="Search restaurant or kitchen"><span class="hb-search-go">⌕</span></div>
+      <section class="hb-final-hero">
+        <div><small>HOME BITE</small><h1>रेस्टोरेंट का स्वाद<br><em>अब आपके घर.</em></h1><p>Restaurant food + homemade food</p></div>
+        <div class="hb-hero-dish">🍽</div>
+      </section>
+      <div class="hb-final-cats">
+        <button class="active"><span>▦</span><b>All</b></button>
+        <button><span>🏪</span><b>Restaurants</b></button>
+        <button><span>🏠</span><b>Home Food</b></button>
+      </div>
+      <div class="hb-final-heading"><div><small>NEAR YOU</small><h2>Popular Restaurants</h2></div><span>View all ›</span></div>
+      <div class="hb-final-empty"><div>🍽</div><h3>Loading restaurants...</h3></div>
+    </main>
+  </div>
+</div>
+<script defer src="app.js?v=38"></script>
 </body>
+
 </html>
