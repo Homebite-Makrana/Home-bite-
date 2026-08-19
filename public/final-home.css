@@ -449,3 +449,85 @@ body{
 .hb-boot .top{display:flex!important}
 .hb-boot .hb-final-page{display:block!important}
 .hb-boot-bell{color:#FFD000!important;font-size:28px!important}
+
+/* HOME BITE v39 FINAL BOOT */
+
+html,body{
+  background:#650000!important;
+}
+
+#hb-boot-splash{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483647!important;
+  width:100%!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  background:#650000!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  opacity:1;
+}
+
+.hb-boot-inner{
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:24px!important;
+}
+
+.hb-boot-inner img{
+  width:min(230px,58vw)!important;
+  height:min(230px,58vw)!important;
+  object-fit:contain!important;
+  display:block!important;
+  border-radius:42px!important;
+}
+
+.hb-boot-title{
+  margin-top:18px!important;
+  color:#fff!important;
+  font-size:38px!important;
+  line-height:1!important;
+  font-weight:900!important;
+}
+
+.hb-boot-title b{
+  color:#FFD000!important;
+}
+
+.hb-boot-city{
+  margin-top:8px!important;
+  color:#FFD000!important;
+  font-size:22px!important;
+  font-weight:700!important;
+}
+
+.hb-boot-loading{
+  margin-top:78px!important;
+  color:#FFD000!important;
+  font-size:22px!important;
+}
+
+.hb-dots{
+  display:inline-block!important;
+  min-width:30px!important;
+  text-align:left!important;
+}
+
+@media(max-width:380px){
+  .hb-boot-inner img{
+    width:190px!important;
+    height:190px!important;
+  }
+  .hb-boot-title{font-size:33px!important}
+  .hb-boot-city{font-size:20px!important}
+  .hb-boot-loading{
+    margin-top:62px!important;
+    font-size:20px!important;
+  }
+}
