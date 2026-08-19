@@ -864,3 +864,86 @@ body{min-height:100vh!important;}
   .brand small{font-size:15px!important;}
   .hb-header-actions .btn{padding:0 13px!important;font-size:15px!important;}
 }
+
+/* =========================================================
+   HOME BITE V45 — APPROVED OLD LOGO + ONE BLUE/GOLD THEME
+   ========================================================= */
+:root{
+  --hb-bg:#070B14;
+  --hb-panel:#0B1322;
+  --hb-panel2:#0B2340;
+  --hb-gold:#FFC928;
+  --hb-gold2:#E9A900;
+  --hb-white:#FFFFFF;
+  --hb-muted:#B9C1CC;
+}
+html,body,#app,.wrap,.hb-final-page{background:#070B14!important;color:#FFFFFF!important;}
+body{min-height:100vh!important;}
+
+/* Header / brand */
+.top{background:#070B14!important;border-bottom:2px solid #FFC928!important;min-height:96px!important;padding:10px 12px!important;}
+.brand{gap:12px!important;align-items:center!important;}
+.hb-app-logo{width:78px!important;height:78px!important;flex:0 0 78px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+.hb-app-logo-img{width:78px!important;height:78px!important;object-fit:cover!important;border-radius:16px!important;display:block!important;}
+.brand b{font-size:30px!important;line-height:1!important;color:#FFFFFF!important;letter-spacing:.2px!important;}
+.brand small{font-size:17px!important;margin-top:5px!important;color:#FFC928!important;}
+.hb-header-actions{gap:6px!important;}
+.hb-bell{color:#FFC928!important;font-size:29px!important;}
+.hb-header-actions .btn,.top .btn{background:#0B1322!important;color:#FFC928!important;border:2px solid #FFC928!important;border-radius:16px!important;min-height:50px!important;padding:0 18px!important;font-size:17px!important;font-weight:900!important;box-shadow:none!important;}
+
+/* Home */
+.hb-final-page{min-height:calc(100vh - 96px)!important;}
+.hb-final-location{color:#FFFFFF!important;}
+.hb-final-location b{color:#FFC928!important;}
+.hb-final-location .hb-live{color:#FFC928!important;}
+.hb-final-search{background:#0B1322!important;border-color:#FFC928!important;}
+.hb-final-search input{color:#FFFFFF!important;background:transparent!important;}
+.hb-final-search input::placeholder{color:#9FA9B7!important;}
+.hb-final-hero{background:linear-gradient(135deg,#0B2340,#07162A 55%,#0B1322)!important;border-color:#FFC928!important;color:#FFFFFF!important;}
+.hb-final-hero h1,.hb-final-hero h1 em,.hb-final-hero p,.hb-final-hero small{color:#FFFFFF!important;}
+.hb-final-hero h1 em{color:#FFC928!important;}
+
+/* Categories / navigation */
+.hb-final-cats button{background:#0B1322!important;border-color:#C99A00!important;color:#FFFFFF!important;}
+.hb-final-cats button *{color:#FFFFFF!important;}
+.hb-final-cats button .hb-svg{color:#FFC928!important;}
+.hb-final-cats button.active,.hb-final-cats button.selected{background:linear-gradient(180deg,#FFC928,#E9A900)!important;border-color:#FFC928!important;}
+.hb-final-cats button.active *,.hb-final-cats button.selected *{color:#070B14!important;}
+.hb-final-nav{background:#0B1322!important;border-color:#FFC928!important;}
+.hb-final-nav button{background:transparent!important;color:#FFFFFF!important;}
+.hb-final-nav button .hb-svg{color:#FFC928!important;}
+.hb-final-nav button.active,.hb-final-nav button.selected{background:linear-gradient(180deg,#FFC928,#E9A900)!important;}
+.hb-final-nav button.active *,.hb-final-nav button.selected *{color:#070B14!important;}
+
+/* Restaurant card — the red image panel is now blue */
+.hb-final-card{background:linear-gradient(145deg,#0B2340,#070B14)!important;border-color:#FFC928!important;color:#FFFFFF!important;}
+.hb-final-card *{color:inherit;}
+.hb-final-card small,.hb-final-card p{color:#B9C1CC!important;}
+.hb-final-card .hb-svg{color:#FFC928!important;}
+.hb-food-image,.hb-food-image.restaurant,.hb-food-image.home{background:linear-gradient(145deg,#0B2340,#07162A)!important;border-color:#C99A00!important;color:#FFFFFF!important;}
+.hb-food-image span{color:#FFC928!important;}
+.hb-card-bottom button{background:#0B1322!important;color:#FFC928!important;border:2px solid #FFC928!important;box-shadow:none!important;}
+.hb-open{color:#42E06F!important;}
+
+/* Restaurant menu / generic pages */
+.card,.shop-card{background:#0B1322!important;color:#FFFFFF!important;border:2px solid #C99A00!important;box-shadow:none!important;}
+.food{background:transparent!important;color:#FFFFFF!important;border-top:1px solid #24344D!important;}
+.food b,.food span{color:#FFFFFF!important;}
+.muted{color:#B9C1CC!important;}
+.btn{background:linear-gradient(180deg,#FFC928,#E9A900)!important;color:#070B14!important;border:2px solid #FFC928!important;box-shadow:none!important;font-weight:900!important;}
+.btn.dark{background:#0B1322!important;color:#FFC928!important;border-color:#FFC928!important;}
+
+/* Hard-stop old red/brown surfaces */
+[style*="#650000"],[style*="#8A0000"],[style*="#6C2500"],[style*="#210000"],
+[style*="#650000f5"],[style*="#3D0000"],[style*="#3d0000"],[style*="#8b0000"],
+[style*="rgb(101,0,0)"],[style*="rgb(138,0,0)"]{background:#0B1322!important;color:#FFFFFF!important;}
+#hb-boot-splash,.hb-boot{display:none!important;visibility:hidden!important;}
+
+@media(max-width:390px){
+  .top{padding:8px 8px!important;min-height:90px!important;}
+  .hb-app-logo,.hb-app-logo-img{width:70px!important;height:70px!important;flex-basis:70px!important;}
+  .brand{gap:8px!important;}
+  .brand b{font-size:26px!important;}
+  .brand small{font-size:15px!important;}
+  .hb-header-actions .btn{padding:0 13px!important;font-size:15px!important;}
+}
