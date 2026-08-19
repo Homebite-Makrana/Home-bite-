@@ -47,7 +47,7 @@ function layout(c){
   A.innerHTML=`<header class="top">
     <div class="brand">
       <div class="logo hb-app-logo">
-        <img class="hb-app-logo-img" src="/home-bite-app-icon.png" alt="HOME BITE">
+        <img class="hb-app-logo-img" src="/logo.svg" alt="HOME BITE">
       </div>
       <div><b>HOME BITE</b><small>Makrana City</small></div>
     </div>

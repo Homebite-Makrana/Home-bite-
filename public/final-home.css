@@ -690,3 +690,94 @@ body{
 [style*="#210000"]{
   background:#0B1322!important;
 }
+
+/* =========================================================
+   HOME BITE V43 — FINAL BRAND / HEADER FIX
+   ========================================================= */
+
+html,body,#app,.wrap,.hb-final-page{
+  background:#070B14!important;
+  color:#FFFFFF!important;
+}
+
+.top{
+  background:#070B14!important;
+  border-bottom:2px solid #FFC928!important;
+  min-height:96px!important;
+  padding:10px 12px!important;
+}
+
+.brand{
+  gap:12px!important;
+  align-items:center!important;
+}
+
+.hb-app-logo{
+  width:76px!important;
+  height:76px!important;
+  flex:0 0 76px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+.hb-app-logo-img{
+  width:76px!important;
+  height:76px!important;
+  object-fit:contain!important;
+  border-radius:0!important;
+  display:block!important;
+}
+
+.brand b{
+  font-size:30px!important;
+  line-height:1!important;
+  letter-spacing:.2px!important;
+}
+
+.brand small{
+  font-size:17px!important;
+  margin-top:5px!important;
+  color:#FFC928!important;
+}
+
+.hb-header-actions{
+  gap:6px!important;
+}
+
+.hb-bell{
+  color:#FFC928!important;
+  font-size:29px!important;
+}
+
+.hb-header-actions .btn{
+  background:#FFC928!important;
+  color:#070B14!important;
+  border:2px solid #FFC928!important;
+  border-radius:16px!important;
+  min-height:50px!important;
+  padding:0 18px!important;
+  font-size:17px!important;
+  font-weight:900!important;
+}
+
+.hb-header-actions .btn.dark{
+  background:#0B1322!important;
+  color:#FFC928!important;
+  border-color:#FFC928!important;
+}
+
+.hb-final-page{
+  min-height:calc(100vh - 96px)!important;
+}
+
+@media(max-width:390px){
+  .top{padding:8px 8px!important;min-height:90px!important}
+  .hb-app-logo,.hb-app-logo-img{width:68px!important;height:68px!important;flex-basis:68px!important}
+  .brand{gap:8px!important}
+  .brand b{font-size:26px!important}
+  .brand small{font-size:15px!important}
+  .hb-header-actions .btn{padding:0 13px!important;font-size:15px!important}
+  .hb-bell{font-size:26px!important}
+}
+
