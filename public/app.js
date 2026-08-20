@@ -255,7 +255,7 @@ async function checkout(){
 
   try{
     if(!navigator.geolocation){
-      return alert("Location permission is required for delivery.");
+      return alert("Location is required for home delivery. Please enable location on your phone.");
     }
 
     const pos=await new Promise((resolve,reject)=>{
@@ -292,43 +292,90 @@ async function checkout(){
 
   }catch(e){
     console.error("CHECKOUT LOCATION/QUOTE ERROR:",e);
-    return alert(e.message||"Unable to calculate delivery fee");
+
+    if(e && e.code===1){
+      return alert("Location permission is required for home delivery. Please allow location permission and try Cart again.");
+    }
+
+    if(e && e.code===2){
+      return alert("Your location could not be detected. Please turn on GPS/location and try again.");
+    }
+
+    if(e && e.code===3){
+      return alert("Location request timed out. Please make sure GPS/location is ON and try again.");
+    }
+
+    return alert(e.message||"Unable to calculate delivery fee.");
   }
+
+  // Keep the successful GPS coordinates for the Place Order step.
+  window.hbCheckoutLocation={
+    latitude,
+    longitude
+  };
 
   const finalTotal=t+Number(quote.delivery_fee);
 
-  layout(`<button onclick="home()">← Home</button><h2>Checkout</h2>
-  <div class="card">
-  ${cart.map(x=>`<div class="food"><span>${x.name} × ${x.qty}</span><b>₹${x.price*x.qty}</b></div>`).join("")}
-  <hr>
-  <p>Food subtotal <b>₹${t}</b></p>
-  <p>Distance <b>${Number(quote.distance_km).toFixed(1)} km</b></p>
-  <p>Delivery fee <b>₹${quote.delivery_fee}</b></p>
-  <h3>Final Total ₹${finalTotal}</h3>
-  <input id="addr" class="input" placeholder="Full delivery address, Makrana">
-  <h3>Payment Method</h3>
-  <label><input type="radio" name="payment" value="COD" checked> 💵 Cash on Delivery</label><br>
-  <label><input type="radio" name="payment" value="ONLINE"> 💳 Online Payment</label>
-  <div class="topspace"><button class="btn" onclick="place()">Place Order</button></div>
-  </div>`);
+  layout(`
+    <button onclick="home()">← Home</button>
+    <h2>Checkout</h2>
+
+    <div class="card hb-checkout-card">
+      ${cart.map(x=>`
+        <div class="food hb-cart-row">
+          <span>${x.name} × ${x.qty}</span>
+          <b>₹${x.price*x.qty}</b>
+        </div>
+      `).join("")}
+
+      <hr>
+
+      <p>Food subtotal <b>₹${t}</b></p>
+      <p>Distance <b>${Number(quote.distance_km).toFixed(1)} km</b></p>
+      <p>Delivery fee <b>₹${quote.delivery_fee}</b></p>
+      <h3>Final Total ₹${finalTotal}</h3>
+
+      <input id="addr"
+        class="input hb-address-input"
+        placeholder="Full delivery address, Makrana">
+
+      <h3>Payment Method</h3>
+
+      <label class="hb-payment-option">
+        <input type="radio" name="payment" value="COD" checked>
+        💵 Cash on Delivery
+      </label>
+
+      <label class="hb-payment-option">
+        <input type="radio" name="payment" value="ONLINE">
+        💳 Online Payment
+      </label>
+
+      <div class="topspace hb-place-order">
+        <button class="btn" onclick="place()">Place Order</button>
+      </div>
+    </div>
+  `);
 }
 
 async function place(){
-try{
-let a=document.getElementById("addr").value;
-if(!a)return alert("Address required");
-let method=document.querySelector('input[name="payment"]:checked')?.value||"COD";
+  try{
+    let a=document.getElementById("addr")?.value.trim();
+    if(!a)return alert("Address required");
 
-if(!navigator.geolocation)return alert("GPS location is required for delivery.");
-const pos=await new Promise((resolve,reject)=>{
-  navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:10000});
-});
-const latitude=pos.coords.latitude;
-const longitude=pos.coords.longitude;
+    let method=document.querySelector('input[name="payment"]:checked')?.value||"COD";
+
+    // Reuse the location already obtained during Cart/Checkout.
+    let latitude=Number(window.hbCheckoutLocation?.latitude);
+    let longitude=Number(window.hbCheckoutLocation?.longitude);
+
+    if(!Number.isFinite(latitude)||!Number.isFinite(longitude)){
+      return alert("Delivery location is missing. Please go back to Cart and allow location.");
+    }
 
 if(method==="COD"){
 let r=await api("/api/orders",{method:"POST",body:JSON.stringify({shopId:cart[0].shopId,items:cart.map(x=>({menuId:x.menuId,qty:x.qty})),address:a,payment_method:"COD",latitude,longitude})});
-cart=[];alert("Order #HB"+r.orderId+" placed");return orders();
+cart=[];window.hbCheckoutLocation=null;alert("Order #HB"+r.orderId+" placed");return orders();
 }
 
 let p=await api("/api/payment/create",{method:"POST",body:JSON.stringify({shopId:cart[0].shopId,items:cart.map(x=>({menuId:x.menuId,qty:x.qty})),address:a,latitude,longitude})});
@@ -378,7 +425,7 @@ try{
       razorpay_signature:response.razorpay_signature
     })
   });
-  cart=[];
+  cart=[];window.hbCheckoutLocation=null;
   alert("Payment successful! Order #HB"+v.orderId);
   orders();
 }catch(e){
