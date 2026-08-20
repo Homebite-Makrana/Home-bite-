@@ -1396,3 +1396,177 @@ body{
 .top + .wrap .topspace{
   margin-top:12px!important;
 }
+
+/* =========================================================
+   V53 TARGETED UI REPAIR
+   Existing Home layout intentionally untouched.
+   ========================================================= */
+
+/* ---------- LOGIN / REGISTER ---------- */
+
+.wrap > h2{
+  margin-top:24px !important;
+  margin-bottom:22px !important;
+  line-height:1.25 !important;
+}
+
+.wrap > h2 + .input{
+  margin-top:0 !important;
+}
+
+.wrap .input{
+  min-height:52px !important;
+  margin:0 0 16px !important;
+  padding:14px 16px !important;
+  font-size:16px !important;
+  line-height:1.25 !important;
+}
+
+.wrap > h2 ~ .input{
+  width:100% !important;
+  display:block !important;
+}
+
+.wrap > h2 ~ .btn{
+  min-height:50px !important;
+  margin-top:5px !important;
+  margin-bottom:16px !important;
+  padding:12px 20px !important;
+  font-size:16px !important;
+}
+
+.wrap > h2 ~ p{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:14px !important;
+  margin:18px 2px 8px !important;
+  line-height:1.5 !important;
+  flex-wrap:wrap !important;
+}
+
+.wrap > h2 ~ p button{
+  min-height:44px !important;
+  padding:9px 16px !important;
+  margin:0 !important;
+  white-space:nowrap !important;
+  font-size:15px !important;
+}
+
+/* Register form */
+.wrap > h2 + .input + .input + .input{
+  margin-bottom:18px !important;
+}
+
+/* ---------- POST LOGIN / ADMIN / PARTNER / DELIVERY ---------- */
+
+.wrap > .grid{
+  gap:16px !important;
+  margin-top:18px !important;
+}
+
+.wrap > .topspace{
+  margin-top:22px !important;
+}
+
+.wrap > .card{
+  margin-top:16px !important;
+}
+
+.wrap > h3{
+  margin-top:24px !important;
+  margin-bottom:12px !important;
+  line-height:1.3 !important;
+}
+
+.wrap .card .food{
+  gap:14px !important;
+  padding:16px 0 !important;
+  align-items:center !important;
+}
+
+.wrap .card .food > div:last-child{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:flex-end !important;
+  gap:8px !important;
+}
+
+.wrap .card .food .btn{
+  min-height:42px !important;
+  margin:0 !important;
+}
+
+.wrap select{
+  min-height:44px !important;
+  padding:8px 12px !important;
+  border-radius:10px !important;
+}
+
+.wrap .btn{
+  margin-top:6px;
+}
+
+/* Keep action buttons from colliding on small screens */
+@media (max-width:600px){
+
+  .wrap{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  .wrap > h2{
+    margin-top:18px !important;
+    margin-bottom:20px !important;
+    font-size:25px !important;
+  }
+
+  .wrap .card{
+    padding:16px !important;
+  }
+
+  .wrap .card .food{
+    flex-direction:column !important;
+    align-items:stretch !important;
+  }
+
+  .wrap .card .food > div:last-child{
+    justify-content:flex-start !important;
+  }
+
+  .wrap .card .food .btn{
+    flex:1 1 auto !important;
+  }
+
+  .wrap > h2 ~ p{
+    align-items:flex-start !important;
+  }
+}
+
+/* ---------- APP START / WEBVIEW ---------- */
+
+/* Prevent a white/black-looking WebView flash while app shell loads */
+html,body{
+  min-height:100% !important;
+}
+
+body{
+  background:#070B14;
+}
+
+#app{
+  min-height:100vh;
+}
+
+/*
+   Once the actual Home UI is rendered, its existing styles
+   remain authoritative. No Home-page geometry is changed here.
+*/
+
+/* ---------- SMALL/UNWANTED HOME CONTROL ---------- */
+
+.launch-home,
+.home-launch-button,
+.small-home-button{
+  display:none !important;
+}

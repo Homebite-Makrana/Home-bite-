@@ -574,7 +574,7 @@ async function saveArea(){
 async function ast(id,status){await api("/api/admin/orders/"+id,{method:"PATCH",body:JSON.stringify({status})});alert("Status updated")}
 async function addShop(type){
   if(type==="home"){
-    layout(`<h2>Add Home Kitchen</h2><input id="sn" class="input" placeholder="Business name"><input id="sa" class="input" placeholder="Address"><input id="sp" class="input" placeholder="Phone"><button class="btn" onclick="saveShop("home")">Save</button>`);
+    layout(`<h2>Add Home Kitchen</h2><input id="sn" class="input" placeholder="Business name"><input id="sa" class="input" placeholder="Address"><input id="sp" class="input" placeholder="Phone"><button class="btn" onclick='saveShop("home")'>Save</button>`);
     return;
   }
 
