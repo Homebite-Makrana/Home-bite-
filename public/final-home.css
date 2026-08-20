@@ -677,10 +677,20 @@ body{
 }
 
 /* Remove the old V39 boot surface if it is still present in DOM */
+/* V55: legacy web boot/splash permanently disabled */
 #hb-boot-splash,
-.hb-boot{
+.hb-boot,
+.hb-boot-splash,
+.launch-home,
+.home-launch-button,
+.small-home-button,
+#launch-home,
+#home-launch-button,
+#small-home-button{
   display:none!important;
   visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
 }
 
 /* Hard-stop old red/cream surfaces */

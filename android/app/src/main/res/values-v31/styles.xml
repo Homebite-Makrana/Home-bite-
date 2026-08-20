@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.NoActionBarLaunch"
+        parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:windowBackground">#070B14</item>
+
+        <item name="android:windowSplashScreenBackground">#070B14</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/hb_transparent_splash</item>
+        <item name="android:windowSplashScreenAnimationDuration">0</item>
+
+        <item name="android:navigationBarColor">#070B14</item>
+        <item name="android:statusBarColor">#070B14</item>
+        <item name="android:forceDarkAllowed">false</item>
+
+        <item name="android:windowDisablePreview">true</item>
+
+    </style>
+
+</resources>
