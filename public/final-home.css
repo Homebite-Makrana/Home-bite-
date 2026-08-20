@@ -1059,3 +1059,261 @@ body {
     max-width:130px!important;
   }
 }
+
+
+
+
+/* =========================================================
+   HOME BITE V56 FINAL REPAIR
+   UI ONLY — HOME / API / DB / LOGIN LOGIC UNTOUCHED
+   ========================================================= */
+
+/* ---------- LOGIN PAGE ---------- */
+
+.wrap > h2:first-child {
+  margin-top: 22px !important;
+  margin-bottom: 24px !important;
+  line-height: 1.15 !important;
+}
+
+.wrap > h2 + .input,
+.wrap > h2 ~ .input {
+  display: block !important;
+  width: min(100%, 520px) !important;
+  min-width: 0 !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  margin: 0 0 18px 0 !important;
+  padding: 0 18px !important;
+  font-size: 20px !important;
+  line-height: 58px !important;
+  border-radius: 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* Login button must NEVER sit beside password field */
+.wrap > h2 ~ .input + .btn,
+.wrap > h2 ~ .input ~ .btn {
+  display: block !important;
+}
+
+/* The first action button after the inputs gets its own row */
+.wrap > h2 + .input + .input + .btn,
+.wrap > h2 ~ .input + .btn {
+  width: min(100%, 520px) !important;
+  min-width: 0 !important;
+  min-height: 58px !important;
+  height: 58px !important;
+  margin: 4px 0 24px 0 !important;
+  padding: 0 24px !important;
+  font-size: 20px !important;
+  border-radius: 16px !important;
+  display: block !important;
+}
+
+/* New customer / Create account separation */
+.wrap > h2 ~ p {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 8px 0 0 0 !important;
+  font-size: 19px !important;
+  line-height: 1.5 !important;
+}
+
+.wrap > h2 ~ p button {
+  margin: 0 !important;
+  min-height: 50px !important;
+  padding: 10px 18px !important;
+  border-radius: 12px !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+}
+
+/* ---------- REGISTER PAGE ---------- */
+
+.wrap > h2 + .input {
+  margin-bottom: 18px !important;
+}
+
+/* ---------- ROLE PAGE HEADER ---------- */
+
+/*
+   Do not allow Password / Logout / other header actions
+   to overlap the HOME BITE branding.
+*/
+.top {
+  min-height: 112px !important;
+  height: auto !important;
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+}
+
+.top > * {
+  min-width: 0 !important;
+}
+
+.hb-header-actions {
+  position: static !important;
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: 48% !important;
+}
+
+.hb-header-actions .btn,
+.top .btn {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  min-height: 50px !important;
+  height: auto !important;
+  padding: 0 16px !important;
+  font-size: 16px !important;
+}
+
+/* Don't let the user name/branding collide with actions */
+.top .hb-header-brand,
+.top .hb-brand,
+.top .brand {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+/* ---------- ROLE PAGE CONTENT ---------- */
+
+.wrap {
+  width: min(100%, 1100px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  box-sizing: border-box !important;
+}
+
+.wrap > h2 {
+  margin-bottom: 22px !important;
+}
+
+.wrap > .card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: auto !important;
+  margin-bottom: 22px !important;
+}
+
+.wrap .food {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 16px 12px !important;
+  gap: 12px !important;
+}
+
+.wrap .food > div:last-child {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+.wrap .food .btn {
+  min-height: 48px !important;
+  padding: 8px 16px !important;
+  margin: 0 !important;
+}
+
+/* Tables on admin page */
+.wrap .card table {
+  width: 100% !important;
+  min-width: 650px !important;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 760px) {
+
+  .top {
+    min-height: 126px !important;
+    padding: 8px 10px !important;
+    align-items: center !important;
+  }
+
+  .hb-header-actions {
+    max-width: 52% !important;
+    gap: 6px !important;
+  }
+
+  .hb-header-actions .btn,
+  .top .btn {
+    min-height: 46px !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+  }
+
+  .wrap {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .wrap > h2 {
+    font-size: 30px !important;
+  }
+
+  .wrap > h2 + .input,
+  .wrap > h2 ~ .input {
+    width: 100% !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    font-size: 20px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .wrap > h2 + .input + .input + .btn,
+  .wrap > h2 ~ .input + .btn {
+    width: 100% !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    margin-top: 4px !important;
+    margin-bottom: 24px !important;
+    font-size: 20px !important;
+  }
+
+  .wrap > h2 ~ p {
+    gap: 12px !important;
+    font-size: 18px !important;
+  }
+
+  .wrap > h2 ~ p button {
+    min-height: 52px !important;
+    font-size: 17px !important;
+  }
+
+}
+
+/* Very narrow phones */
+@media (max-width: 430px) {
+
+  .top {
+    min-height: 136px !important;
+  }
+
+  .hb-header-actions {
+    max-width: 50% !important;
+  }
+
+  .hb-header-actions .btn,
+  .top .btn {
+    padding: 0 10px !important;
+    font-size: 13px !important;
+  }
+
+}
