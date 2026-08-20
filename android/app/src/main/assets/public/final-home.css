@@ -1,0 +1,1471 @@
+/* =========================================================
+   HOME BITE — MASTER REFERENCE v36
+   Black + Deep Red + Gold
+   Single authoritative mobile Home design
+   ========================================================= */
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0!important;
+  padding:0!important;
+  background:#000!important;
+  color:#fff!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+}
+
+body{
+  min-height:100vh!important;
+  overflow-x:hidden!important;
+}
+
+#app{
+  min-height:100vh!important;
+  background:#000!important;
+}
+
+.top{
+  background:#000!important;
+  border-bottom:1px solid #D5A900!important;
+  min-height:82px!important;
+  padding:10px 14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+}
+
+.brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:0!important;
+}
+
+.hb-app-logo{
+  width:58px!important;
+  height:58px!important;
+  flex:0 0 58px!important;
+}
+
+.hb-app-logo-img{
+  width:58px!important;
+  height:58px!important;
+  object-fit:cover!important;
+  border-radius:16px!important;
+  display:block!important;
+}
+
+.brand b{
+  display:block!important;
+  color:#fff!important;
+  font-size:25px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+.brand small{
+  display:block!important;
+  color:#FFD000!important;
+  font-size:15px!important;
+  margin-top:4px!important;
+}
+
+.btn{
+  background:#650000!important;
+  color:#FFD000!important;
+  border:1.5px solid #FFD000!important;
+  border-radius:16px!important;
+  min-height:48px!important;
+  padding:0 20px!important;
+  font-size:16px!important;
+  font-weight:800!important;
+}
+
+.wrap{
+  margin:0!important;
+  padding:0!important;
+  background:#000!important;
+}
+
+.hb-header-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+
+.hb-bell{
+  background:transparent!important;
+  border:0!important;
+  color:#FFD000!important;
+  font-size:27px!important;
+  padding:4px!important;
+}
+
+.hb-hi{color:#fff!important;font-weight:700!important}
+
+.hb-final-page{
+  width:100%!important;
+  max-width:560px!important;
+  min-height:calc(100vh - 82px)!important;
+  margin:0 auto!important;
+  padding:0 16px 105px!important;
+  background:#000!important;
+  color:#fff!important;
+}
+
+.hb-final-location{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:6px!important;
+  padding:18px 0 16px!important;
+  white-space:nowrap!important;
+}
+
+.hb-pin{color:#fff!important;font-size:15px!important}
+.hb-final-location small{color:#fff!important;font-size:15px!important}
+.hb-final-location b{color:#FFD000!important;font-size:18px!important}
+.hb-final-location .hb-live{color:#ff3030!important;font-weight:800!important}
+
+.hb-final-search{
+  height:54px!important;
+  width:100%!important;
+  border:2px solid #FFD000!important;
+  border-radius:30px!important;
+  background:#050505!important;
+  display:flex!important;
+  align-items:center!important;
+  padding:0 14px!important;
+  margin-bottom:16px!important;
+}
+
+.hb-final-search span{
+  color:#FFD000!important;
+  font-size:27px!important;
+  line-height:1!important;
+}
+
+.hb-final-search input{
+  flex:1!important;
+  min-width:0!important;
+  height:48px!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  color:#fff!important;
+  font-size:17px!important;
+  padding:0 10px!important;
+}
+
+.hb-final-search input::placeholder{color:#999!important}
+
+.hb-final-hero{
+  min-height:220px!important;
+  border:2px solid #FFD000!important;
+  border-radius:22px!important;
+  background:linear-gradient(135deg,#650000,#8A0000 55%,#650000)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:25px 22px!important;
+  overflow:hidden!important;
+}
+
+.hb-final-hero > div:first-child{
+  flex:1!important;
+  min-width:0!important;
+}
+
+.hb-final-hero small{
+  color:#FFD000!important;
+  font-size:15px!important;
+  font-weight:900!important;
+}
+
+.hb-final-hero h1{
+  color:#fff!important;
+  font-size:30px!important;
+  line-height:1.08!important;
+  margin:8px 0!important;
+  font-weight:900!important;
+}
+
+.hb-final-hero h1 em{
+  color:#FFD000!important;
+  font-style:normal!important;
+}
+
+.hb-final-hero p{
+  color:#fff!important;
+  font-size:15px!important;
+  margin:12px 0 0!important;
+}
+
+.hb-hero-dish{
+  flex:0 0 auto!important;
+  font-size:58px!important;
+}
+
+.hb-final-cats{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:10px!important;
+  margin:16px 0 25px!important;
+}
+
+.hb-final-cats button{
+  min-height:76px!important;
+  border:1.5px solid #FFD000!important;
+  border-radius:16px!important;
+  background:#650000!important;
+  color:#fff!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+}
+
+.hb-final-cats button span{
+  font-size:27px!important;
+  color:#FFD000!important;
+}
+
+.hb-final-cats button b{
+  font-size:15px!important;
+  color:#fff!important;
+}
+
+.hb-final-cats button.active,
+.hb-final-cats button.selected{
+  background:#FFD000!important;
+}
+
+.hb-final-cats button.active *,
+.hb-final-cats button.selected *{
+  color:#111!important;
+}
+
+.hb-final-heading{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:space-between!important;
+  margin-bottom:14px!important;
+}
+
+.hb-final-heading small{
+  display:block!important;
+  color:#FFD000!important;
+  font-size:12px!important;
+  letter-spacing:2px!important;
+  margin-bottom:5px!important;
+}
+
+.hb-final-heading h2{
+  margin:0!important;
+  color:#fff!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+}
+
+.hb-final-heading > span{
+  color:#FFD000!important;
+  font-size:14px!important;
+  white-space:nowrap!important;
+}
+
+.hb-final-shops{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:12px!important;
+}
+
+.hb-final-card{
+  display:grid!important;
+  grid-template-columns:112px minmax(0,1fr)!important;
+  min-height:170px!important;
+  border:2px solid #FFD000!important;
+  border-radius:21px!important;
+  background:#050505!important;
+  padding:11px!important;
+  overflow:hidden!important;
+}
+
+.hb-food-image{
+  min-height:145px!important;
+  border:1px solid #8F7100!important;
+  border-radius:17px!important;
+  background:linear-gradient(145deg,#6C2500,#210000)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+}
+
+.hb-food-image span{
+  color:#FFD000!important;
+  font-size:10px!important;
+  font-weight:900!important;
+}
+
+.hb-food-image strong{font-size:48px!important}
+
+.hb-card-body{
+  min-width:0!important;
+  padding:7px 0 7px 14px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+.hb-card-title{
+  display:flex!important;
+  justify-content:space-between!important;
+  gap:7px!important;
+}
+
+.hb-card-title h3{
+  margin:0!important;
+  color:#fff!important;
+  font-size:20px!important;
+  line-height:1.15!important;
+}
+
+.hb-card-title b{
+  color:#fff!important;
+  white-space:nowrap!important;
+}
+
+.hb-card-body p{
+  color:#bbb!important;
+  font-size:13px!important;
+  margin:10px 0!important;
+}
+
+.hb-card-bottom{
+  margin-top:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:7px!important;
+}
+
+.hb-card-bottom span{
+  color:#43E35B!important;
+  font-size:14px!important;
+  font-weight:800!important;
+}
+
+.hb-card-bottom button{
+  border:1.5px solid #FFD000!important;
+  border-radius:13px!important;
+  background:#650000!important;
+  color:#FFD000!important;
+  padding:10px 12px!important;
+  font-weight:900!important;
+}
+
+.hb-final-empty{
+  border:1.5px solid #FFD000!important;
+  border-radius:20px!important;
+  background:#050505!important;
+  color:#fff!important;
+  padding:28px!important;
+  text-align:center!important;
+}
+
+.hb-final-empty *{color:#fff!important}
+.hb-final-empty h3{font-size:18px!important}
+.hb-final-empty p{color:#aaa!important}
+
+.hb-final-benefits,
+.hb-final-role-actions{
+  display:none!important;
+}
+
+.hb-final-nav{
+  position:fixed!important;
+  z-index:99999!important;
+  left:16px!important;
+  right:16px!important;
+  bottom:11px!important;
+  height:76px!important;
+  border:3px solid #FFD000!important;
+  border-radius:40px!important;
+  background:#650000!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  padding:4px!important;
+}
+
+.hb-final-nav button{
+  border:0!important;
+  border-radius:34px!important;
+  background:transparent!important;
+  color:#FFD000!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:2px!important;
+}
+
+.hb-final-nav button span{font-size:28px!important}
+.hb-final-nav button b{font-size:13px!important}
+
+.hb-final-nav button.active,
+.hb-final-nav button.selected{
+  background:#FFD000!important;
+  color:#111!important;
+}
+
+.hb-final-nav button.active *,
+.hb-final-nav button.selected *{color:#111!important}
+
+@media(max-width:380px){
+  .hb-final-page{padding-left:12px!important;padding-right:12px!important}
+  .hb-final-hero{min-height:205px!important;padding:21px 17px!important}
+  .hb-final-hero h1{font-size:27px!important}
+  .hb-hero-dish{font-size:50px!important}
+  .hb-final-card{grid-template-columns:96px minmax(0,1fr)!important}
+  .hb-food-image{min-height:130px!important}
+  .hb-card-title h3{font-size:18px!important}
+}
+
+/* v38 deterministic visual lock */
+.hb-svg{width:28px!important;height:28px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.hb-svg-hero{width:76px!important;height:76px!important;stroke-width:1.7!important}
+.hb-final-cats button .hb-svg{color:#FFD000!important;width:31px!important;height:31px!important}
+.hb-final-cats button.active .hb-svg,.hb-final-cats button.selected .hb-svg{color:#111!important}
+.hb-hero-dish{color:#FFD000!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.hb-final-empty .hb-svg{color:#FFD000!important;margin:0 auto 10px!important}
+.hb-final-nav button .hb-svg{color:#FFD000!important;width:28px!important;height:28px!important}
+.hb-final-nav button.active .hb-svg,.hb-final-nav button.selected .hb-svg{color:#111!important}
+.hb-bell .hb-svg{width:29px!important;height:29px!important;color:#FFD000!important}
+.hb-final-search input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none!important;appearance:none!important;display:none!important}
+.hb-final-search input[type="search"]::-webkit-search-decoration{-webkit-appearance:none!important}
+.hb-search-clear{display:none!important}
+.hb-boot{min-height:100vh!important;background:#000!important}
+.hb-boot .top{display:flex!important}
+.hb-boot .hb-final-page{display:block!important}
+.hb-boot-bell{color:#FFD000!important;font-size:28px!important}
+
+/* HOME BITE v39 FINAL BOOT */
+
+html,body{
+  background:#650000!important;
+}
+
+#hb-boot-splash{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483647!important;
+  width:100%!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  background:#650000!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  opacity:1;
+}
+
+.hb-boot-inner{
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:24px!important;
+}
+
+.hb-boot-inner img{
+  width:min(230px,58vw)!important;
+  height:min(230px,58vw)!important;
+  object-fit:contain!important;
+  display:block!important;
+  border-radius:42px!important;
+}
+
+.hb-boot-title{
+  margin-top:18px!important;
+  color:#fff!important;
+  font-size:38px!important;
+  line-height:1!important;
+  font-weight:900!important;
+}
+
+.hb-boot-title b{
+  color:#FFD000!important;
+}
+
+.hb-boot-city{
+  margin-top:8px!important;
+  color:#FFD000!important;
+  font-size:22px!important;
+  font-weight:700!important;
+}
+
+.hb-boot-loading{
+  margin-top:78px!important;
+  color:#FFD000!important;
+  font-size:22px!important;
+}
+
+.hb-dots{
+  display:inline-block!important;
+  min-width:30px!important;
+  text-align:left!important;
+}
+
+@media(max-width:380px){
+  .hb-boot-inner img{
+    width:190px!important;
+    height:190px!important;
+  }
+  .hb-boot-title{font-size:33px!important}
+  .hb-boot-city{font-size:20px!important}
+  .hb-boot-loading{
+    margin-top:62px!important;
+    font-size:20px!important;
+  }
+}
+
+/* =========================================================
+   HOME BITE v42 — CLEAN BLUE/GOLD THEME
+   V39 layout preserved. No red/cream theme.
+   ========================================================= */
+
+:root{
+  --hb-bg:#070B14;
+  --hb-panel:#0B1322;
+  --hb-panel2:#0E1B2E;
+  --hb-gold:#FFC928;
+  --hb-gold2:#E9A900;
+  --hb-white:#FFFFFF;
+  --hb-muted:#B9C1CC;
+}
+
+html,body,#app{
+  background:#070B14!important;
+  color:#FFFFFF!important;
+}
+
+body{
+  background:#070B14!important;
+}
+
+/* Main V39 surface */
+.hb-final-page{
+  background:#070B14!important;
+  color:#FFFFFF!important;
+}
+
+/* Location / header */
+.hb-final-location{
+  color:#FFFFFF!important;
+}
+.hb-final-location b{
+  color:#FFC928!important;
+}
+.hb-final-location .hb-live{
+  color:#FF3030!important;
+}
+
+/* Search */
+.hb-final-search{
+  background:#0B1322!important;
+  border-color:#FFC928!important;
+}
+.hb-final-search input{
+  color:#FFFFFF!important;
+  background:transparent!important;
+}
+.hb-final-search input::placeholder{
+  color:#9FA9B7!important;
+}
+
+/* Hero */
+.hb-final-hero{
+  background:linear-gradient(135deg,#0B2340,#07162A 55%,#0B1322)!important;
+  border-color:#FFC928!important;
+  color:#FFFFFF!important;
+}
+.hb-final-hero h1,
+.hb-final-hero h1 em,
+.hb-final-hero p,
+.hb-final-hero small{
+  color:#FFFFFF!important;
+}
+.hb-final-hero h1 em{
+  color:#FFC928!important;
+}
+
+/* Category buttons */
+.hb-final-cats button{
+  background:#0B1322!important;
+  border-color:#C99A00!important;
+  color:#FFFFFF!important;
+}
+.hb-final-cats button *{
+  color:#FFFFFF!important;
+}
+.hb-final-cats button .hb-svg{
+  color:#FFC928!important;
+}
+.hb-final-cats button.active,
+.hb-final-cats button.selected{
+  background:linear-gradient(180deg,#FFC928,#E9A900)!important;
+  border-color:#FFC928!important;
+}
+.hb-final-cats button.active *,
+.hb-final-cats button.selected *{
+  color:#070B14!important;
+}
+.hb-final-cats button.active .hb-svg,
+.hb-final-cats button.selected .hb-svg{
+  color:#070B14!important;
+}
+
+/* Restaurant cards */
+.hb-final-card{
+  background:linear-gradient(145deg,#0B2340,#070B14)!important;
+  border-color:#FFC928!important;
+  color:#FFFFFF!important;
+}
+.hb-final-card *{
+  color:inherit;
+}
+.hb-final-card small,
+.hb-final-card p{
+  color:#B9C1CC!important;
+}
+.hb-final-card .hb-svg{
+  color:#FFC928!important;
+}
+
+/* Any old red/brown card backgrounds inside the V39 card */
+.hb-final-card [style*="#6C2500"],
+.hb-final-card [style*="#210000"]{
+  background:#0B1322!important;
+}
+
+/* Navigation */
+.hb-final-nav{
+  background:#0B1322!important;
+  border-color:#FFC928!important;
+}
+.hb-final-nav button{
+  background:transparent!important;
+  color:#FFFFFF!important;
+}
+.hb-final-nav button .hb-svg{
+  color:#FFC928!important;
+}
+.hb-final-nav button.active,
+.hb-final-nav button.selected{
+  background:linear-gradient(180deg,#FFC928,#E9A900)!important;
+}
+.hb-final-nav button.active *,
+.hb-final-nav button.selected *{
+  color:#070B14!important;
+}
+.hb-final-nav button.active .hb-svg,
+.hb-final-nav button.selected .hb-svg{
+  color:#070B14!important;
+}
+
+/* Remove the old V39 boot surface if it is still present in DOM */
+/* V55: legacy web boot/splash permanently disabled */
+#hb-boot-splash,
+.hb-boot,
+.hb-boot-splash,
+.launch-home,
+.home-launch-button,
+.small-home-button,
+#launch-home,
+#home-launch-button,
+#small-home-button{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
+/* Hard-stop old red/cream surfaces */
+[style*="#650000"],
+[style*="#8A0000"],
+[style*="#6C2500"],
+[style*="#210000"]{
+  background:#0B1322!important;
+}
+
+/* =========================================================
+   HOME BITE V43 — FINAL BRAND / HEADER FIX
+   ========================================================= */
+
+html,body,#app,.wrap,.hb-final-page{
+  background:#070B14!important;
+  color:#FFFFFF!important;
+}
+
+.top{
+  background:#070B14!important;
+  border-bottom:2px solid #FFC928!important;
+  min-height:96px!important;
+  padding:10px 12px!important;
+}
+
+.brand{
+  gap:12px!important;
+  align-items:center!important;
+}
+
+.hb-app-logo{
+  width:76px!important;
+  height:76px!important;
+  flex:0 0 76px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+.hb-app-logo-img{
+  width:76px!important;
+  height:76px!important;
+  object-fit:contain!important;
+  border-radius:0!important;
+  display:block!important;
+}
+
+.brand b{
+  font-size:30px!important;
+  line-height:1!important;
+  letter-spacing:.2px!important;
+}
+
+.brand small{
+  font-size:17px!important;
+  margin-top:5px!important;
+  color:#FFC928!important;
+}
+
+.hb-header-actions{
+  gap:6px!important;
+}
+
+.hb-bell{
+  color:#FFC928!important;
+  font-size:29px!important;
+}
+
+.hb-header-actions .btn{
+  background:#FFC928!important;
+  color:#070B14!important;
+  border:2px solid #FFC928!important;
+  border-radius:16px!important;
+  min-height:50px!important;
+  padding:0 18px!important;
+  font-size:17px!important;
+  font-weight:900!important;
+}
+
+.hb-header-actions .btn.dark{
+  background:#0B1322!important;
+  color:#FFC928!important;
+  border-color:#FFC928!important;
+}
+
+.hb-final-page{
+  min-height:calc(100vh - 96px)!important;
+}
+
+@media(max-width:390px){
+  .top{padding:8px 8px!important;min-height:90px!important}
+  .hb-app-logo,.hb-app-logo-img{width:68px!important;height:68px!important;flex-basis:68px!important}
+  .brand{gap:8px!important}
+  .brand b{font-size:26px!important}
+  .brand small{font-size:15px!important}
+  .hb-header-actions .btn{padding:0 13px!important;font-size:15px!important}
+  .hb-bell{font-size:26px!important}
+}
+
+
+/* =========================================================
+   HOME BITE V44 — APPROVED OLD LOGO + ONE BLUE/GOLD THEME
+   ========================================================= */
+:root{
+  --hb-bg:#070B14;
+  --hb-panel:#0B1322;
+  --hb-panel2:#0B2340;
+  --hb-gold:#FFC928;
+  --hb-gold2:#E9A900;
+  --hb-white:#FFFFFF;
+  --hb-muted:#B9C1CC;
+}
+html,body,#app,.wrap,.hb-final-page{background:#070B14!important;color:#FFFFFF!important;}
+body{min-height:100vh!important;}
+
+/* Header / brand */
+.top{background:#070B14!important;border-bottom:2px solid #FFC928!important;min-height:96px!important;padding:10px 12px!important;}
+.brand{gap:12px!important;align-items:center!important;}
+.hb-app-logo{width:78px!important;height:78px!important;flex:0 0 78px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+.hb-app-logo-img{width:78px!important;height:78px!important;object-fit:cover!important;border-radius:16px!important;display:block!important;}
+.brand b{font-size:30px!important;line-height:1!important;color:#FFFFFF!important;letter-spacing:.2px!important;}
+.brand small{font-size:17px!important;margin-top:5px!important;color:#FFC928!important;}
+.hb-header-actions{gap:6px!important;}
+.hb-bell{color:#FFC928!important;font-size:29px!important;}
+.hb-header-actions .btn,.top .btn{background:#0B1322!important;color:#FFC928!important;border:2px solid #FFC928!important;border-radius:16px!important;min-height:50px!important;padding:0 18px!important;font-size:17px!important;font-weight:900!important;box-shadow:none!important;}
+
+/* Home */
+.hb-final-page{min-height:calc(100vh - 96px)!important;}
+.hb-final-location{color:#FFFFFF!important;}
+.hb-final-location b{color:#FFC928!important;}
+.hb-final-location .hb-live{color:#FFC928!important;}
+.hb-final-search{background:#0B1322!important;border-color:#FFC928!important;}
+.hb-final-search input{color:#FFFFFF!important;background:transparent!important;}
+.hb-final-search input::placeholder{color:#9FA9B7!important;}
+.hb-final-hero{background:linear-gradient(135deg,#0B2340,#07162A 55%,#0B1322)!important;border-color:#FFC928!important;color:#FFFFFF!important;}
+.hb-final-hero h1,.hb-final-hero h1 em,.hb-final-hero p,.hb-final-hero small{color:#FFFFFF!important;}
+.hb-final-hero h1 em{color:#FFC928!important;}
+
+/* Categories / navigation */
+.hb-final-cats button{background:#0B1322!important;border-color:#C99A00!important;color:#FFFFFF!important;}
+.hb-final-cats button *{color:#FFFFFF!important;}
+.hb-final-cats button .hb-svg{color:#FFC928!important;}
+.hb-final-cats button.active,.hb-final-cats button.selected{background:linear-gradient(180deg,#FFC928,#E9A900)!important;border-color:#FFC928!important;}
+.hb-final-cats button.active *,.hb-final-cats button.selected *{color:#070B14!important;}
+.hb-final-nav{background:#0B1322!important;border-color:#FFC928!important;}
+.hb-final-nav button{background:transparent!important;color:#FFFFFF!important;}
+.hb-final-nav button .hb-svg{color:#FFC928!important;}
+.hb-final-nav button.active,.hb-final-nav button.selected{background:linear-gradient(180deg,#FFC928,#E9A900)!important;}
+.hb-final-nav button.active *,.hb-final-nav button.selected *{color:#070B14!important;}
+
+/* Restaurant card — the red image panel is now blue */
+.hb-final-card{background:linear-gradient(145deg,#0B2340,#070B14)!important;border-color:#FFC928!important;color:#FFFFFF!important;}
+.hb-final-card *{color:inherit;}
+.hb-final-card small,.hb-final-card p{color:#B9C1CC!important;}
+.hb-final-card .hb-svg{color:#FFC928!important;}
+.hb-food-image,.hb-food-image.restaurant,.hb-food-image.home{background:linear-gradient(145deg,#0B2340,#07162A)!important;border-color:#C99A00!important;color:#FFFFFF!important;}
+.hb-food-image span{color:#FFC928!important;}
+.hb-card-bottom button{background:#0B1322!important;color:#FFC928!important;border:2px solid #FFC928!important;box-shadow:none!important;}
+.hb-open{color:#42E06F!important;}
+
+/* Restaurant menu / generic pages */
+.card,.shop-card{background:#0B1322!important;color:#FFFFFF!important;border:2px solid #C99A00!important;box-shadow:none!important;}
+.food{background:transparent!important;color:#FFFFFF!important;border-top:1px solid #24344D!important;}
+.food b,.food span{color:#FFFFFF!important;}
+.muted{color:#B9C1CC!important;}
+.btn{background:linear-gradient(180deg,#FFC928,#E9A900)!important;color:#070B14!important;border:2px solid #FFC928!important;box-shadow:none!important;font-weight:900!important;}
+.btn.dark{background:#0B1322!important;color:#FFC928!important;border-color:#FFC928!important;}
+
+/* Hard-stop old red/brown surfaces */
+[style*="#650000"],[style*="#8A0000"],[style*="#6C2500"],[style*="#210000"],
+[style*="#650000f5"],[style*="#3D0000"],[style*="#3d0000"],[style*="#8b0000"],
+[style*="rgb(101,0,0)"],[style*="rgb(138,0,0)"]{background:#0B1322!important;color:#FFFFFF!important;}
+#hb-boot-splash,.hb-boot{display:none!important;visibility:hidden!important;}
+
+@media(max-width:390px){
+  .top{padding:8px 8px!important;min-height:90px!important;}
+  .hb-app-logo,.hb-app-logo-img{width:70px!important;height:70px!important;flex-basis:70px!important;}
+  .brand{gap:8px!important;}
+  .brand b{font-size:26px!important;}
+  .brand small{font-size:15px!important;}
+  .hb-header-actions .btn{padding:0 13px!important;font-size:15px!important;}
+}
+
+/* =========================================================
+   HOME BITE V45 — APPROVED OLD LOGO + ONE BLUE/GOLD THEME
+   ========================================================= */
+:root{
+  --hb-bg:#070B14;
+  --hb-panel:#0B1322;
+  --hb-panel2:#0B2340;
+  --hb-gold:#FFC928;
+  --hb-gold2:#E9A900;
+  --hb-white:#FFFFFF;
+  --hb-muted:#B9C1CC;
+}
+html,body,#app,.wrap,.hb-final-page{background:#070B14!important;color:#FFFFFF!important;}
+body{min-height:100vh!important;}
+
+/* Header / brand */
+.top{background:#070B14!important;border-bottom:2px solid #FFC928!important;min-height:96px!important;padding:10px 12px!important;}
+.brand{gap:12px!important;align-items:center!important;}
+.hb-app-logo{width:78px!important;height:78px!important;flex:0 0 78px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+.hb-app-logo-img{width:78px!important;height:78px!important;object-fit:cover!important;border-radius:16px!important;display:block!important;}
+.brand b{font-size:30px!important;line-height:1!important;color:#FFFFFF!important;letter-spacing:.2px!important;}
+.brand small{font-size:17px!important;margin-top:5px!important;color:#FFC928!important;}
+.hb-header-actions{gap:6px!important;}
+.hb-bell{color:#FFC928!important;font-size:29px!important;}
+.hb-header-actions .btn,.top .btn{background:#0B1322!important;color:#FFC928!important;border:2px solid #FFC928!important;border-radius:16px!important;min-height:50px!important;padding:0 18px!important;font-size:17px!important;font-weight:900!important;box-shadow:none!important;}
+
+/* Home */
+.hb-final-page{min-height:calc(100vh - 96px)!important;}
+.hb-final-location{color:#FFFFFF!important;}
+.hb-final-location b{color:#FFC928!important;}
+.hb-final-location .hb-live{color:#FFC928!important;}
+.hb-final-search{background:#0B1322!important;border-color:#FFC928!important;}
+.hb-final-search input{color:#FFFFFF!important;background:transparent!important;}
+.hb-final-search input::placeholder{color:#9FA9B7!important;}
+.hb-final-hero{background:linear-gradient(135deg,#0B2340,#07162A 55%,#0B1322)!important;border-color:#FFC928!important;color:#FFFFFF!important;}
+.hb-final-hero h1,.hb-final-hero h1 em,.hb-final-hero p,.hb-final-hero small{color:#FFFFFF!important;}
+.hb-final-hero h1 em{color:#FFC928!important;}
+
+/* Categories / navigation */
+.hb-final-cats button{background:#0B1322!important;border-color:#C99A00!important;color:#FFFFFF!important;}
+.hb-final-cats button *{color:#FFFFFF!important;}
+.hb-final-cats button .hb-svg{color:#FFC928!important;}
+.hb-final-cats button.active,.hb-final-cats button.selected{background:linear-gradient(180deg,#FFC928,#E9A900)!important;border-color:#FFC928!important;}
+.hb-final-cats button.active *,.hb-final-cats button.selected *{color:#070B14!important;}
+.hb-final-nav{background:#0B1322!important;border-color:#FFC928!important;}
+.hb-final-nav button{background:transparent!important;color:#FFFFFF!important;}
+.hb-final-nav button .hb-svg{color:#FFC928!important;}
+.hb-final-nav button.active,.hb-final-nav button.selected{background:linear-gradient(180deg,#FFC928,#E9A900)!important;}
+.hb-final-nav button.active *,.hb-final-nav button.selected *{color:#070B14!important;}
+
+/* Restaurant card — the red image panel is now blue */
+.hb-final-card{background:linear-gradient(145deg,#0B2340,#070B14)!important;border-color:#FFC928!important;color:#FFFFFF!important;}
+.hb-final-card *{color:inherit;}
+.hb-final-card small,.hb-final-card p{color:#B9C1CC!important;}
+.hb-final-card .hb-svg{color:#FFC928!important;}
+.hb-food-image,.hb-food-image.restaurant,.hb-food-image.home{background:linear-gradient(145deg,#0B2340,#07162A)!important;border-color:#C99A00!important;color:#FFFFFF!important;}
+.hb-food-image span{color:#FFC928!important;}
+.hb-card-bottom button{background:#0B1322!important;color:#FFC928!important;border:2px solid #FFC928!important;box-shadow:none!important;}
+.hb-open{color:#42E06F!important;}
+
+/* Restaurant menu / generic pages */
+.card,.shop-card{background:#0B1322!important;color:#FFFFFF!important;border:2px solid #C99A00!important;box-shadow:none!important;}
+.food{background:transparent!important;color:#FFFFFF!important;border-top:1px solid #24344D!important;}
+.food b,.food span{color:#FFFFFF!important;}
+.muted{color:#B9C1CC!important;}
+.btn{background:linear-gradient(180deg,#FFC928,#E9A900)!important;color:#070B14!important;border:2px solid #FFC928!important;box-shadow:none!important;font-weight:900!important;}
+.btn.dark{background:#0B1322!important;color:#FFC928!important;border-color:#FFC928!important;}
+
+/* Hard-stop old red/brown surfaces */
+[style*="#650000"],[style*="#8A0000"],[style*="#6C2500"],[style*="#210000"],
+[style*="#650000f5"],[style*="#3D0000"],[style*="#3d0000"],[style*="#8b0000"],
+[style*="rgb(101,0,0)"],[style*="rgb(138,0,0)"]{background:#0B1322!important;color:#FFFFFF!important;}
+#hb-boot-splash,.hb-boot{display:none!important;visibility:hidden!important;}
+
+@media(max-width:390px){
+  .top{padding:8px 8px!important;min-height:90px!important;}
+  .hb-app-logo,.hb-app-logo-img{width:70px!important;height:70px!important;flex-basis:70px!important;}
+  .brand{gap:8px!important;}
+  .brand b{font-size:26px!important;}
+  .brand small{font-size:15px!important;}
+  .hb-header-actions .btn{padding:0 13px!important;font-size:15px!important;}
+}
+
+
+/* HOME BITE V46 — NO INTERMEDIATE BLANK SURFACE */
+html,body,#app{
+  background:#070B14!important;
+  color:#FFFFFF!important;
+  min-height:100%!important;
+}
+
+body{
+  margin:0!important;
+  background:#070B14!important;
+}
+
+#app{
+  background:#070B14!important;
+  min-height:100vh!important;
+}
+
+.hb-final-page{
+  background:#070B14!important;
+  min-height:100vh!important;
+}
+
+/* HOME BITE V48 — FINAL FIRST SURFACE */
+html,
+body,
+#app {
+    margin: 0 !important;
+    background: #070B14 !important;
+    color: #FFFFFF !important;
+}
+
+body {
+    min-height: 100vh !important;
+}
+
+#app {
+    min-height: 100vh !important;
+}
+
+
+/* HOME BITE V51 — FINAL MOBILE UI FIX */
+
+/* Login: keep existing field/button sizes; add only breathing room */
+.input + .btn{
+  margin-top:8px!important;
+}
+
+/* Order progress must remain inside the card */
+.hb-order-progress{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  margin-top:12px!important;
+  padding:10px!important;
+  border-radius:10px!important;
+  background:#0B1322!important;
+  border:1px solid #C99A00!important;
+  overflow:hidden!important;
+}
+
+.hb-progress-line{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:4px!important;
+  width:100%!important;
+  max-width:100%!important;
+  line-height:1.45!important;
+}
+
+.card{
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+
+.card table{
+  display:block!important;
+  max-width:100%!important;
+  overflow-x:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+
+.card .btn{
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+@media(max-width:600px){
+  .hb-order-progress{
+    font-size:14px!important;
+  }
+
+  .card table{
+    font-size:13px!important;
+  }
+
+  .card table select{
+    max-width:130px!important;
+  }
+}
+
+
+
+
+/* =========================================================
+   HOME BITE V56 FINAL REPAIR
+   UI ONLY — HOME / API / DB / LOGIN LOGIC UNTOUCHED
+   ========================================================= */
+
+/* ---------- LOGIN PAGE ---------- */
+
+.wrap > h2:first-child {
+  margin-top: 22px !important;
+  margin-bottom: 24px !important;
+  line-height: 1.15 !important;
+}
+
+.wrap > h2 + .input,
+.wrap > h2 ~ .input {
+  display: block !important;
+  width: min(100%, 520px) !important;
+  min-width: 0 !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  margin: 0 0 18px 0 !important;
+  padding: 0 18px !important;
+  font-size: 20px !important;
+  line-height: 58px !important;
+  border-radius: 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* Login button must NEVER sit beside password field */
+.wrap > h2 ~ .input + .btn,
+.wrap > h2 ~ .input ~ .btn {
+  display: block !important;
+}
+
+/* The first action button after the inputs gets its own row */
+.wrap > h2 + .input + .input + .btn,
+.wrap > h2 ~ .input + .btn {
+  width: min(100%, 520px) !important;
+  min-width: 0 !important;
+  min-height: 58px !important;
+  height: 58px !important;
+  margin: 4px 0 24px 0 !important;
+  padding: 0 24px !important;
+  font-size: 20px !important;
+  border-radius: 16px !important;
+  display: block !important;
+}
+
+/* New customer / Create account separation */
+.wrap > h2 ~ p {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 8px 0 0 0 !important;
+  font-size: 19px !important;
+  line-height: 1.5 !important;
+}
+
+.wrap > h2 ~ p button {
+  margin: 0 !important;
+  min-height: 50px !important;
+  padding: 10px 18px !important;
+  border-radius: 12px !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+}
+
+/* ---------- REGISTER PAGE ---------- */
+
+.wrap > h2 + .input {
+  margin-bottom: 18px !important;
+}
+
+/* ---------- ROLE PAGE HEADER ---------- */
+
+/*
+   Do not allow Password / Logout / other header actions
+   to overlap the HOME BITE branding.
+*/
+.top {
+  min-height: 112px !important;
+  height: auto !important;
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+}
+
+.top > * {
+  min-width: 0 !important;
+}
+
+.hb-header-actions {
+  position: static !important;
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: 48% !important;
+}
+
+.hb-header-actions .btn,
+.top .btn {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  min-height: 50px !important;
+  height: auto !important;
+  padding: 0 16px !important;
+  font-size: 16px !important;
+}
+
+/* Don't let the user name/branding collide with actions */
+.top .hb-header-brand,
+.top .hb-brand,
+.top .brand {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+/* ---------- ROLE PAGE CONTENT ---------- */
+
+.wrap {
+  width: min(100%, 1100px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  box-sizing: border-box !important;
+}
+
+.wrap > h2 {
+  margin-bottom: 22px !important;
+}
+
+.wrap > .card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: auto !important;
+  margin-bottom: 22px !important;
+}
+
+.wrap .food {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 16px 12px !important;
+  gap: 12px !important;
+}
+
+.wrap .food > div:last-child {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+.wrap .food .btn {
+  min-height: 48px !important;
+  padding: 8px 16px !important;
+  margin: 0 !important;
+}
+
+/* Tables on admin page */
+.wrap .card table {
+  width: 100% !important;
+  min-width: 650px !important;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 760px) {
+
+  .top {
+    min-height: 126px !important;
+    padding: 8px 10px !important;
+    align-items: center !important;
+  }
+
+  .hb-header-actions {
+    max-width: 52% !important;
+    gap: 6px !important;
+  }
+
+  .hb-header-actions .btn,
+  .top .btn {
+    min-height: 46px !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+  }
+
+  .wrap {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .wrap > h2 {
+    font-size: 30px !important;
+  }
+
+  .wrap > h2 + .input,
+  .wrap > h2 ~ .input {
+    width: 100% !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    font-size: 20px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .wrap > h2 + .input + .input + .btn,
+  .wrap > h2 ~ .input + .btn {
+    width: 100% !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    margin-top: 4px !important;
+    margin-bottom: 24px !important;
+    font-size: 20px !important;
+  }
+
+  .wrap > h2 ~ p {
+    gap: 12px !important;
+    font-size: 18px !important;
+  }
+
+  .wrap > h2 ~ p button {
+    min-height: 52px !important;
+    font-size: 17px !important;
+  }
+
+}
+
+/* Very narrow phones */
+@media (max-width: 430px) {
+
+  .top {
+    min-height: 136px !important;
+  }
+
+  .hb-header-actions {
+    max-width: 50% !important;
+  }
+
+  .hb-header-actions .btn,
+  .top .btn {
+    padding: 0 10px !important;
+    font-size: 13px !important;
+  }
+
+}
+
+/* =========================================================
+   HOME BITE V58 UI REPAIR
+   Home Page styles intentionally untouched.
+   ========================================================= */
+
+/* LOGIN */
+.hb-login-v58,
+.hb-login-v58 * {
+  box-sizing:border-box !important;
+}
+
+.hb-login-field {
+  width:100% !important;
+  min-height:62px !important;
+  height:62px !important;
+  margin:0 0 18px 0 !important;
+  padding:0 18px !important;
+  font-size:19px !important;
+  line-height:62px !important;
+  border-radius:16px !important;
+}
+
+.hb-login-icon {
+  width:24px !important;
+  height:24px !important;
+  min-width:24px !important;
+}
+
+.hb-login-button {
+  display:block !important;
+  width:100% !important;
+  min-height:62px !important;
+  height:62px !important;
+  margin:8px 0 28px 0 !important;
+  font-size:20px !important;
+  border-radius:16px !important;
+}
+
+.hb-login-links {
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  gap:14px !important;
+  margin-top:10px !important;
+}
+
+.hb-login-links button {
+  width:100% !important;
+  min-height:56px !important;
+  font-size:18px !important;
+  font-weight:800 !important;
+  margin:0 !important;
+  border-radius:14px !important;
+}
+
+/* CUSTOMER ACCOUNT / ROLE CONTENT */
+.hb-account-v58 {
+  display:flex !important;
+  flex-direction:column !important;
+  gap:16px !important;
+  width:100% !important;
+}
+
+.hb-account-v58 button {
+  width:100% !important;
+  min-height:56px !important;
+  margin:0 !important;
+  font-size:18px !important;
+  border-radius:15px !important;
+}
+
+.hb-account-v58 .hb-svg,
+.hb-account-v58 svg {
+  width:26px !important;
+  height:26px !important;
+  min-width:26px !important;
+}
+
+/* ADD / CART */
+.hb-menu-actions-v58 {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:16px !important;
+  margin-top:22px !important;
+}
+
+.hb-menu-actions-v58 .btn {
+  flex:1 1 0 !important;
+  min-height:56px !important;
+  margin:0 !important;
+}
+
+/* CHECKOUT */
+.hb-checkout-card {
+  margin-top:20px !important;
+}
+
+.hb-cart-row {
+  margin-bottom:12px !important;
+}
+
+.hb-address-input {
+  min-height:60px !important;
+  height:60px !important;
+  margin-top:18px !important;
+  margin-bottom:20px !important;
+  font-size:18px !important;
+}
+
+.hb-payment-option {
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  min-height:48px !important;
+  margin:8px 0 !important;
+  font-size:17px !important;
+}
+
+.hb-payment-option input {
+  width:22px !important;
+  height:22px !important;
+}
+
+.hb-place-order {
+  margin-top:24px !important;
+}
+
+.hb-place-order .btn {
+  width:100% !important;
+  min-height:60px !important;
+  font-size:19px !important;
+}
+
+@media (max-width:760px) {
+  .hb-login-field {
+    min-height:60px !important;
+    height:60px !important;
+    font-size:18px !important;
+  }
+
+  .hb-login-button {
+    min-height:60px !important;
+    height:60px !important;
+  }
+
+  .hb-menu-actions-v58 {
+    gap:14px !important;
+  }
+}
+
