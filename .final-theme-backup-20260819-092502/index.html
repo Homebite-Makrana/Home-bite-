@@ -1,0 +1,49 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#650000">
+  <meta name="description" content="HOME BITE – Makrana food delivery">
+  <title>HOME BITE – Makrana</title>
+
+<link rel="icon" type="image/svg+xml" href="/logo.svg"><link rel="manifest" href="/manifest.json"><link rel="preload" as="image" href="home-bite-app-icon.png">
+<link rel="stylesheet" href="final-home.css?v=39">
+</head>
+<body style="margin:0;background:#650000;">
+<div id="hb-boot-splash">
+  <div class="hb-boot-inner">
+    <img src="home-bite-app-icon.png" alt="HOME BITE">
+    <div class="hb-boot-title"><span>HOME</span> <b>BITE</b></div>
+    <div class="hb-boot-city">Makrana City</div>
+    <div class="hb-boot-loading">Loading<span class="hb-dots">...</span></div>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<script>
+(function(){
+  function hideBoot(){
+    var b=document.getElementById("hb-boot-splash");
+    var a=document.getElementById("app");
+    if(!b||!a)return;
+    if(a.children.length){
+      b.style.opacity="0";
+      b.style.transition="opacity 120ms ease";
+      setTimeout(function(){
+        if(b.parentNode)b.parentNode.removeChild(b);
+      },130);
+    }else{
+      requestAnimationFrame(hideBoot);
+    }
+  }
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",hideBoot,{once:true});
+  }else{
+    hideBoot();
+  }
+})();
+</script>
+
+<script defer src="app.js?v=39"></script>
+</body>
+</html>

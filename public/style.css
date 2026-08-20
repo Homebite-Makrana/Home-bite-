@@ -1303,3 +1303,96 @@ body{
     font-size:11px;
   }
 }
+
+/* =========================================================
+   HOME BITE V52 UI REPAIR
+   ONLY HEADER / LOGIN / PARTNER UI
+   Main Home layout intentionally untouched.
+   ========================================================= */
+
+.hb-header-actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  min-width:0!important;
+}
+
+.hb-header-actions .btn{
+  width:auto!important;
+  min-width:0!important;
+  max-width:max-content!important;
+  padding:8px 12px!important;
+  margin:0!important;
+  white-space:nowrap!important;
+  flex:0 0 auto!important;
+}
+
+.hb-header-actions .hb-bell{
+  width:36px!important;
+  height:36px!important;
+  padding:0!important;
+  margin:0!important;
+  flex:0 0 36px!important;
+}
+
+.hb-hi{
+  white-space:nowrap!important;
+  max-width:100px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+@media (max-width:520px){
+  .top{
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+
+  .hb-header-actions{
+    gap:5px!important;
+  }
+
+  .hb-header-actions .btn{
+    padding:7px 9px!important;
+    font-size:12px!important;
+  }
+
+  .hb-hi{
+    display:none!important;
+  }
+}
+
+/* Login page: compact, separated action button */
+.wrap > h2 + .input{
+  margin-top:10px!important;
+}
+
+.wrap .btn{
+  box-sizing:border-box;
+}
+
+.wrap > h2 ~ .btn{
+  width:auto!important;
+  min-width:110px!important;
+  max-width:180px!important;
+  padding:10px 18px!important;
+  margin-top:14px!important;
+}
+
+.wrap > h2 ~ .input{
+  display:block!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin-bottom:10px!important;
+}
+
+/* Restaurant/Admin role pages: keep existing content,
+   only prevent oversized header controls. */
+.top + .wrap h2{
+  margin-top:8px!important;
+}
+
+.top + .wrap .topspace{
+  margin-top:12px!important;
+}

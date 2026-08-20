@@ -1,0 +1,43 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#650000">
+  <meta name="description" content="HOME BITE – Makrana food delivery">
+  <title>HOME BITE – Makrana</title>
+
+<link rel="icon" type="image/svg+xml" href="/logo.svg"><link rel="manifest" href="/manifest.json"><link rel="preload" as="image" href="home-bite-app-icon.png">
+<link rel="stylesheet" href="final-home.css?v=41">
+</head>
+<body style="margin:0;background:#070B14;">
+<div id="hb-boot-splash">
+  <div class="hb-boot-inner">
+    <img src="home-bite-app-icon.png" alt="HOME BITE">
+  </div>
+</div>
+<div id="app"></div>
+<script>
+(function(){
+  function finish(){
+    var b=document.getElementById("hb-boot-splash");
+    var a=document.getElementById("app");
+    if(!b||!a)return;
+    if(a.children.length){
+      b.style.opacity="0";
+      b.style.transition="opacity 100ms linear";
+      setTimeout(function(){
+        if(b.parentNode)b.parentNode.removeChild(b);
+      },110);
+    }else{
+      requestAnimationFrame(finish);
+    }
+  }
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",finish,{once:true});
+  }else{
+    finish();
+  }
+})();
+</script>
+<script defer src="app.js?v=41"></script>
+</body>
+</html>

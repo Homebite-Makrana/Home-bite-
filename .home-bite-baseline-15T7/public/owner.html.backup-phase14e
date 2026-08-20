@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111">
+  <title>Food Bite — Owner</title>
+  <link rel="stylesheet" href="owner.css">
+</head>
+<body>
+  <div id="ownerApp">
+    <header class="owner-top">
+      <div>
+        <div class="owner-logo">FB</div>
+        <div>
+          <b>Food Bite</b>
+          <small>Owner Control Center</small>
+        </div>
+      </div>
+      <button onclick="logout()">Logout</button>
+    </header>
+
+    <main>
+      <section class="welcome">
+        <span>OWNER PANEL</span>
+        <h1>Business Control Center</h1>
+        <p>Restaurants, kitchens, delivery, franchises & orders — all in one place.</p>
+      </section>
+
+      <section id="stats" class="stats"></section>
+
+      <section class="actions">
+        <button onclick="showSection('franchise')">🏢 Franchise</button>
+        <button onclick="showSection('shops')">🍴 Restaurants</button>
+        <button onclick="showSection('delivery')">🛵 Delivery</button>
+        <button onclick="showSection('areas')">📍 Areas</button>
+        <button onclick="showSection('orders')">📦 Orders</button>
+        <button onclick="showSection('users')">👥 Users</button><button onclick="settings()">⚙️ Settings</button>
+      </section>
+
+      <section id="panel"></section>
+    </main>
+  </div>
+
+  <script src="owner.js"></script>
+</body>
+</html>

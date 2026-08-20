@@ -1,0 +1,653 @@
+/* =========================================================
+   HOME BITE — MASTER REFERENCE v36
+   Black + Deep Red + Gold
+   Single authoritative mobile Home design
+   ========================================================= */
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0!important;
+  padding:0!important;
+  background:#000!important;
+  color:#fff!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+}
+
+body{
+  min-height:100vh!important;
+  overflow-x:hidden!important;
+}
+
+#app{
+  min-height:100vh!important;
+  background:#000!important;
+}
+
+.top{
+  background:#000!important;
+  border-bottom:1px solid #D5A900!important;
+  min-height:82px!important;
+  padding:10px 14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+}
+
+.brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:0!important;
+}
+
+.hb-app-logo{
+  width:58px!important;
+  height:58px!important;
+  flex:0 0 58px!important;
+}
+
+.hb-app-logo-img{
+  width:58px!important;
+  height:58px!important;
+  object-fit:cover!important;
+  border-radius:16px!important;
+  display:block!important;
+}
+
+.brand b{
+  display:block!important;
+  color:#fff!important;
+  font-size:25px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+.brand small{
+  display:block!important;
+  color:#FFD000!important;
+  font-size:15px!important;
+  margin-top:4px!important;
+}
+
+.btn{
+  background:#650000!important;
+  color:#FFD000!important;
+  border:1.5px solid #FFD000!important;
+  border-radius:16px!important;
+  min-height:48px!important;
+  padding:0 20px!important;
+  font-size:16px!important;
+  font-weight:800!important;
+}
+
+.wrap{
+  margin:0!important;
+  padding:0!important;
+  background:#000!important;
+}
+
+.hb-header-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+
+.hb-bell{
+  background:transparent!important;
+  border:0!important;
+  color:#FFD000!important;
+  font-size:27px!important;
+  padding:4px!important;
+}
+
+.hb-hi{color:#fff!important;font-weight:700!important}
+
+.hb-final-page{
+  width:100%!important;
+  max-width:560px!important;
+  min-height:calc(100vh - 82px)!important;
+  margin:0 auto!important;
+  padding:0 16px 105px!important;
+  background:#000!important;
+  color:#fff!important;
+}
+
+.hb-final-location{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:6px!important;
+  padding:18px 0 16px!important;
+  white-space:nowrap!important;
+}
+
+.hb-pin{color:#fff!important;font-size:15px!important}
+.hb-final-location small{color:#fff!important;font-size:15px!important}
+.hb-final-location b{color:#FFD000!important;font-size:18px!important}
+.hb-final-location .hb-live{color:#ff3030!important;font-weight:800!important}
+
+.hb-final-search{
+  height:54px!important;
+  width:100%!important;
+  border:2px solid #FFD000!important;
+  border-radius:30px!important;
+  background:#050505!important;
+  display:flex!important;
+  align-items:center!important;
+  padding:0 14px!important;
+  margin-bottom:16px!important;
+}
+
+.hb-final-search span{
+  color:#FFD000!important;
+  font-size:27px!important;
+  line-height:1!important;
+}
+
+.hb-final-search input{
+  flex:1!important;
+  min-width:0!important;
+  height:48px!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  color:#fff!important;
+  font-size:17px!important;
+  padding:0 10px!important;
+}
+
+.hb-final-search input::placeholder{color:#999!important}
+
+.hb-final-hero{
+  min-height:220px!important;
+  border:2px solid #FFD000!important;
+  border-radius:22px!important;
+  background:linear-gradient(135deg,#650000,#8A0000 55%,#650000)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:25px 22px!important;
+  overflow:hidden!important;
+}
+
+.hb-final-hero > div:first-child{
+  flex:1!important;
+  min-width:0!important;
+}
+
+.hb-final-hero small{
+  color:#FFD000!important;
+  font-size:15px!important;
+  font-weight:900!important;
+}
+
+.hb-final-hero h1{
+  color:#fff!important;
+  font-size:30px!important;
+  line-height:1.08!important;
+  margin:8px 0!important;
+  font-weight:900!important;
+}
+
+.hb-final-hero h1 em{
+  color:#FFD000!important;
+  font-style:normal!important;
+}
+
+.hb-final-hero p{
+  color:#fff!important;
+  font-size:15px!important;
+  margin:12px 0 0!important;
+}
+
+.hb-hero-dish{
+  flex:0 0 auto!important;
+  font-size:58px!important;
+}
+
+.hb-final-cats{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:10px!important;
+  margin:16px 0 25px!important;
+}
+
+.hb-final-cats button{
+  min-height:76px!important;
+  border:1.5px solid #FFD000!important;
+  border-radius:16px!important;
+  background:#650000!important;
+  color:#fff!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+}
+
+.hb-final-cats button span{
+  font-size:27px!important;
+  color:#FFD000!important;
+}
+
+.hb-final-cats button b{
+  font-size:15px!important;
+  color:#fff!important;
+}
+
+.hb-final-cats button.active,
+.hb-final-cats button.selected{
+  background:#FFD000!important;
+}
+
+.hb-final-cats button.active *,
+.hb-final-cats button.selected *{
+  color:#111!important;
+}
+
+.hb-final-heading{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:space-between!important;
+  margin-bottom:14px!important;
+}
+
+.hb-final-heading small{
+  display:block!important;
+  color:#FFD000!important;
+  font-size:12px!important;
+  letter-spacing:2px!important;
+  margin-bottom:5px!important;
+}
+
+.hb-final-heading h2{
+  margin:0!important;
+  color:#fff!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+}
+
+.hb-final-heading > span{
+  color:#FFD000!important;
+  font-size:14px!important;
+  white-space:nowrap!important;
+}
+
+.hb-final-shops{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:12px!important;
+}
+
+.hb-final-card{
+  display:grid!important;
+  grid-template-columns:112px minmax(0,1fr)!important;
+  min-height:170px!important;
+  border:2px solid #FFD000!important;
+  border-radius:21px!important;
+  background:#050505!important;
+  padding:11px!important;
+  overflow:hidden!important;
+}
+
+.hb-food-image{
+  min-height:145px!important;
+  border:1px solid #8F7100!important;
+  border-radius:17px!important;
+  background:linear-gradient(145deg,#6C2500,#210000)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+}
+
+.hb-food-image span{
+  color:#FFD000!important;
+  font-size:10px!important;
+  font-weight:900!important;
+}
+
+.hb-food-image strong{font-size:48px!important}
+
+.hb-card-body{
+  min-width:0!important;
+  padding:7px 0 7px 14px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+.hb-card-title{
+  display:flex!important;
+  justify-content:space-between!important;
+  gap:7px!important;
+}
+
+.hb-card-title h3{
+  margin:0!important;
+  color:#fff!important;
+  font-size:20px!important;
+  line-height:1.15!important;
+}
+
+.hb-card-title b{
+  color:#fff!important;
+  white-space:nowrap!important;
+}
+
+.hb-card-body p{
+  color:#bbb!important;
+  font-size:13px!important;
+  margin:10px 0!important;
+}
+
+.hb-card-bottom{
+  margin-top:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:7px!important;
+}
+
+.hb-card-bottom span{
+  color:#43E35B!important;
+  font-size:14px!important;
+  font-weight:800!important;
+}
+
+.hb-card-bottom button{
+  border:1.5px solid #FFD000!important;
+  border-radius:13px!important;
+  background:#650000!important;
+  color:#FFD000!important;
+  padding:10px 12px!important;
+  font-weight:900!important;
+}
+
+.hb-final-empty{
+  border:1.5px solid #FFD000!important;
+  border-radius:20px!important;
+  background:#050505!important;
+  color:#fff!important;
+  padding:28px!important;
+  text-align:center!important;
+}
+
+.hb-final-empty *{color:#fff!important}
+.hb-final-empty h3{font-size:18px!important}
+.hb-final-empty p{color:#aaa!important}
+
+.hb-final-benefits,
+.hb-final-role-actions{
+  display:none!important;
+}
+
+.hb-final-nav{
+  position:fixed!important;
+  z-index:99999!important;
+  left:16px!important;
+  right:16px!important;
+  bottom:11px!important;
+  height:76px!important;
+  border:3px solid #FFD000!important;
+  border-radius:40px!important;
+  background:#650000!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  padding:4px!important;
+}
+
+.hb-final-nav button{
+  border:0!important;
+  border-radius:34px!important;
+  background:transparent!important;
+  color:#FFD000!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:2px!important;
+}
+
+.hb-final-nav button span{font-size:28px!important}
+.hb-final-nav button b{font-size:13px!important}
+
+.hb-final-nav button.active,
+.hb-final-nav button.selected{
+  background:#FFD000!important;
+  color:#111!important;
+}
+
+.hb-final-nav button.active *,
+.hb-final-nav button.selected *{color:#111!important}
+
+@media(max-width:380px){
+  .hb-final-page{padding-left:12px!important;padding-right:12px!important}
+  .hb-final-hero{min-height:205px!important;padding:21px 17px!important}
+  .hb-final-hero h1{font-size:27px!important}
+  .hb-hero-dish{font-size:50px!important}
+  .hb-final-card{grid-template-columns:96px minmax(0,1fr)!important}
+  .hb-food-image{min-height:130px!important}
+  .hb-card-title h3{font-size:18px!important}
+}
+
+/* v38 deterministic visual lock */
+.hb-svg{width:28px!important;height:28px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.hb-svg-hero{width:76px!important;height:76px!important;stroke-width:1.7!important}
+.hb-final-cats button .hb-svg{color:#FFD000!important;width:31px!important;height:31px!important}
+.hb-final-cats button.active .hb-svg,.hb-final-cats button.selected .hb-svg{color:#111!important}
+.hb-hero-dish{color:#FFD000!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.hb-final-empty .hb-svg{color:#FFD000!important;margin:0 auto 10px!important}
+.hb-final-nav button .hb-svg{color:#FFD000!important;width:28px!important;height:28px!important}
+.hb-final-nav button.active .hb-svg,.hb-final-nav button.selected .hb-svg{color:#111!important}
+.hb-bell .hb-svg{width:29px!important;height:29px!important;color:#FFD000!important}
+.hb-final-search input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none!important;appearance:none!important;display:none!important}
+.hb-final-search input[type="search"]::-webkit-search-decoration{-webkit-appearance:none!important}
+.hb-search-clear{display:none!important}
+.hb-boot{min-height:100vh!important;background:#000!important}
+.hb-boot .top{display:flex!important}
+.hb-boot .hb-final-page{display:block!important}
+.hb-boot-bell{color:#FFD000!important;font-size:28px!important}
+
+/* HOME BITE v39 FINAL BOOT */
+
+html,body{
+  background:#650000!important;
+}
+
+#hb-boot-splash{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483647!important;
+  width:100%!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  background:#650000!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  opacity:1;
+}
+
+.hb-boot-inner{
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:24px!important;
+}
+
+.hb-boot-inner img{
+  width:min(230px,58vw)!important;
+  height:min(230px,58vw)!important;
+  object-fit:contain!important;
+  display:block!important;
+  border-radius:42px!important;
+}
+
+.hb-boot-title{
+  margin-top:18px!important;
+  color:#fff!important;
+  font-size:38px!important;
+  line-height:1!important;
+  font-weight:900!important;
+}
+
+.hb-boot-title b{
+  color:#FFD000!important;
+}
+
+.hb-boot-city{
+  margin-top:8px!important;
+  color:#FFD000!important;
+  font-size:22px!important;
+  font-weight:700!important;
+}
+
+.hb-boot-loading{
+  margin-top:78px!important;
+  color:#FFD000!important;
+  font-size:22px!important;
+}
+
+.hb-dots{
+  display:inline-block!important;
+  min-width:30px!important;
+  text-align:left!important;
+}
+
+@media(max-width:380px){
+  .hb-boot-inner img{
+    width:190px!important;
+    height:190px!important;
+  }
+  .hb-boot-title{font-size:33px!important}
+  .hb-boot-city{font-size:20px!important}
+  .hb-boot-loading{
+    margin-top:62px!important;
+    font-size:20px!important;
+  }
+}
+/* HOME BITE FINAL WARM MAROON THEME START */
+:root{
+  --hb-cream:#F7F0E3;
+  --hb-cream-2:#FFF9EE;
+  --hb-maroon:#650F12;
+  --hb-maroon-2:#7A1418;
+  --hb-maroon-3:#4B080B;
+  --hb-gold:#D9A800;
+  --hb-gold-bright:#F2C230;
+  --hb-text:#3A1718;
+  --hb-muted:#6B5550;
+  --hb-green:#159447;
+}
+html,body,#app{
+  background:var(--hb-cream)!important;
+  color:var(--hb-text)!important;
+}
+.top{
+  background:linear-gradient(135deg,var(--hb-maroon-3),var(--hb-maroon))!important;
+  border-bottom:2px solid var(--hb-gold)!important;
+  color:#fff!important;
+}
+.top .brand,.top .brand b,.top .brand small,.hb-hi{color:#fff!important}
+.top .brand small{color:var(--hb-gold-bright)!important}
+.hb-header-actions .btn,.top .btn{
+  background:var(--hb-gold)!important;
+  color:var(--hb-maroon-3)!important;
+  border-color:var(--hb-gold-bright)!important;
+}
+.hb-final-page,.hb-reference-home{
+  background:var(--hb-cream)!important;
+  color:var(--hb-text)!important;
+}
+.hb-final-location,.hb-reference-home .hb-final-location{color:var(--hb-text)!important}
+.hb-final-location b{color:var(--hb-maroon)!important}
+.hb-pin{color:var(--hb-maroon)!important}
+.hb-live{color:#D51F2A!important}
+.hb-final-search,.hb-reference-search{
+  background:var(--hb-cream-2)!important;
+  border-color:var(--hb-gold)!important;
+  color:var(--hb-text)!important;
+}
+.hb-final-search input,.hb-reference-search input{
+  background:transparent!important;color:var(--hb-text)!important;
+}
+.hb-final-search input::placeholder{color:#8A7770!important}
+.hb-search-icon,.hb-search-go,.hb-search-clear{color:var(--hb-maroon)!important}
+.hb-final-hero,.hb-reference-hero{
+  background:
+    radial-gradient(circle at 88% 50%,rgba(242,194,48,.12),transparent 28%),
+    linear-gradient(135deg,var(--hb-maroon-3),var(--hb-maroon-2))!important;
+  border-color:var(--hb-gold)!important;color:#fff!important;
+}
+.hb-hero-copy small{color:var(--hb-gold-bright)!important}
+.hb-hero-copy h1{color:#fff!important}
+.hb-hero-copy h1 em{color:var(--hb-gold-bright)!important}
+.hb-hero-copy p{color:#FFF8ED!important}
+.hb-hero-dish{color:var(--hb-gold-bright)!important}
+.hb-final-cats,.hb-reference-cats{background:transparent!important}
+.hb-final-cats button,.hb-reference-cats button{
+  background:var(--hb-cream-2)!important;
+  color:var(--hb-maroon)!important;
+  border-color:var(--hb-gold)!important;
+}
+.hb-final-cats button span,.hb-reference-cats button span{color:var(--hb-maroon)!important}
+.hb-final-cats button.active,.hb-reference-cats button.active{
+  background:linear-gradient(135deg,var(--hb-gold-bright),var(--hb-gold))!important;
+  color:var(--hb-maroon-3)!important;border-color:var(--hb-gold)!important;
+}
+.hb-final-cats button.active span{color:var(--hb-maroon-3)!important}
+.hb-final-heading,.hb-reference-heading{color:var(--hb-text)!important}
+.hb-final-heading small,.hb-reference-heading small{color:var(--hb-maroon)!important}
+.hb-final-heading h2,.hb-reference-heading h2{color:var(--hb-text)!important}
+.hb-final-heading>span,.hb-reference-heading>span{color:var(--hb-maroon)!important}
+.hb-final-card,.hb-reference-card{
+  background:var(--hb-cream-2)!important;
+  border-color:var(--hb-gold)!important;color:var(--hb-text)!important;
+}
+.hb-card-body,.hb-card-title,.hb-card-title h3,.hb-address{color:var(--hb-text)!important}
+.hb-rating{color:var(--hb-gold)!important}
+.hb-food-image{
+  background:linear-gradient(145deg,var(--hb-maroon),var(--hb-maroon-3))!important;
+  border-color:var(--hb-gold)!important;
+}
+.hb-food-image span{
+  background:rgba(101,15,18,.88)!important;
+  color:var(--hb-gold-bright)!important;
+}
+.hb-open{color:var(--hb-green)!important}
+.hb-card-bottom button{
+  background:var(--hb-maroon)!important;color:#fff!important;border-color:var(--hb-gold)!important;
+}
+.hb-card-bottom button span{color:var(--hb-gold-bright)!important}
+.hb-final-empty,.hb-reference-empty{
+  background:var(--hb-cream-2)!important;
+  border-color:var(--hb-gold)!important;color:var(--hb-text)!important;
+}
+.hb-final-empty h3,.hb-reference-empty h3,.hb-final-empty p,.hb-reference-empty p{
+  color:var(--hb-text)!important;
+}
+.hb-final-benefits{color:var(--hb-text)!important}
+.hb-final-benefits b{color:var(--hb-maroon)!important}
+.hb-final-benefits small{color:var(--hb-muted)!important}
+.hb-final-benefits span{color:var(--hb-gold)!important}
+.hb-final-nav,.hb-reference-nav{
+  background:var(--hb-cream-2)!important;border-color:var(--hb-gold)!important;
+}
+.hb-final-nav button{background:transparent!important;color:var(--hb-maroon)!important}
+.hb-final-nav button span,.hb-final-nav button b{color:inherit!important}
+.hb-final-nav button.selected{
+  background:var(--hb-maroon)!important;color:var(--hb-gold-bright)!important;
+}
+.hb-final-nav button.selected span,.hb-final-nav button.selected b{color:var(--hb-gold-bright)!important}
+.hb-final-role-actions button{
+  background:var(--hb-maroon)!important;color:#fff!important;border-color:var(--hb-gold)!important;
+}
+/* Preserve v39 launch structure; palette only. */
+#hb-boot-splash{background:var(--hb-maroon)!important}
+.hb-boot-title b,.hb-boot-city,.hb-boot-loading{color:var(--hb-gold-bright)!important}
+/* HOME BITE FINAL WARM MAROON THEME END */

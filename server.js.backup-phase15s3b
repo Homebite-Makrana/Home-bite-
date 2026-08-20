@@ -1,0 +1,599 @@
+import "dotenv/config";
+import { registerOwnerApi } from "./owner-api.js";
+import express from "express";
+import cors from "cors";
+import { createDatabase } from "./db-adapter.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import Razorpay from "razorpay";
+import path from "path";
+import {fileURLToPath} from "url";
+
+const __filename=fileURLToPath(import.meta.url), __dirname=path.dirname(__filename);
+const app=express();
+const db = await createDatabase("foodbite.db");
+const SECRET=process.env.JWT_SECRET;
+if(!SECRET || SECRET.length < 32){
+  throw new Error("JWT_SECRET is missing or too short");
+}
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+app.use(cors()); app.use(express.json()); app.use((req,res,next)=>{res.setHeader("Cache-Control","no-store, no-cache, must-revalidate, proxy-revalidate"); next()}); app.use(express.static(path.join(__dirname,"public")));
+app.get("/health",(req,res)=>res.json({ok:true,service:"HOME BITE",database:"postgres"}));
+app.get("/api/config/razorpay",(req,res)=>res.json({key_id:process.env.RAZORPAY_KEY_ID}));
+
+db.exec(`
+CREATE TABLE IF NOT EXISTS notifications(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  order_id INTEGER,
+  message TEXT NOT NULL,
+  read INTEGER DEFAULT 0,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,phone TEXT UNIQUE NOT NULL,password TEXT NOT NULL,role TEXT NOT NULL DEFAULT 'customer');
+CREATE TABLE IF NOT EXISTS shops(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,type TEXT NOT NULL,address TEXT,phone TEXT,rating REAL DEFAULT 5,active INTEGER DEFAULT 1,owner_id INTEGER);
+CREATE TABLE IF NOT EXISTS menu(id INTEGER PRIMARY KEY AUTOINCREMENT,shop_id INTEGER,name TEXT NOT NULL,price REAL NOT NULL,category TEXT,available INTEGER DEFAULT 1);
+CREATE TABLE IF NOT EXISTS orders(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER NOT NULL,shop_id INTEGER NOT NULL,total REAL NOT NULL,address TEXT NOT NULL,status TEXT DEFAULT 'PLACED',payment_status TEXT DEFAULT 'PENDING',delivery_id INTEGER,created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS order_items(id INTEGER PRIMARY KEY AUTOINCREMENT,order_id INTEGER,menu_id INTEGER,name TEXT,qty INTEGER,price REAL);
+`);
+
+function addUser(name,phone,password,role){
+  let u=db.prepare("SELECT id FROM users WHERE phone=?").get(phone);
+  if(!u) db.prepare("INSERT INTO users(name,phone,password,role) VALUES(?,?,?,?)").run(name,phone,bcrypt.hashSync(password,10),role);
+  return db.prepare("SELECT * FROM users WHERE phone=?").get(phone);
+}
+function addShop(name,type,address,phone,owner_id){
+  let s=db.prepare("SELECT id FROM shops WHERE name=?").get(name);
+  if(!s) return db.prepare("INSERT INTO shops(name,type,address,phone,owner_id) VALUES(?,?,?,?,?)").run(name,type,address,phone,owner_id).lastInsertRowid;
+  return s.id;
+}
+// Admin account is managed separately; no default admin password is created here.
+function token(u){return jwt.sign({id:u.id,name:u.name,role:u.role},SECRET,{expiresIn:"7d"})}
+function auth(req,res,next){try{req.user=jwt.verify((req.headers.authorization||"").replace("Bearer ",""),SECRET);next()}catch(e){res.status(401).json({error:"Login required"})}}
+function role(...roles){return (req,res,next)=>roles.includes(req.user.role)?next():res.status(403).json({error:"Not allowed"})}
+
+/* Change password for the currently logged-in account */
+app.patch("/api/account/password",auth,async(req,res)=>{
+  try{
+    const {current_password,new_password,confirm_password}=req.body||{};
+
+    if(!current_password||!new_password||!confirm_password)
+      return res.status(400).json({error:"All password fields are required"});
+
+    if(new_password.length<6)
+      return res.status(400).json({error:"New password must be at least 6 characters"});
+
+    if(new_password!==confirm_password)
+      return res.status(400).json({error:"New passwords do not match"});
+
+    const user=db.prepare("SELECT * FROM users WHERE id=?").get(req.user.id);
+
+    if(!user)
+      return res.status(404).json({error:"Account not found"});
+
+    if(!bcrypt.compareSync(current_password,user.password))
+      return res.status(400).json({error:"Current password is incorrect"});
+
+    db.prepare("UPDATE users SET password=? WHERE id=?")
+      .run(bcrypt.hashSync(new_password,10),req.user.id);
+
+    res.json({ok:true,message:"Password changed successfully"});
+  }catch(e){
+    console.error("PASSWORD CHANGE ERROR:",e);
+    res.status(500).json({error:"Unable to change password"});
+  }
+});
+
+
+app.post("/api/register",(req,res)=>{
+ const {name,phone,password}=req.body||{}; if(!name||!phone||!password)return res.status(400).json({error:"Required fields missing"});
+ try{const r=db.prepare("INSERT INTO users(name,phone,password) VALUES(?,?,?)").run(name,phone,bcrypt.hashSync(password,10));const u={id:r.lastInsertRowid,name,role:"customer"};res.json({token:token(u),user:u})}catch(e){res.status(400).json({error:"Phone already registered"})}
+});
+app.post("/api/login",(req,res)=>{
+ const loginPhone=String(req.body.phone||"").trim(); const loginPassword=String(req.body.password||""); const u=db.prepare("SELECT * FROM users WHERE phone=?").get(loginPhone); 
+ if(!u||!bcrypt.compareSync(loginPassword,u.password))return res.status(401).json({error:"Invalid login"});
+ res.json({token:token(u),user:{id:u.id,name:u.name,role:u.role,shop_id:db.prepare("SELECT id FROM shops WHERE owner_id=?").get(u.id)?.id||null}})
+});
+app.get("/api/shops",(req,res)=>{const t=req.query.type;res.json(db.prepare(t?"SELECT * FROM shops WHERE active=1 AND type=?":"SELECT * FROM shops WHERE active=1").all(...(t?[t]:[])))});
+app.get("/api/shops/:id/menu",(req,res)=>res.json(db.prepare("SELECT * FROM menu WHERE shop_id=? AND available=1").all(req.params.id)));
+
+function addCommission(orderId,shopId,franchiseId,amount,status="PENDING"){
+  const exists=db.prepare("SELECT id FROM commissions WHERE order_id=?").get(orderId);
+  if(exists)return;
+  db.prepare(`
+    INSERT INTO commissions(order_id,franchise_id,shop_id,amount,percent,status)
+    VALUES(?,?,?,?,?,?)
+  `).run(orderId,franchiseId||null,shopId,amount,15,status);
+}
+
+function notifyOrderStatus(orderId,status){
+  const o=db.prepare("SELECT user_id FROM orders WHERE id=?").get(orderId);
+  if(!o)return;
+
+  const messages={
+    PLACED:"Order placed successfully",
+    PREPARING:"Restaurant is preparing your order",
+    READY:"Your order is ready for pickup",
+    ON_THE_WAY:"Your order is on the way",
+    DELIVERED:"Order delivered successfully"
+  };
+
+  const message=messages[status]||("Order status: "+status);
+
+  db.prepare(
+    "INSERT INTO notifications(user_id,order_id,message) VALUES(?,?,?)"
+  ).run(o.user_id,orderId,message);
+}
+
+function deliveryFeeKm(km){
+  if(km<=2)return 25;
+  if(km<=4)return 30;
+  if(km<=6)return 35;
+  return 40;
+}
+function distanceKm(lat1,lon1,lat2,lon2){
+  const R=6371, r=Math.PI/180;
+  const dLat=(lat2-lat1)*r, dLon=(lon2-lon1)*r;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+app.post("/api/orders",auth,role("customer"),(req,res)=>{
+ const {shopId,items,address,latitude,longitude,payment_method}=req.body||{};
+ if(!shopId||!items?.length||!address)return res.status(400).json({error:"Shop/items/address required"});
+
+ const shop=db.prepare("SELECT * FROM shops WHERE id=? AND active=1").get(shopId);
+ if(!shop)return res.status(400).json({error:"Invalid shop"});
+
+ let subtotal=0,checked=[],get=db.prepare("SELECT * FROM menu WHERE id=? AND shop_id=?");
+ try{
+  for(const x of items){
+   const m=get.get(x.menuId,shopId);if(!m)throw Error("Invalid item");
+   const qty=Number(x.qty||1);subtotal+=m.price*qty;checked.push({...m,qty});
+  }
+ }catch(e){return res.status(400).json({error:e.message})}
+
+ if(!Number.isFinite(Number(latitude))||!Number.isFinite(Number(longitude))||shop.latitude==null||shop.longitude==null)
+   return res.status(400).json({error:"Location required for delivery fee"});
+
+ const km=distanceKm(Number(latitude),Number(longitude),Number(shop.latitude),Number(shop.longitude));
+ const deliveryFee=deliveryFeeKm(km);
+ const commissionPercent=15;
+ const commissionAmount=Math.round(subtotal*commissionPercent)/100;
+ const total=subtotal+deliveryFee;
+
+ const r=db.prepare(`
+  INSERT INTO orders(user_id,shop_id,total,address,status,payment_status,payment_method,franchise_id,commission_amount,delivery_fee)
+  VALUES(?,?,?,?,?,?,?,?,?,?)
+ `).run(req.user.id,shopId,total,address,"PLACED","PENDING",payment_method||"COD",shop.franchise_id||null,commissionAmount,deliveryFee);
+
+ const ins=db.prepare("INSERT INTO order_items(order_id,menu_id,name,qty,price) VALUES(?,?,?,?,?)");
+ checked.forEach(x=>ins.run(r.lastInsertRowid,x.id,x.name,x.qty,x.price));
+
+ res.json({orderId:r.lastInsertRowid,total,subtotal,delivery_fee:deliveryFee,commission_amount:commissionAmount,distance_km:km,status:"PLACED",payment_status:"PENDING"});
+});
+app.post("/api/delivery/quote",auth,role("customer"),(req,res)=>{
+  const {shopId,latitude,longitude}=req.body||{};
+  const shop=db.prepare("SELECT latitude,longitude FROM shops WHERE id=? AND active=1").get(shopId);
+  if(!shop||shop.latitude==null||shop.longitude==null)
+    return res.status(400).json({error:"Restaurant location unavailable"});
+  if(!Number.isFinite(Number(latitude))||!Number.isFinite(Number(longitude)))
+    return res.status(400).json({error:"Location required"});
+  const km=distanceKm(Number(latitude),Number(longitude),Number(shop.latitude),Number(shop.longitude));
+  res.json({distance_km:km,delivery_fee:deliveryFeeKm(km)});
+});
+
+app.post("/api/payment/create",auth,role("customer"),async(req,res)=>{
+  try{
+    const {shopId,items,address,latitude,longitude}=req.body||{};
+    if(!shopId||!items?.length||!address)
+      return res.status(400).json({error:"Shop/items/address required"});
+
+    let subtotal=0,checked=[];
+    const get=db.prepare("SELECT * FROM menu WHERE id=? AND shop_id=?");
+
+    for(const x of items){
+      const m=get.get(x.menuId,shopId);
+      if(!m)return res.status(400).json({error:"Invalid item"});
+      const qty=Number(x.qty||1);
+      subtotal+=m.price*qty;
+      checked.push({...m,qty});
+    }
+
+    if(!Number.isFinite(Number(latitude))||!Number.isFinite(Number(longitude)))
+      return res.status(400).json({error:"Location required for delivery fee"});
+    const shop=db.prepare("SELECT * FROM shops WHERE id=? AND active=1").get(shopId);
+    if(!shop||shop.latitude==null||shop.longitude==null)
+      return res.status(400).json({error:"Restaurant location unavailable"});
+    const km=distanceKm(Number(latitude),Number(longitude),Number(shop.latitude),Number(shop.longitude));
+    const deliveryFee=deliveryFeeKm(km);
+    const commissionAmount=Math.round(subtotal*15)/100;
+    const total=subtotal+deliveryFee;
+
+    const rp=await razorpay.orders.create({
+      amount:Math.round(total*100),
+      currency:"INR",
+      receipt:"HB_"+Date.now(),
+      notes:{shopId:String(shopId),userId:String(req.user.id)}
+    });
+
+    const r=db.prepare(
+      "INSERT INTO orders(user_id,shop_id,total,address,status,payment_status,payment_method,franchise_id,commission_amount,delivery_fee,razorpay_order_id) VALUES(?,?,?,?,?,?,?,?,?,?,?)"
+    ).run(req.user.id,shopId,total,address,"PAYMENT_PENDING","PENDING","ONLINE",shop.franchise_id||null,commissionAmount,deliveryFee,rp.id);
+
+    const ins=db.prepare("INSERT INTO order_items(order_id,menu_id,name,qty,price) VALUES(?,?,?,?,?)");
+    checked.forEach(x=>ins.run(r.lastInsertRowid,x.id,x.name,x.qty,x.price));
+
+    res.json({
+      ok:true,
+      orderId:r.lastInsertRowid,
+      razorpay_order_id:rp.id,
+      amount:rp.amount,
+      currency:rp.currency,
+      subtotal,
+      delivery_fee:deliveryFee,
+      commission_amount:commissionAmount,
+      distance_km:km
+    });
+  }catch(e){
+    console.error("RAZORPAY CREATE ERROR:",e);
+    res.status(500).json({error:e.message||"Payment order failed"});
+  }
+});
+
+app.post("/api/payment/verify",auth,role("customer"),(req,res)=>{
+  try{
+    const {razorpay_order_id,razorpay_payment_id,razorpay_signature}=req.body||{};
+
+    if(!razorpay_order_id||!razorpay_payment_id||!razorpay_signature)
+      return res.status(400).json({error:"Payment verification data missing"});
+
+    const order=db.prepare(
+      "SELECT * FROM orders WHERE razorpay_order_id=? AND user_id=?"
+    ).get(razorpay_order_id,req.user.id);
+
+    if(!order)
+      return res.status(404).json({error:"Order not found"});
+
+    const expected=crypto.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET)
+      .update(razorpay_order_id+"|"+razorpay_payment_id)
+      .digest("hex");
+
+    if(expected!==razorpay_signature)
+      return res.status(400).json({error:"Payment signature verification failed"});
+
+    if(order.payment_method!=="ONLINE")
+      return res.status(400).json({error:"Invalid payment method"});
+
+    if(order.payment_status==="PAID")
+      return res.json({
+        ok:true,
+        orderId:order.id,
+        payment_status:"PAID",
+        already_paid:true
+      });
+
+    db.prepare(`
+      UPDATE orders
+      SET payment_status='PAID',
+          status='PLACED',
+          razorpay_payment_id=?,
+          razorpay_signature=?
+      WHERE id=? AND user_id=? AND payment_method='ONLINE'
+    `).run(
+      razorpay_payment_id,
+      razorpay_signature,
+      order.id,
+      req.user.id
+    );
+
+    addCommission(
+      order.id,
+      order.shop_id,
+      order.franchise_id,
+      order.commission_amount,
+      "PENDING"
+    );
+
+    res.json({
+      ok:true,
+      orderId:order.id,
+      payment_status:"PAID"
+    });
+  }catch(e){
+    console.error("RAZORPAY VERIFY ERROR:",e);
+    res.status(500).json({error:e.message||"Payment verification failed"});
+  }
+});
+
+app.post("/api/payment/confirm",auth,role("customer"),async(req,res)=>{
+  try{
+    const {razorpay_order_id}=req.body||{};
+    if(!razorpay_order_id)
+      return res.status(400).json({error:"Razorpay order ID required"});
+
+    const order=db.prepare(
+      "SELECT * FROM orders WHERE razorpay_order_id=? AND user_id=?"
+    ).get(razorpay_order_id,req.user.id);
+
+    if(!order)
+      return res.status(404).json({error:"Order not found"});
+
+    const payments=await razorpay.orders.fetchPayments(razorpay_order_id);
+    const paid=payments.items?.find(x=>x.status==="captured");
+
+    if(!paid)
+      return res.status(400).json({error:"Payment not captured yet"});
+
+    if(order.payment_method!=="ONLINE")
+      return res.status(400).json({error:"Invalid payment method"});
+
+    if(order.payment_status==="PAID")
+      return res.json({
+        ok:true,
+        orderId:order.id,
+        payment_status:"PAID",
+        payment_id:order.razorpay_payment_id,
+        already_paid:true
+      });
+
+    db.prepare(`
+      UPDATE orders
+      SET payment_status='PAID',
+          status='PLACED',
+          razorpay_payment_id=?
+      WHERE id=? AND user_id=? AND payment_method='ONLINE'
+    `).run(paid.id,order.id,req.user.id);
+
+    addCommission(
+      order.id,
+      order.shop_id,
+      order.franchise_id,
+      order.commission_amount,
+      "PENDING"
+    );
+
+    res.json({
+      ok:true,
+      orderId:order.id,
+      payment_status:"PAID",
+      payment_id:paid.id
+    });
+  }catch(e){
+    console.error("RAZORPAY CONFIRM ERROR:",e);
+    res.status(500).json({error:e.message||"Payment confirmation failed"});
+  }
+});
+
+app.get("/api/orders",auth,role("customer"),(req,res)=>res.json(db.prepare("SELECT o.*,s.name shop_name FROM orders o JOIN shops s ON s.id=o.shop_id WHERE o.user_id=? ORDER BY o.id DESC").all(req.user.id)));
+
+app.get("/api/admin/stats",auth,role("admin"),(req,res)=>res.json({
+ orders:db.prepare("SELECT COUNT(*) n FROM orders").get().n,
+ revenue:db.prepare("SELECT COALESCE(SUM(total),0) n FROM orders WHERE payment_status='PAID'").get().n,
+ pendingPayments:db.prepare("SELECT COALESCE(SUM(total),0) n FROM orders WHERE payment_status='PENDING'").get().n,
+ restaurants:db.prepare("SELECT COUNT(*) n FROM shops WHERE type='restaurant'").get().n,
+ kitchens:db.prepare("SELECT COUNT(*) n FROM shops WHERE type='home'").get().n,
+ customers:db.prepare("SELECT COUNT(*) n FROM users WHERE role='customer'").get().n,
+ delivery:db.prepare("SELECT COUNT(*) n FROM users WHERE role='delivery'").get().n
+}));
+app.get("/api/admin/orders",auth,role("admin"),(req,res)=>res.json(db.prepare("SELECT o.*,s.name shop_name,u.name customer FROM orders o JOIN shops s ON s.id=o.shop_id JOIN users u ON u.id=o.user_id ORDER BY o.id DESC").all()));
+app.patch("/api/admin/orders/:id",auth,role("admin"),(req,res)=>{
+  db.prepare("UPDATE orders SET status=? WHERE id=?").run(req.body.status,req.params.id);
+  notifyOrderStatus(req.params.id,req.body.status);
+  res.json({ok:true});
+});
+app.post("/api/admin/shops",auth,role("admin"),(req,res)=>{const {name,type,address,phone}=req.body||{};if(!name||!type)return res.status(400).json({error:"Name/type required"});const r=db.prepare("INSERT INTO shops(name,type,address,phone) VALUES(?,?,?,?)").run(name,type,address||"Makrana City",phone||"");res.json({id:r.lastInsertRowid})});
+
+app.get("/api/partner/shop",auth,role("restaurant"),(req,res)=>{
+ const s=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id); if(!s)return res.status(404).json({error:"Shop not found"});
+ res.json({...s,menu:db.prepare("SELECT * FROM menu WHERE shop_id=?").all(s.id),orders:db.prepare("SELECT o.*,u.name customer FROM orders o JOIN users u ON u.id=o.user_id WHERE o.shop_id=? ORDER BY o.id DESC").all(s.id)})
+});
+app.post("/api/partner/menu",auth,role("restaurant"),(req,res)=>{
+ const s=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);if(!s)return res.status(404).json({error:"Shop not found"});
+ const {name,price,category}=req.body||{};if(!name||!price)return res.status(400).json({error:"Name/price required"});
+ const r=db.prepare("INSERT INTO menu(shop_id,name,price,category) VALUES(?,?,?,?)").run(s.id,name,price,category||"General");res.json({id:r.lastInsertRowid});
+});
+app.patch("/api/partner/menu/:id",auth,role("restaurant"),(req,res)=>{
+  const shop=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);
+  if(!shop)
+    return res.status(404).json({error:"Shop not found"});
+
+  const item=db.prepare(
+    "SELECT * FROM menu WHERE id=? AND shop_id=?"
+  ).get(req.params.id,shop.id);
+
+  if(!item)
+    return res.status(404).json({error:"Menu item not found"});
+
+  const {name,price,category,available}=req.body||{};
+
+  if(name!==undefined && !String(name).trim())
+    return res.status(400).json({error:"Menu name cannot be empty"});
+
+  if(price!==undefined &&
+     (!Number.isFinite(Number(price)) || Number(price)<=0))
+    return res.status(400).json({error:"Invalid menu price"});
+
+  if(available!==undefined && ![0,1,true,false].includes(available))
+    return res.status(400).json({error:"Invalid availability value"});
+
+  db.prepare(`
+    UPDATE menu
+    SET name=?,
+        price=?,
+        category=?,
+        available=?
+    WHERE id=? AND shop_id=?
+  `).run(
+    name===undefined ? item.name : String(name).trim(),
+    price===undefined ? item.price : Number(price),
+    category===undefined ? (item.category||"General") : String(category).trim(),
+    available===undefined ? item.available : (available===true || Number(available)===1 ? 1 : 0),
+    item.id,
+    shop.id
+  );
+
+  res.json({ok:true});
+});
+
+app.delete("/api/partner/menu/:id",auth,role("restaurant"),(req,res)=>{
+  const shop=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);
+  if(!shop)
+    return res.status(404).json({error:"Shop not found"});
+
+  const result=db.prepare(
+    "DELETE FROM menu WHERE id=? AND shop_id=?"
+  ).run(req.params.id,shop.id);
+
+  if(!result.changes)
+    return res.status(404).json({error:"Menu item not found"});
+
+  res.json({ok:true});
+});
+
+app.patch("/api/partner/orders/:id",auth,role("restaurant"),(req,res)=>{
+ const s=db.prepare("SELECT * FROM shops WHERE owner_id=?").get(req.user.id);
+
+ if(!s)
+   return res.status(404).json({error:"Shop not found"});
+
+ const o=db.prepare(
+   "SELECT * FROM orders WHERE id=? AND shop_id=?"
+ ).get(req.params.id,s.id);
+
+ if(!o)
+   return res.status(404).json({error:"Order not found"});
+
+ const status=String(req.body.status||"").trim();
+
+ const allowed={
+   PLACED:["PREPARING"],
+   PREPARING:["READY"]
+ };
+
+ if(!allowed[o.status]?.includes(status))
+   return res.status(400).json({
+     error:"Invalid restaurant order transition"
+   });
+
+ db.prepare(
+   "UPDATE orders SET status=? WHERE id=? AND shop_id=?"
+ ).run(status,o.id,s.id);
+
+ notifyOrderStatus(o.id,status);
+
+ res.json({ok:true,status});
+});
+
+app.get("/api/delivery/earnings",auth,role("delivery"),(req,res)=>{
+  const rows=db.prepare(`
+    SELECT id,total,delivery_fee,status,created_at
+    FROM orders
+    WHERE delivery_id=? AND status='DELIVERED'
+    ORDER BY id DESC
+  `).all(req.user.id);
+
+  const total=rows.reduce((sum,x)=>sum+Number(x.delivery_fee||0),0);
+
+  res.json({
+    total_earnings:total,
+    completed_deliveries:rows.length,
+    orders:rows
+  });
+});
+
+app.get("/api/notifications",auth,(req,res)=>{
+  res.json(db.prepare(
+    "SELECT * FROM notifications WHERE user_id=? ORDER BY id DESC LIMIT 30"
+  ).all(req.user.id));
+});
+
+app.patch("/api/notifications/:id/read",auth,(req,res)=>{
+  db.prepare("UPDATE notifications SET read=1 WHERE id=? AND user_id=?")
+    .run(req.params.id,req.user.id);
+  res.json({ok:true});
+});
+
+app.get("/api/delivery/orders",auth,role("delivery"),(req,res)=>res.json(db.prepare(`SELECT o.*,s.name shop_name,s.address shop_address,u.name customer FROM orders o JOIN shops s ON s.id=o.shop_id JOIN users u ON u.id=o.user_id WHERE (o.status='READY' AND (o.delivery_id IS NULL OR o.delivery_id=?)) OR o.delivery_id=? ORDER BY o.id DESC`).all(req.user.id,req.user.id)));
+app.patch("/api/delivery/orders/:id/cod-collected",auth,role("delivery"),(req,res)=>{
+  const o=db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);
+
+  if(!o)
+    return res.status(404).json({error:"Order not found"});
+
+  if(o.delivery_id!==req.user.id)
+    return res.status(403).json({error:"Order not assigned to this delivery agent"});
+
+  if(o.payment_method!=="COD")
+    return res.status(400).json({error:"This order is not COD"});
+
+  if(o.status!=="DELIVERED")
+    return res.status(400).json({error:"Order must be DELIVERED before cash collection"});
+
+  if(o.payment_status==="PAID")
+    return res.json({ok:true,orderId:o.id,payment_status:"PAID",already_paid:true});
+
+  db.prepare(`
+    UPDATE orders
+    SET payment_status='PAID'
+    WHERE id=? AND delivery_id=? AND payment_method='COD' AND status='DELIVERED'
+  `).run(o.id,req.user.id);
+
+  addCommission(
+    o.id,
+    o.shop_id,
+    o.franchise_id,
+    o.commission_amount,
+    "PENDING"
+  );
+
+  db.prepare(
+    "INSERT INTO notifications(user_id,order_id,message) VALUES(?,?,?)"
+  ).run(o.user_id,o.id,"Cash payment received successfully");
+
+  res.json({
+    ok:true,
+    orderId:o.id,
+    payment_status:"PAID"
+  });
+});
+
+app.patch("/api/delivery/orders/:id",auth,role("delivery"),(req,res)=>{
+ const o=db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);
+
+ if(!o)
+   return res.status(404).json({error:"Order not found"});
+
+ if(o.delivery_id&&o.delivery_id!==req.user.id)
+   return res.status(403).json({error:"Delivery already assigned"});
+
+ const status=String(req.body.status||"").trim();
+
+ const allowed={
+   READY:["ON_THE_WAY"],
+   ON_THE_WAY:["DELIVERED"]
+ };
+
+ if(!allowed[o.status]?.includes(status))
+   return res.status(400).json({
+     error:"Invalid delivery order transition"
+   });
+
+ db.prepare(
+   "UPDATE orders SET status=?,delivery_id=? WHERE id=?"
+ ).run(status,req.user.id,o.id);
+
+ notifyOrderStatus(o.id,status);
+
+ res.json({ok:true,status});
+});
+
+registerOwnerApi(app,db,auth,role,bcrypt);
+app.get("/owner",(req,res)=>res.sendFile(path.join(__dirname,"public","owner.html")));
+app.get("/{*splat}",(req,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
+app.listen(process.env.PORT||3000,"0.0.0.0",()=>console.log("Food Bite running"));

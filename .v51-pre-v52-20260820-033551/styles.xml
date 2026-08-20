@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#070B14</item>
+        <item name="colorPrimaryDark">#070B14</item>
+        <item name="colorAccent">#FFC928</item>
+        <item name="android:windowBackground">#070B14</item>
+        <item name="android:navigationBarColor">#070B14</item>
+        <item name="android:statusBarColor">#070B14</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">#070B14</item>
+        <item name="android:colorAccent">#FFC928</item>
+        <item name="android:navigationBarColor">#070B14</item>
+        <item name="android:statusBarColor">#070B14</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/home_bite_final_launch</item>
+        <item name="android:navigationBarColor">#070B14</item>
+        <item name="android:statusBarColor">#070B14</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowDisablePreview">false</item>
+    </style>
+</resources>
