@@ -6,8 +6,13 @@
   <title>HOME BITE – Makrana</title>
 
 <link rel="icon" type="image/svg+xml" href="/logo.svg"><link rel="manifest" href="/manifest.json"><link rel="preload" as="image" href="home-bite-app-icon-blue.png">
-<link rel="stylesheet" href="final-home.css?v=47">
-<style id="hb-first-paint">html,body{margin:0!important;background:#070B14!important;color:#FFFFFF!important;color-scheme:dark!important}
+<link rel="stylesheet" href="final-home.css?v=61g">
+<style id="hb-first-paint">
+html,body{margin:0!important;background:#070B14!important;color:#FFFFFF!important;color-scheme:dark!important}
+#app{min-height:100vh}
+#hb-first-paint-screen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#070B14;transition:opacity .25s ease,visibility .25s ease}
+#hb-first-paint-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+#hb-first-paint-screen img{width:118px;height:118px;object-fit:contain;border-radius:28px}
 </style>
 </head>
 <body style="margin:0;background:#070B14;">
@@ -16,8 +21,17 @@
 
 
 
+<div id="hb-first-paint-screen" aria-label="HOME BITE"><img src="/home-bite-app-icon-blue.png" alt="HOME BITE"></div>
 <div id="app"></div>
 
-<script defer src="app.js?v=57"></script>
+<script defer src="app.js?v=61g"></script>
+<script>
+window.addEventListener("load",function(){
+  setTimeout(function(){
+    var x=document.getElementById("hb-first-paint-screen");
+    if(x)x.classList.add("hide");
+  },180);
+});
+</script>
 </body>
 </html>
