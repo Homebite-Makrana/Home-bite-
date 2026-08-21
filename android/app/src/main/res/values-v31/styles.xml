@@ -7,14 +7,14 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <item name="android:windowBackground">#070B14</item>
+        <item name="android:windowBackground">@drawable/hb_native_splash</item>
 
-        <item name="android:windowSplashScreenBackground">#070B14</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/hb_transparent_splash</item>
+        <item name="android:windowSplashScreenBackground">@color/hb_splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/home_bite_final_launch</item>
         <item name="android:windowSplashScreenAnimationDuration">0</item>
 
-        <item name="android:navigationBarColor">#070B14</item>
-        <item name="android:statusBarColor">#070B14</item>
+        <item name="android:navigationBarColor">#01072D</item>
+        <item name="android:statusBarColor">#01072D</item>
         <item name="android:forceDarkAllowed">false</item>
 
         <item name="android:windowDisablePreview">false</item>

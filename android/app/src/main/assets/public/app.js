@@ -244,118 +244,25 @@ function find(q){
   });
 }
 
-async function menu(id){let s=(await api("/api/shops")).find(x=>x.id==id),m=await api("/api/shops/"+id+"/menu");layout(`<button onclick="home()">← Back</button><h2>${s.name}</h2><div class="card">${m.map(x=>`<div class="food"><div><b>${x.name}</b><div class="muted">₹${x.price} · ${x.category}</div></div><button class="btn" onclick="add(${id},${x.id},'${x.name.replace(/'/g,"\\'")}',${x.price})">Add</button></div>`).join("")}</div><div class="topspace"><button class="btn" onclick="checkout()">Cart (${cart.length})</button></div>`)}
-async function add(shopId,menuId,name,price){if(cart.length&&cart[0].shopId!==shopId)return alert("Please order from one restaurant at a time.");cart.push({shopId,menuId,name,price,qty:1});await menu(shopId)}
-async function checkout(){
-  if(!cart.length)return alert("Cart empty");
-  if(!U)return login();
-
-  let t=cart.reduce((a,x)=>a+x.price*x.qty,0);
-  let latitude,longitude,quote;
-
+async function menu(id){
+  layout(`<button class="btn" onclick="home()">← Back</button>
+    <div class="card"><h2>Menu</h2><p>Loading menu…</p></div>`);
+  await new Promise(r=>requestAnimationFrame(()=>r()));
   try{
-    if(!navigator.geolocation){
-      return alert("Location is required for home delivery. Please enable location on your phone.");
-    }
-
-    const pos=await new Promise((resolve,reject)=>{
-      navigator.geolocation.getCurrentPosition(
-        resolve,
-        reject,
-        {
-          enableHighAccuracy:true,
-          timeout:15000,
-          maximumAge:60000
-        }
-      );
-    });
-
-    latitude=Number(pos.coords.latitude);
-    longitude=Number(pos.coords.longitude);
-
-    if(!Number.isFinite(latitude)||!Number.isFinite(longitude)){
-      throw new Error("Unable to read your delivery location.");
-    }
-
-    quote=await api("/api/delivery/quote",{
-      method:"POST",
-      body:JSON.stringify({
-        shopId:cart[0].shopId,
-        latitude,
-        longitude
-      })
-    });
-
-    if(!quote || !Number.isFinite(Number(quote.delivery_fee))){
-      throw new Error("Unable to calculate delivery fee.");
-    }
-
+    const all=await api("/api/shops");
+    const shop=all.find(x=>x.id==id);
+    const m=await api("/api/shops/"+id+"/menu");
+    layout(`<button onclick="home()">← Back</button>
+      <h2>${shop?.name||"Restaurant"}</h2>
+      <div class="card">${m.map(x=>`<div class="food">
+        <div><b>${x.name}</b><div class="muted">₹${x.price} · ${x.category||""}</div></div>
+        <button class="btn" onclick="add(${id},${x.id},'${String(x.name).replace(/'/g,"\\\\'")}',${x.price})">Add</button>
+      </div>`).join("")}</div>
+      <div class="topspace"><button class="btn" onclick="checkout()">Cart (${cart.length})</button></div>`);
   }catch(e){
-    console.error("CHECKOUT LOCATION/QUOTE ERROR:",e);
-
-    if(e && e.code===1){
-      return alert("Location permission is required for home delivery. Please allow location permission and try Cart again.");
-    }
-
-    if(e && e.code===2){
-      return alert("Your location could not be detected. Please turn on GPS/location and try again.");
-    }
-
-    if(e && e.code===3){
-      return alert("Location request timed out. Please make sure GPS/location is ON and try again.");
-    }
-
-    return alert(e.message||"Unable to calculate delivery fee.");
+    layout(`<button class="btn" onclick="home()">← Back</button>
+      <div class="card"><h3>Menu couldn't load</h3><button class="btn" onclick="menu(${id})">Try Again</button></div>`);
   }
-
-  // Keep the successful GPS coordinates for the Place Order step.
-  window.hbCheckoutLocation={
-    latitude,
-    longitude
-  };
-
-  const finalTotal=t+Number(quote.delivery_fee);
-
-  layout(`
-    <button onclick="home()">← Home</button>
-    <h2>Checkout</h2>
-
-    <div class="card hb-checkout-card">
-      ${cart.map(x=>`
-        <div class="food hb-cart-row">
-          <span>${x.name} × ${x.qty}</span>
-          <b>₹${x.price*x.qty}</b>
-        </div>
-      `).join("")}
-
-      <hr>
-
-      <p>Food subtotal <b>₹${t}</b></p>
-      <p>Distance <b>${Number(quote.distance_km).toFixed(1)} km</b></p>
-      <p>Delivery fee <b>₹${quote.delivery_fee}</b></p>
-      <h3>Final Total ₹${finalTotal}</h3>
-
-      <input id="addr"
-        class="input hb-address-input"
-        placeholder="Full delivery address, Makrana">
-
-      <h3>Payment Method</h3>
-
-      <label class="hb-payment-option">
-        <input type="radio" name="payment" value="COD" checked>
-        💵 Cash on Delivery
-      </label>
-
-      <label class="hb-payment-option">
-        <input type="radio" name="payment" value="ONLINE">
-        💳 Online Payment
-      </label>
-
-      <div class="topspace hb-place-order">
-        <button class="btn" onclick="place()">Place Order</button>
-      </div>
-    </div>
-  `);
 }
 
 async function place(){
@@ -410,6 +317,18 @@ description:"Food Order",
 order_id:p.razorpay_order_id,
 prefill:{name:U.name||""},
 theme:{color:"#075d31"},
+config:{
+  display:{
+    blocks:{
+      hb_upi:{
+        name:"Pay using UPI",
+        instruments:[{method:"upi"}]
+      }
+    },
+    sequence:["block.hb_upi","block.cards","block.netbanking","block.wallet"],
+    preferences:{show_default_blocks:true}
+  }
+},
 modal:{
   ondismiss:function(){
     alert("Razorpay checkout closed.");
@@ -450,7 +369,7 @@ try{
   console.error(e);
 }
 
-}catch(e){alert(e.message)}
+ }catch(e){alert(e.message)}finally{window.hbPlaceBusy=false}
 }
 async function orders(){
   let r=await api("/api/orders");
@@ -469,8 +388,44 @@ async function orders(){
     </div>
   </div>`).join(""):"<p>No orders yet.</p>"}<button class="btn topspace" onclick="home()">Home</button>`)
 }
-function login(){layout(`<h2>Login</h2><input id="loginPhone" class="input" type="tel" autocomplete="off" placeholder="Mobile number"><input id="loginPassword" class="input" type="password" autocomplete="new-password" placeholder="Password"><button class="btn" onclick="doLogin()">Login</button><p>New customer? <button onclick="register()">Create account</button></p>`)}
-async function doLogin(){try{const phone=document.getElementById("loginPhone").value.trim();const password=document.getElementById("loginPassword").value.trim();const data=await api("/api/login",{method:"POST",body:JSON.stringify({phone:phone,password:password})});save(data);if(data.user.role==="admin")return admin();if(data.user.role==="restaurant")return partner();if(data.user.role==="delivery")return deliver();return home()}catch(e){alert(e.message)}}
+function login(){layout(`
+<section class="hb-login-v61">
+  <div class="hb-login-head">
+    <img class="hb-login-logo" src="/home-bite-app-icon-blue.png" alt="HOME BITE">
+    <small>HOME BITE</small>
+    <h2>Welcome Back</h2>
+    <p>Login to continue to your account</p>
+  </div>
+  <div class="hb-login-form card">
+    <label>Mobile Number</label>
+    <input id="loginPhone" class="input hb-login-field" type="tel" autocomplete="tel" inputmode="numeric" placeholder="Enter mobile number">
+    <label>Password</label>
+    <input id="loginPassword" class="input hb-login-field" type="password" autocomplete="current-password" placeholder="Enter password">
+    <button id="hbLoginBtn" class="btn hb-login-button" type="button" onclick="doLogin()">Login</button>
+    <div class="hb-login-links">
+      <button class="btn dark" type="button" onclick="register()">Create New Account</button>
+      <button class="btn dark" type="button" onclick="home()">Continue as Guest</button>
+    </div>
+  </div>
+</section>`)}
+async function doLogin(){
+  const btn=document.getElementById("hbLoginBtn");
+  try{
+    const phone=document.getElementById("loginPhone").value.trim();
+    const password=document.getElementById("loginPassword").value.trim();
+    if(!phone||!password){alert("Please enter mobile number and password");return}
+    if(btn){btn.disabled=true;btn.textContent="Logging in…"}
+    const data=await api("/api/login",{method:"POST",body:JSON.stringify({phone:phone,password:password})});
+    save(data);
+    if(data.user.role==="admin")return admin();
+    if(data.user.role==="restaurant")return partner();
+    if(data.user.role==="delivery")return deliver();
+    return home();
+  }catch(e){
+    if(btn){btn.disabled=false;btn.textContent="Login"}
+    alert(e.message)
+  }
+}
 function register(){layout(`<h2>Create account</h2><input id="n" class="input" placeholder="Name"><input id="p" class="input" placeholder="Mobile"><input id="pw" class="input" type="password" placeholder="Password"><button class="btn" onclick="doRegister()">Create</button>`)}
 async function doRegister(){try{save(await api("/api/register",{method:"POST",body:JSON.stringify({name:n.value,phone:p.value,password:pw.value})}));home()}catch(e){alert(e.message)}}
 function logout(){
@@ -481,6 +436,8 @@ function logout(){
   home();
 }
 async function admin(){
+  layout(`<h2>Admin Panel</h2><div class="card"><b>Loading dashboard…</b><p>Please wait.</p></div>`);
+  await new Promise(r=>requestAnimationFrame(()=>r()));
   let s=await api("/api/admin/stats");
   let o=await api("/api/admin/orders");
   let f=await api("/api/owner/franchises");
@@ -659,31 +616,78 @@ async function addShop(type){
 
   let f=await api("/api/owner/franchises");
 
-  layout(`<h2>Add Restaurant</h2>
-  <div class="card">
-    <input id="sn" class="input" placeholder="Business / Restaurant name">
-    <input id="on" class="input" placeholder="Owner name">
-    <input id="op" class="input" type="tel" placeholder="Owner phone">
-    <input id="pw" class="input" type="password" placeholder="Partner password (minimum 6 characters)">
-    <input id="sa" class="input" placeholder="Full restaurant address">
-    <input id="lat" class="input" type="number" step="any" placeholder="Latitude">
-    <input id="lng" class="input" type="number" step="any" placeholder="Longitude">
-    <button class="btn" type="button" onclick="getRestaurantLocation()">📍 Use Current Location</button>
+  layout(`
+  <section class="hb-restaurant-page">
+    <div class="hb-form-heading">
+      <small>HOME BITE PARTNER</small>
+      <h2>Add Restaurant</h2>
+      <p>Create a restaurant partner profile and assign its service area.</p>
+    </div>
 
-    <select id="fi" class="input" onchange="loadRestaurantAreas()">
-      <option value="">Select City / Franchise</option>
-      ${f.map(x=>`<option value="${x.id}" data-commission="${x.commission_percent}">${x.name} - ${x.city||""}</option>`).join("")}
-    </select>
+    <div class="card hb-restaurant-form">
+      <div class="hb-form-section">
+        <h3>Business Details</h3>
+        <p>Enter restaurant and owner information.</p>
 
-    <select id="ari" class="input">
-      <option value="">Select Area</option>
-    </select>
+        <label>Business / Restaurant Name</label>
+        <input id="sn" class="input" placeholder="Restaurant name">
 
-    <input id="cp" class="input" type="number" min="0" max="100" step="0.1" placeholder="Commission %">
+        <label>Owner Name</label>
+        <input id="on" class="input" placeholder="Owner full name">
 
-    <button class="btn" onclick="saveRestaurant()">Create Restaurant Partner</button>
-    <button class="btn dark topspace" onclick="admin()">Cancel</button>
-  </div>`);
+        <label>Owner Phone</label>
+        <input id="op" class="input" type="tel" inputmode="numeric" placeholder="Owner mobile number">
+
+        <label>Partner Password</label>
+        <input id="pw" class="input" type="password" placeholder="Minimum 6 characters">
+      </div>
+
+      <div class="hb-form-section">
+        <h3>Restaurant Location</h3>
+        <p>Add address and map location.</p>
+
+        <label>Full Address</label>
+        <input id="sa" class="input" placeholder="Full restaurant address">
+
+        <div class="hb-location-grid">
+          <div>
+            <label>Latitude</label>
+            <input id="lat" class="input" type="number" step="any" placeholder="Latitude">
+          </div>
+          <div>
+            <label>Longitude</label>
+            <input id="lng" class="input" type="number" step="any" placeholder="Longitude">
+          </div>
+        </div>
+
+        <button class="btn hb-location-button" type="button" onclick="getRestaurantLocation()">📍 Use Current Location</button>
+      </div>
+
+      <div class="hb-form-section">
+        <h3>Service & Commission</h3>
+        <p>Select city/franchise and delivery area.</p>
+
+        <label>City / Franchise</label>
+        <select id="fi" class="input" onchange="loadRestaurantAreas()">
+          <option value="">Select City / Franchise</option>
+          ${f.map(x=>`<option value="${x.id}" data-commission="${x.commission_percent}">${x.name} - ${x.city||""}</option>`).join("")}
+        </select>
+
+        <label>Area</label>
+        <select id="ari" class="input">
+          <option value="">Select Area</option>
+        </select>
+
+        <label>Commission %</label>
+        <input id="cp" class="input" type="number" min="0" max="100" step="0.1" placeholder="Commission percentage">
+      </div>
+
+      <div class="hb-form-actions">
+        <button class="btn hb-v61-wide" type="button" onclick="saveRestaurant()">Create Restaurant Partner</button>
+        <button class="btn dark hb-v61-wide" type="button" onclick="admin()">Cancel</button>
+      </div>
+    </div>
+  </section>`);
 }
 
 async function loadRestaurantAreas(){

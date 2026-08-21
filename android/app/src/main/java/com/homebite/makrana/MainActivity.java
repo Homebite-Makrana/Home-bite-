@@ -8,7 +8,7 @@ import android.webkit.WebView;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
-    private static final int HB_NAVY = Color.rgb(7, 11, 20);
+    private static final int HB_NAVY = Color.rgb(1, 7, 45);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -244,118 +244,25 @@ function find(q){
   });
 }
 
-async function menu(id){let s=(await api("/api/shops")).find(x=>x.id==id),m=await api("/api/shops/"+id+"/menu");layout(`<button onclick="home()">← Back</button><h2>${s.name}</h2><div class="card">${m.map(x=>`<div class="food"><div><b>${x.name}</b><div class="muted">₹${x.price} · ${x.category}</div></div><button class="btn" onclick="add(${id},${x.id},'${x.name.replace(/'/g,"\\'")}',${x.price})">Add</button></div>`).join("")}</div><div class="topspace"><button class="btn" onclick="checkout()">Cart (${cart.length})</button></div>`)}
-async function add(shopId,menuId,name,price){if(cart.length&&cart[0].shopId!==shopId)return alert("Please order from one restaurant at a time.");cart.push({shopId,menuId,name,price,qty:1});await menu(shopId)}
-async function checkout(){
-  if(!cart.length)return alert("Cart empty");
-  if(!U)return login();
-
-  let t=cart.reduce((a,x)=>a+x.price*x.qty,0);
-  let latitude,longitude,quote;
-
+async function menu(id){
+  layout(`<button class="btn" onclick="home()">← Back</button>
+    <div class="card"><h2>Menu</h2><p>Loading menu…</p></div>`);
+  await new Promise(r=>requestAnimationFrame(()=>r()));
   try{
-    if(!navigator.geolocation){
-      return alert("Location is required for home delivery. Please enable location on your phone.");
-    }
-
-    const pos=await new Promise((resolve,reject)=>{
-      navigator.geolocation.getCurrentPosition(
-        resolve,
-        reject,
-        {
-          enableHighAccuracy:true,
-          timeout:15000,
-          maximumAge:60000
-        }
-      );
-    });
-
-    latitude=Number(pos.coords.latitude);
-    longitude=Number(pos.coords.longitude);
-
-    if(!Number.isFinite(latitude)||!Number.isFinite(longitude)){
-      throw new Error("Unable to read your delivery location.");
-    }
-
-    quote=await api("/api/delivery/quote",{
-      method:"POST",
-      body:JSON.stringify({
-        shopId:cart[0].shopId,
-        latitude,
-        longitude
-      })
-    });
-
-    if(!quote || !Number.isFinite(Number(quote.delivery_fee))){
-      throw new Error("Unable to calculate delivery fee.");
-    }
-
+    const all=await api("/api/shops");
+    const shop=all.find(x=>x.id==id);
+    const m=await api("/api/shops/"+id+"/menu");
+    layout(`<button onclick="home()">← Back</button>
+      <h2>${shop?.name||"Restaurant"}</h2>
+      <div class="card">${m.map(x=>`<div class="food">
+        <div><b>${x.name}</b><div class="muted">₹${x.price} · ${x.category||""}</div></div>
+        <button class="btn" onclick="add(${id},${x.id},'${String(x.name).replace(/'/g,"\\\\'")}',${x.price})">Add</button>
+      </div>`).join("")}</div>
+      <div class="topspace"><button class="btn" onclick="checkout()">Cart (${cart.length})</button></div>`);
   }catch(e){
-    console.error("CHECKOUT LOCATION/QUOTE ERROR:",e);
-
-    if(e && e.code===1){
-      return alert("Location permission is required for home delivery. Please allow location permission and try Cart again.");
-    }
-
-    if(e && e.code===2){
-      return alert("Your location could not be detected. Please turn on GPS/location and try again.");
-    }
-
-    if(e && e.code===3){
-      return alert("Location request timed out. Please make sure GPS/location is ON and try again.");
-    }
-
-    return alert(e.message||"Unable to calculate delivery fee.");
+    layout(`<button class="btn" onclick="home()">← Back</button>
+      <div class="card"><h3>Menu couldn't load</h3><button class="btn" onclick="menu(${id})">Try Again</button></div>`);
   }
-
-  // Keep the successful GPS coordinates for the Place Order step.
-  window.hbCheckoutLocation={
-    latitude,
-    longitude
-  };
-
-  const finalTotal=t+Number(quote.delivery_fee);
-
-  layout(`
-    <button onclick="home()">← Home</button>
-    <h2>Checkout</h2>
-
-    <div class="card hb-checkout-card">
-      ${cart.map(x=>`
-        <div class="food hb-cart-row">
-          <span>${x.name} × ${x.qty}</span>
-          <b>₹${x.price*x.qty}</b>
-        </div>
-      `).join("")}
-
-      <hr>
-
-      <p>Food subtotal <b>₹${t}</b></p>
-      <p>Distance <b>${Number(quote.distance_km).toFixed(1)} km</b></p>
-      <p>Delivery fee <b>₹${quote.delivery_fee}</b></p>
-      <h3>Final Total ₹${finalTotal}</h3>
-
-      <input id="addr"
-        class="input hb-address-input"
-        placeholder="Full delivery address, Makrana">
-
-      <h3>Payment Method</h3>
-
-      <label class="hb-payment-option">
-        <input type="radio" name="payment" value="COD" checked>
-        💵 Cash on Delivery
-      </label>
-
-      <label class="hb-payment-option">
-        <input type="radio" name="payment" value="ONLINE">
-        💳 Online Payment
-      </label>
-
-      <div class="topspace hb-place-order">
-        <button class="btn" onclick="place()">Place Order</button>
-      </div>
-    </div>
-  `);
 }
 
 async function place(){
@@ -410,6 +317,18 @@ description:"Food Order",
 order_id:p.razorpay_order_id,
 prefill:{name:U.name||""},
 theme:{color:"#075d31"},
+config:{
+  display:{
+    blocks:{
+      hb_upi:{
+        name:"Pay using UPI",
+        instruments:[{method:"upi"}]
+      }
+    },
+    sequence:["block.hb_upi","block.cards","block.netbanking","block.wallet"],
+    preferences:{show_default_blocks:true}
+  }
+},
 modal:{
   ondismiss:function(){
     alert("Razorpay checkout closed.");
@@ -450,7 +369,7 @@ try{
   console.error(e);
 }
 
-}catch(e){alert(e.message)}
+ }catch(e){alert(e.message)}finally{window.hbPlaceBusy=false}
 }
 async function orders(){
   let r=await api("/api/orders");
@@ -517,6 +436,8 @@ function logout(){
   home();
 }
 async function admin(){
+  layout(`<h2>Admin Panel</h2><div class="card"><b>Loading dashboard…</b><p>Please wait.</p></div>`);
+  await new Promise(r=>requestAnimationFrame(()=>r()));
   let s=await api("/api/admin/stats");
   let o=await api("/api/admin/orders");
   let f=await api("/api/owner/franchises");
