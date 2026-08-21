@@ -473,7 +473,13 @@ function login(){layout(`<h2>Login</h2><input id="loginPhone" class="input" type
 async function doLogin(){try{const phone=document.getElementById("loginPhone").value.trim();const password=document.getElementById("loginPassword").value.trim();const data=await api("/api/login",{method:"POST",body:JSON.stringify({phone:phone,password:password})});save(data);if(data.user.role==="admin")return admin();if(data.user.role==="restaurant")return partner();if(data.user.role==="delivery")return deliver();return home()}catch(e){alert(e.message)}}
 function register(){layout(`<h2>Create account</h2><input id="n" class="input" placeholder="Name"><input id="p" class="input" placeholder="Mobile"><input id="pw" class="input" type="password" placeholder="Password"><button class="btn" onclick="doRegister()">Create</button>`)}
 async function doRegister(){try{save(await api("/api/register",{method:"POST",body:JSON.stringify({name:n.value,phone:p.value,password:pw.value})}));home()}catch(e){alert(e.message)}}
-function logout(){localStorage.clear();T=null;U=null;home()}
+function logout(){
+  localStorage.clear();
+  T=null;
+  U=null;
+  if(typeof hbClearNav==="function") hbClearNav();
+  home();
+}
 async function admin(){
   let s=await api("/api/admin/stats");
   let o=await api("/api/admin/orders");
@@ -1010,3 +1016,383 @@ async function collectCOD(id){
 
 async function dst(id,status){await api("/api/delivery/orders/"+id,{method:"PATCH",body:JSON.stringify({status})});deliver()}
 home().catch(e=>document.getElementById("app").innerHTML="<div style='padding:30px'><h2>HOME BITE Error</h2><pre>"+e.message+"</pre></div>");
+
+// ================= HOME BITE V61 BUSINESS UI =================
+(function(){
+  let hbNavStack = [];
+  let hbRestoring = false;
+
+  function esc(v){
+    return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+  }
+  function roleLabel(){
+    const r=U?.role;
+    return r==="admin"?"Admin":r==="restaurant"?"Restaurant Partner":r==="delivery"?"Delivery Partner":r==="home"?"Home Kitchen":"Customer";
+  }
+  function pushCurrent(){
+    if(hbRestoring || !A?.innerHTML) return;
+    const html=A.innerHTML.trim();
+    if(!html) return;
+
+    const last=hbNavStack[hbNavStack.length-1];
+    if(last!==html) hbNavStack.push(html);
+
+    if(hbNavStack.length>30) hbNavStack.shift();
+  }
+
+  function clearNavStack(){
+    hbNavStack=[];
+  }
+
+  window.hbClearNav=function(){
+    clearNavStack();
+  };
+
+  window.hbBack=function(){
+    if(hbNavStack.length<=1){
+      clearNavStack();
+      if(typeof home==="function"){
+        hbRestoring=true;
+        try{
+          return home();
+        }finally{
+          hbRestoring=false;
+        }
+      }
+      return;
+    }
+
+    hbNavStack.pop();
+    const previous=hbNavStack[hbNavStack.length-1];
+
+    if(!previous){
+      clearNavStack();
+      if(typeof home==="function") return home();
+      return;
+    }
+
+    hbRestoring=true;
+    try{
+      A.innerHTML=previous;
+    }finally{
+      hbRestoring=false;
+    }
+  };
+
+  const oldLayout=layout;
+  layout=function(c){
+    if(!hbRestoring) pushCurrent();
+
+    A.innerHTML=`<header class="top hb-v61-top">
+      <div class="brand">
+        <div class="logo hb-app-logo"><img class="hb-app-logo-img" src="/home-bite-app-icon-blue.png" alt="HOME BITE"></div>
+        <div><b>HOME BITE</b><small>Makrana City</small></div>
+      </div>
+      <div class="hb-v61-actions">
+        <button class="hb-v61-icon-btn" onclick="hbBack()" title="Back" aria-label="Back">←</button>
+        ${U?`<button class="hb-v61-icon-btn" onclick="settings()" title="Settings" aria-label="Settings">☰</button>`:""}
+        ${U?`<button class="hb-bell" onclick="notifications()" title="Notifications">${hbIcon("bell")}</button>`:""}
+        ${U?`<span class="hb-hi hb-v61-hi">Hi, ${esc(U.name)}</span>`:`<button class="btn" onclick="login()">Login</button>`}
+      </div>
+    </header><main class="wrap">${c}</main>`;
+  };
+
+  window.settings=async function(){
+    layout(`<div class="hb-v61-page">
+      <div class="hb-v61-title-row"><div><small>ACCOUNT</small><h2>Settings</h2><p>${esc(roleLabel())}</p></div></div>
+      <div class="hb-settings-grid">
+        <button class="hb-setting-card" onclick="profileSettings()"><b>👤 Profile</b><span>Edit name, mobile and address</span></button>
+        <button class="hb-setting-card" onclick="changePassword()"><b>🔐 Password</b><span>Change account password</span></button>
+        <button class="hb-setting-card" onclick="payoutSettings()"><b>🏦 Payment Account</b><span>Bank, UPI and Razorpay account</span></button>
+        <button class="hb-setting-card" onclick="earningsSettings()"><b>💰 Earnings</b><span>Paid, pending and failed settlements</span></button>
+        <button class="hb-setting-card" onclick="settlementHistorySettings()"><b>📋 Settlement History</b><span>View your complete payout history</span></button>
+        ${U?.role==="admin"?`
+          <button class="hb-setting-card" onclick="commissionSettings()"><b>👑 Commission</b><span>Owner commission and payout records</span></button>
+          <button class="hb-setting-card" onclick="adminSettlementsSettings()"><b>🔄 Transfers & Settlements</b><span>Manage restaurant payouts and retries</span></button>
+        `:""}
+        <button class="hb-setting-card" onclick="appSettings()"><b>⚙️ App Settings</b><span>Notifications and preferences</span></button>
+        <button class="hb-setting-card" onclick="paymentSettings()"><b>💳 Payments</b><span>Online payment and COD status</span></button>
+        <button class="hb-setting-card" onclick="supportSettings()"><b>☎️ Support</b><span>Get help with HOME BITE</span></button>
+        <button class="hb-setting-card" onclick="aboutSettings()"><b>ℹ️ About</b><span>HOME BITE business information</span></button>
+        <button class="hb-setting-card hb-setting-danger" onclick="logout()"><b>↪ Logout</b><span>Sign out of this account</span></button>
+      </div>
+    </div>`);
+  };
+
+  window.profileSettings=async function(){
+    try{
+      const p=await api("/api/account/profile");
+      layout(`<div class="hb-v61-page"><div class="hb-v61-title-row"><div><small>ACCOUNT</small><h2>Profile</h2></div></div>
+        <div class="card hb-v61-form">
+          <label>Full Name</label><input id="hbpf_name" class="input" value="${esc(p.name)}">
+          <label>Mobile Number</label><input id="hbpf_phone" class="input" type="tel" value="${esc(p.phone)}">
+          <label>Email</label><input id="hbpf_email" class="input" type="email" value="${esc(p.email||"")}">
+          <label>Address</label><input id="hbpf_address" class="input" value="${esc(p.address||"")}">
+          <label>City</label><input id="hbpf_city" class="input" value="${esc(p.city||"Makrana")}">
+          <label>State</label><input id="hbpf_state" class="input" value="${esc(p.state||"Rajasthan")}">
+          <label>Pincode</label><input id="hbpf_pin" class="input" inputmode="numeric" value="${esc(p.pincode||"")}">
+          <button class="btn hb-v61-wide" onclick="saveProfileSettings()">Save Profile</button>
+        </div></div>`);
+    }catch(e){alert(e.message)}
+  };
+
+  window.saveProfileSettings=async function(){
+    try{
+      const d=await api("/api/account/profile",{method:"PATCH",body:JSON.stringify({
+        name:document.getElementById("hbpf_name").value.trim(),
+        phone:document.getElementById("hbpf_phone").value.trim(),
+        email:document.getElementById("hbpf_email").value.trim(),
+        address:document.getElementById("hbpf_address").value.trim(),
+        city:document.getElementById("hbpf_city").value.trim(),
+        state:document.getElementById("hbpf_state").value.trim(),
+        pincode:document.getElementById("hbpf_pin").value.trim()
+      })});
+      if(U){
+        U.name=document.getElementById("hbpf_name").value.trim();
+        U.phone=document.getElementById("hbpf_phone").value.trim();
+        localStorage.setItem("hb_user",JSON.stringify(U));
+      }
+      alert(d.message||"Profile saved successfully");
+      settings();
+    }catch(e){alert(e.message)}
+  };
+
+
+// ===== V61_SETTLEMENT_UI =====
+
+window.earningsSettings=async function(){
+  try{
+    const e=await api("/api/account/earnings");
+
+    layout(`
+      <div class="hb-v61-page">
+        <div class="hb-v61-title-row">
+          <div>
+            <small>EARNINGS</small>
+            <h2>My Earnings</h2>
+            <p>Restaurant / Home Kitchen settlement</p>
+          </div>
+        </div>
+
+        <div class="hb-v61-stat-grid">
+          <div class="card hb-v61-stat-card">
+            <span>Paid</span>
+            <strong>₹${Number(e.total_earnings||0).toFixed(2)}</strong>
+          </div>
+          <div class="card hb-v61-stat-card">
+            <span>Pending</span>
+            <strong>₹${Number(e.pending_amount||0).toFixed(2)}</strong>
+          </div>
+          <div class="card hb-v61-stat-card">
+            <span>Failed</span>
+            <strong>₹${Number(e.failed_amount||0).toFixed(2)}</strong>
+          </div>
+        </div>
+
+        <h3>Settlement Records</h3>
+
+        <div class="card">
+          ${(e.records||[]).map(x=>`
+            <div class="food hb-v61-list-row">
+              <span>
+                <b>Order #${x.order_id}</b><br>
+                ${esc(x.shop_name||"Restaurant")}<br>
+                Status: ${esc(x.status)}
+                ${x.failure_reason?`<br><small>${esc(x.failure_reason)}</small>`:""}
+              </span>
+              <b>₹${Number(x.amount||0).toFixed(2)}</b>
+            </div>
+          `).join("") || "<p>No earnings yet.</p>"}
+        </div>
+
+        <button class="btn hb-v61-wide" onclick="settlementHistorySettings()">
+          Settlement History
+        </button>
+      </div>
+    `);
+  }catch(e){
+    alert(e.message);
+  }
+};
+
+window.settlementHistorySettings=async function(){
+  try{
+    const rows=await api("/api/account/settlements");
+
+    layout(`
+      <div class="hb-v61-page">
+        <div class="hb-v61-title-row">
+          <div>
+            <small>SETTLEMENTS</small>
+            <h2>Settlement History</h2>
+            <p>Complete payout history</p>
+          </div>
+        </div>
+
+        <div class="card">
+          ${(rows||[]).map(x=>`
+            <div class="food hb-v61-list-row">
+              <span>
+                <b>Order #${x.order_id}</b><br>
+                Gross: ₹${Number(x.gross_amount||0).toFixed(2)}<br>
+                Commission: ₹${Number(x.commission_amount||0).toFixed(2)}<br>
+                Payable: ₹${Number(x.payable_amount||0).toFixed(2)}<br>
+                Status: ${esc(x.status)}
+                ${x.razorpay_transfer_id?
+                  `<br><small>Transfer: ${esc(x.razorpay_transfer_id)}</small>`:""}
+              </span>
+              <b>₹${Number(x.payable_amount||0).toFixed(2)}</b>
+            </div>
+          `).join("") || "<p>No settlement records yet.</p>"}
+        </div>
+      </div>
+    `);
+  }catch(e){
+    alert(e.message);
+  }
+};
+
+window.adminSettlementsSettings=async function(){
+  try{
+    const rows=await api("/api/admin/settlements");
+
+    layout(`
+      <div class="hb-v61-page">
+        <div class="hb-v61-title-row">
+          <div>
+            <small>ADMIN</small>
+            <h2>Transfers & Settlements</h2>
+            <p>Restaurant payout management</p>
+          </div>
+        </div>
+
+        <div class="card">
+          ${(rows||[]).map(x=>`
+            <div class="food hb-v61-list-row">
+              <span>
+                <b>Order #${x.order_id} · ${esc(x.shop_name||"-")}</b><br>
+                Owner: ${esc(x.owner_name||"-")}<br>
+                Amount: ₹${Number(x.amount||0).toFixed(2)}<br>
+                Status: ${esc(x.status)}
+                ${x.razorpay_transfer_id?
+                  `<br><small>Transfer: ${esc(x.razorpay_transfer_id)}</small>`:""}
+                ${x.failure_reason?
+                  `<br><small>${esc(x.failure_reason)}</small>`:""}
+              </span>
+
+              ${x.status==="FAILED"?
+                `<button class="btn"
+                  onclick="retrySettlement(${x.order_id})">
+                  Retry
+                </button>`:""}
+            </div>
+          `).join("") || "<p>No settlement records yet.</p>"}
+        </div>
+      </div>
+    `);
+  }catch(e){
+    alert(e.message);
+  }
+};
+
+window.retrySettlement=async function(orderId){
+  if(!confirm("Retry this failed settlement?")) return;
+
+  try{
+    const r=await api(
+      "/api/admin/settlements/"+orderId+"/retry",
+      {
+        method:"POST",
+        body:"{}"
+      }
+    );
+
+    alert(
+      r.status==="PROCESSED"
+        ? "Settlement processed successfully."
+        : "Settlement status: "+(r.status||"PENDING")
+    );
+
+    adminSettlementsSettings();
+  }catch(e){
+    alert(e.message);
+  }
+};
+
+// ===== END V61_SETTLEMENT_UI =====
+
+
+window.payoutSettings=async function(){
+    try{
+      const p=await api("/api/account/payout");
+      layout(`<div class="hb-v61-page"><div class="hb-v61-title-row"><div><small>PAYOUT</small><h2>Payment Account</h2><p>Money settlement destination</p></div></div>
+        <div class="card hb-v61-info"><b>Status: ${esc(p?.status||"NOT ADDED")}</b><p>Saving account details does not by itself activate live settlement. Verification and the production Razorpay marketplace/settlement setup are required.</p></div>
+        <div class="card hb-v61-form">
+          <label>Account Holder Name</label><input id="hbp_holder" class="input" value="${esc(p?.account_holder||U?.name||"")}">
+          <label>Bank Name</label><input id="hbp_bank" class="input" value="${esc(p?.bank_name||"")}">
+          <label>Bank Account Number</label><input id="hbp_acc" class="input" inputmode="numeric" value="${esc(p?.account_number||"")}">
+          <label>IFSC</label><input id="hbp_ifsc" class="input" value="${esc(p?.ifsc||"")}">
+          <label>UPI ID</label><input id="hbp_upi" class="input" value="${esc(p?.upi_id||"")}">
+          <label>Razorpay Linked Account ID (if applicable)</label><input id="hbp_rp" class="input" value="${esc(p?.razorpay_account_id||"")}">
+          <button class="btn hb-v61-wide" onclick="savePayoutSettings()">Save Payment Account</button>
+        </div></div>`);
+    }catch(e){alert(e.message)}
+  };
+
+  window.savePayoutSettings=async function(){
+    try{
+      const body={
+        account_holder:document.getElementById("hbp_holder").value.trim(),
+        bank_name:document.getElementById("hbp_bank").value.trim(),
+        account_number:document.getElementById("hbp_acc").value.trim(),
+        ifsc:document.getElementById("hbp_ifsc").value.trim(),
+        upi_id:document.getElementById("hbp_upi").value.trim(),
+        razorpay_account_id:document.getElementById("hbp_rp").value.trim()
+      };
+      const d=await api("/api/account/payout",{method:"PUT",body:JSON.stringify(body)});
+      alert(d.message||"Payment account saved");
+      settings();
+    }catch(e){alert(e.message)}
+  };
+
+  window.commissionSettings=async function(){
+    try{
+      const d=await api("/api/owner/commission-summary");
+      const accounts=await api("/api/owner/payout-accounts");
+      layout(`<div class="hb-v61-page"><div class="hb-v61-title-row"><div><small>OWNER</small><h2>Commission</h2><p>Total recorded commission: ₹${Number(d.total||0).toFixed(2)}</p></div></div>
+        <div class="card hb-v61-stat-card"><b>Total Commission</b><strong>₹${Number(d.total||0).toFixed(2)}</strong><span>${d.records?.length||0} records</span></div>
+        <h3>Payout Accounts</h3>
+        <div class="card">${accounts.length?accounts.map(x=>`<div class="food hb-v61-list-row"><span><b>${esc(x.user_name)}</b><br>${esc(x.role)} · ${esc(x.shop_name||"HOME BITE Owner")}<br>Status: ${esc(x.status)}</span><button class="btn" onclick="setPayoutStatus(${x.user_id},'${x.status==="VERIFIED"?"PENDING":"VERIFIED"}')">${x.status==="VERIFIED"?"Unverify":"Verify"}</button></div>`).join(""):"<p>No payout accounts added yet.</p>"}</div>
+        <h3>Recent Commission</h3><div class="card">${(d.records||[]).slice(0,30).map(x=>`<div class="food hb-v61-list-row"><span>#${x.order_id} · ${esc(x.shop_name||"-")}<br>Owner: ${esc(x.owner_name||"-")}</span><b>₹${Number(x.amount||0).toFixed(2)}</b></div>`).join("")||"<p>No commission records.</p>"}</div>
+      </div>`);
+    }catch(e){alert(e.message)}
+  };
+  window.setPayoutStatus=async function(uid,status){
+    try{await api("/api/owner/payout-accounts/"+uid+"/status",{method:"PATCH",body:JSON.stringify({status})});commissionSettings()}catch(e){alert(e.message)}
+  };
+
+  window.appSettings=function(){
+    const n=localStorage.getItem("hb_notifications")!=="off";
+    layout(`<div class="hb-v61-page"><small>APPLICATION</small><h2>App Settings</h2>
+      <div class="card hb-v61-form">
+        <label class="hb-toggle-row"><span>Notifications</span><input id="hbnotif" type="checkbox" ${n?"checked":""}></label>
+        <button class="btn hb-v61-wide" onclick="localStorage.setItem('hb_notifications',document.getElementById('hbnotif').checked?'on':'off');alert('App settings saved');settings()">Save Settings</button>
+      </div></div>`);
+  };
+  window.paymentSettings=function(){
+    layout(`<div class="hb-v61-page"><small>PAYMENTS</small><h2>Payment Settings</h2>
+      <div class="card hb-v61-form">
+        <div class="hb-v61-info-row"><b>Online Payment</b><span>Razorpay checkout</span></div>
+        <div class="hb-v61-info-row"><b>Cash on Delivery</b><span>Available where enabled</span></div>
+        <div class="hb-v61-info-row"><b>Settlement</b><span>Requires verified payout configuration</span></div>
+      </div></div>`);
+  };
+  window.supportSettings=function(){
+    layout(`<div class="hb-v61-page"><small>HELP</small><h2>Support</h2>
+      <div class="card hb-v61-form"><p>For HOME BITE account, restaurant, delivery or payment issues, contact the HOME BITE administrator.</p><p><b>Account:</b> ${esc(U?.phone||"Not logged in")}</p></div></div>`);
+  };
+  window.aboutSettings=function(){
+    layout(`<div class="hb-v61-page"><small>HOME BITE</small><h2>About</h2>
+      <div class="card hb-v61-form"><h3>HOME BITE — Makrana City</h3><p>Restaurant food + homemade food delivery platform.</p><p>Business-ready V61 foundation with role-based accounts, orders, location/GPS, Razorpay checkout, commission tracking and payout-account management.</p></div></div>`);
+  };
+})();

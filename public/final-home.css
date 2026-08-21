@@ -1469,3 +1469,35 @@ body {
   }
 }
 
+
+/* ================= HOME BITE V61 BUSINESS UI ================= */
+.hb-v61-top{position:sticky!important;top:0!important;z-index:1000!important}
+.hb-v61-actions{display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;justify-content:flex-end!important}
+.hb-v61-icon-btn{width:48px!important;height:48px!important;min-width:48px!important;border:2px solid #FFC928!important;border-radius:14px!important;background:#0B1322!important;color:#FFC928!important;font-size:25px!important;font-weight:900!important}
+.hb-v61-hi{max-width:150px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.hb-v61-page{width:100%!important;max-width:1100px!important;margin:0 auto!important;padding-bottom:30px!important}
+.hb-v61-title-row{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-bottom:18px!important}
+.hb-settings-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+.hb-setting-card{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:8px!important;text-align:left!important;padding:20px!important;min-height:110px!important;border:2px solid #C99A00!important;border-radius:18px!important;background:#0B1322!important;color:#fff!important}
+.hb-setting-card b{font-size:19px!important;color:#FFC928!important}
+.hb-setting-card span{font-size:15px!important;color:#C9D1DC!important;line-height:1.4!important}
+.hb-setting-danger{border-color:#9d3030!important}
+.hb-v61-form{display:flex!important;flex-direction:column!important;gap:10px!important;padding:20px!important}
+.hb-v61-form label{font-weight:800!important;color:#FFC928!important;font-size:16px!important;margin-top:5px!important}
+.hb-v61-form .input{width:100%!important;min-height:58px!important;height:58px!important;font-size:18px!important;margin:0 0 8px!important}
+.hb-v61-wide{width:100%!important;min-height:58px!important;font-size:18px!important;margin-top:10px!important}
+.hb-v61-info{padding:18px!important;line-height:1.55!important}
+.hb-v61-info-row{display:flex!important;justify-content:space-between!important;gap:16px!important;padding:15px 0!important;border-bottom:1px solid #24344D!important}
+.hb-v61-info-row:last-child{border-bottom:0!important}
+.hb-v61-stat-card{display:flex!important;flex-direction:column!important;gap:6px!important;padding:20px!important}
+.hb-v61-stat-card strong{font-size:32px!important;color:#FFC928!important}
+.hb-v61-stat-card span{color:#AEB9C8!important}
+.hb-v61-list-row{align-items:center!important;gap:16px!important;min-height:72px!important}
+.hb-toggle-row{display:flex!important;flex-direction:row!important;justify-content:space-between!important;align-items:center!important;padding:18px 0!important;font-size:18px!important}
+@media(max-width:700px){
+  .hb-settings-grid{grid-template-columns:1fr!important}
+  .hb-v61-actions{gap:5px!important}
+  .hb-v61-icon-btn{width:44px!important;height:44px!important;min-width:44px!important}
+  .hb-v61-hi{display:none!important}
+  .hb-v61-form{padding:15px!important}
+}

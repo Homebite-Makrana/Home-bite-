@@ -243,6 +243,22 @@ export function registerOwnerApi(app, db, auth, role, bcrypt) {
   });
 
 
+  // V61 owner payout / commission management
+  app.get("/api/owner/payout-accounts", auth, role("admin"), (req,res) => {
+    res.json(db.prepare(`SELECT p.*,u.name user_name,u.phone,u.role,s.name shop_name FROM payout_accounts p JOIN users u ON u.id=p.user_id LEFT JOIN shops s ON s.owner_id=p.user_id ORDER BY p.id DESC`).all());
+  });
+  app.patch("/api/owner/payout-accounts/:userId/status", auth, role("admin"), (req,res) => {
+    const status=String(req.body?.status||"").toUpperCase();
+    if(!["PENDING","VERIFIED","SUSPENDED"].includes(status)) return res.status(400).json({error:"Invalid payout status"});
+    db.prepare("UPDATE payout_accounts SET status=?,updated_at=CURRENT_TIMESTAMP WHERE user_id=?").run(status,req.params.userId);
+    res.json({ok:true});
+  });
+  app.get("/api/owner/commission-summary", auth, role("admin"), (req,res) => {
+    const rows=db.prepare(`SELECT c.id,c.order_id,c.shop_id,c.amount,c.percent,c.status,s.name shop_name,u.name owner_name,p.status payout_status FROM commissions c LEFT JOIN shops s ON s.id=c.shop_id LEFT JOIN users u ON u.id=s.owner_id LEFT JOIN payout_accounts p ON p.user_id=u.id ORDER BY c.id DESC`).all();
+    const total=rows.reduce((n,x)=>n+Number(x.amount||0),0);
+    res.json({total,records:rows});
+  });
+
   // Admin reset for restaurant/delivery account password
   app.patch("/api/owner/users/:id/password", auth, role("admin"), (req,res) => {
     try {
