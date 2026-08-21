@@ -46,10 +46,9 @@ app.post("/api/payment/webhook",
         .update(req.body)
         .digest("hex");
 
-      if(!crypto.timingSafeEqual(
-        Buffer.from(expected),
-        Buffer.from(String(signature))
-      )){
+      const signatureBuffer=Buffer.from(String(signature));
+      const expectedBuffer=Buffer.from(expected);
+      if(signatureBuffer.length!==expectedBuffer.length || !crypto.timingSafeEqual(expectedBuffer,signatureBuffer)){
         return res.status(400).json({error:"Webhook signature verification failed"});
       }
 
