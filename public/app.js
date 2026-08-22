@@ -408,24 +408,27 @@ currency:p.currency,
 name:"Home Bite",
 description:"Food Order",
 order_id:p.razorpay_order_id,
+webview_intent:true,
 prefill:{name:U.name||""},
 theme:{color:"#075d31"},
 config:{
   display:{
     blocks:{
-      hb_all_payment_methods:{
-        name:"All Payment Options",
+      hb_upi:{
+        name:"UPI & UPI Apps",
         instruments:[
-          {method:"upi"},
-          {method:"card"},
-          {method:"netbanking"},
-          {method:"wallet"}
+          {method:"upi"}
         ]
       }
     },
-    sequence:["block.hb_all_payment_methods"],
+    sequence:[
+      "block.hb_upi",
+      "card",
+      "netbanking",
+      "wallet"
+    ],
     preferences:{
-      show_default_blocks:false
+      show_default_blocks:true
     }
   }
 },
