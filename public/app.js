@@ -410,6 +410,25 @@ description:"Food Order",
 order_id:p.razorpay_order_id,
 prefill:{name:U.name||""},
 theme:{color:"#075d31"},
+config:{
+  display:{
+    blocks:{
+      hb_all_payment_methods:{
+        name:"All Payment Options",
+        instruments:[
+          {method:"upi"},
+          {method:"card"},
+          {method:"netbanking"},
+          {method:"wallet"}
+        ]
+      }
+    },
+    sequence:["block.hb_all_payment_methods"],
+    preferences:{
+      show_default_blocks:false
+    }
+  }
+},
 modal:{
   ondismiss:function(){
     alert("Razorpay checkout closed.");
