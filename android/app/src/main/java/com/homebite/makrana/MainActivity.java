@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -18,8 +17,8 @@ import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
 
-    private static final int HB_NAVY = Color.rgb(1, 7, 45);
-    private static final int SPLASH_TIME = 2400;
+    private static final int HB_NAVY = Color.rgb(2, 7, 45);
+    private static final int SPLASH_TIME = 2200;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,36 +28,15 @@ public class MainActivity extends BridgeActivity {
         getWindow().setStatusBarColor(Color.rgb(7, 11, 20));
         getWindow().setNavigationBarColor(Color.rgb(7, 11, 20));
 
-        WebView webView = getBridge() != null ? getBridge().getWebView() : null;
-
-        if (webView != null) {
-            webView.setBackgroundColor(HB_NAVY);
-            showHomeBiteSplash(webView);
-        } else {
-            new Handler().postDelayed(() -> {
-                WebView w = getBridge() != null ? getBridge().getWebView() : null;
-                if (w != null) {
-                    w.setBackgroundColor(HB_NAVY);
-                    showHomeBiteSplash(w);
-                }
-            }, 100);
-        }
-    }
-
-    private void showHomeBiteSplash(WebView webView) {
-        ViewGroup parent = (ViewGroup) webView.getParent();
-        if (parent == null) return;
+        ImageView logo = new ImageView(this);
+        logo.setImageResource(com.homebite.makrana.R.drawable.home_bite_final_launch);
+        logo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        logo.setBackgroundColor(HB_NAVY);
 
         FrameLayout splash = new FrameLayout(this);
         splash.setBackgroundColor(HB_NAVY);
         splash.setClickable(true);
         splash.setFocusable(true);
-
-        ImageView logo = new ImageView(this);
-        logo.setImageResource(com.homebite.makrana.R.drawable.home_bite_final_launch);
-        logo.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        logo.setAdjustViewBounds(true);
-        logo.setPadding(35, 35, 35, 35);
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -68,33 +46,31 @@ public class MainActivity extends BridgeActivity {
 
         splash.addView(logo, lp);
 
-        parent.addView(
-                splash,
-                new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                )
-        );
+        ViewGroup root = (ViewGroup) getBridge().getWebView().getParent();
+        root.addView(splash, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        ));
 
-        logo.setScaleX(0.72f);
-        logo.setScaleY(0.72f);
-        logo.setAlpha(0.35f);
+        logo.setScaleX(0.55f);
+        logo.setScaleY(0.55f);
 
-        ObjectAnimator sx = ObjectAnimator.ofFloat(logo, View.SCALE_X, 0.72f, 1.0f);
-        ObjectAnimator sy = ObjectAnimator.ofFloat(logo, View.SCALE_Y, 0.72f, 1.0f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(logo, View.ALPHA, 0.35f, 1.0f);
+        ObjectAnimator sx = ObjectAnimator.ofFloat(logo, View.SCALE_X, 0.55f, 1.0f);
+        ObjectAnimator sy = ObjectAnimator.ofFloat(logo, View.SCALE_Y, 0.55f, 1.0f);
 
-        sx.setDuration(900);
-        sy.setDuration(900);
-        alpha.setDuration(900);
+        sx.setDuration(1400);
+        sy.setDuration(1400);
+
+        sx.setStartDelay(150);
+        sy.setStartDelay(150);
 
         sx.start();
         sy.start();
-        alpha.start();
 
         new Handler().postDelayed(() -> {
-            ObjectAnimator fade =
-                    ObjectAnimator.ofFloat(splash, View.ALPHA, 1f, 0f);
+            ObjectAnimator fade = ObjectAnimator.ofFloat(
+                    splash, View.ALPHA, 1f, 0f
+            );
             fade.setDuration(300);
 
             fade.addListener(new AnimatorListenerAdapter() {
