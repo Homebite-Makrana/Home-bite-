@@ -29,7 +29,7 @@ public class MainActivity extends BridgeActivity {
         getWindow().setNavigationBarColor(Color.rgb(7, 11, 20));
 
         ImageView logo = new ImageView(this);
-        logo.setImageResource(com.homebite.makrana.R.drawable.home_bite_final_launch);
+        logo.setImageResource(com.homebite.makrana.R.drawable.home_bite_foreground);
         logo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         logo.setBackgroundColor(HB_NAVY);
 
